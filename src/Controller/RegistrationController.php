@@ -39,8 +39,10 @@ class RegistrationController extends AbstractController
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
-                )
-            );
+                ));
+            //put the email
+            $user->setEmail($form->get('email')->getData());
+            
 
             $entityManager->persist($user);
             $entityManager->flush();
