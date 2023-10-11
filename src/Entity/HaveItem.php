@@ -16,7 +16,7 @@ class HaveItem
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Have_Item')]
+    #[ORM\ManyToOne(inversedBy: 'have_item')]
     private ?Player $player = null;
 
     #[ORM\ManyToOne(inversedBy: 'Have_Item')]

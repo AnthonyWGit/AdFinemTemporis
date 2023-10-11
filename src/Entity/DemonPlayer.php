@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\DemonPlayerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DemonPlayerRepository::class)]
@@ -30,35 +28,28 @@ class DemonPlayer
     #[ORM\Column]
     private ?int $lck_points = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $Trait = null;
-
     #[ORM\Column]
     private ?int $Experience = null;
 
     #[ORM\Column]
     private ?int $LvlUp_Points = null;
 
-    #[ORM\ManyToOne(inversedBy: 'demon_player')]
+    #[ORM\ManyToOne(inversedBy: 'Demon_Player')]
     private ?Player $player = null;
 
-    #[ORM\OneToMany(mappedBy: 'demonplayer1', targetEntity: Battle::class)]
-    private Collection $fighter1;
+    #[ORM\ManyToOne(inversedBy: 'demonsPlayer1')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Battle $fighter1 = null;
 
-    #[ORM\OneToMany(mappedBy: 'demonplayer2', targetEntity: Battle::class)]
-    private Collection $fighter2;
+    #[ORM\ManyToOne(inversedBy: 'demonsPlayer2')]
+    private ?Battle $fighter2 = null;
 
-    #[ORM\ManyToOne(inversedBy: 'demonPlayers')]
+    #[ORM\ManyToOne(inversedBy: 'demon_base')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?DemonTrait $trait = null;
 
     #[ORM\ManyToOne(inversedBy: 'demonPlayers')]
-    private ?DemonBase $Demon_Base = null;
-
-    public function __construct()
-    {
-        $this->fighter1 = new ArrayCollection();
-        $this->fighter2 = new ArrayCollection();
-    }
+    private ?DemonBase $demon_base = null;
 
     public function getId(): ?int
     {
@@ -125,18 +116,6 @@ class DemonPlayer
         return $this;
     }
 
-    public function getTrait(): ?string
-    {
-        return $this->Trait;
-    }
-
-    public function setTrait(string $Trait): static
-    {
-        $this->Trait = $Trait;
-
-        return $this;
-    }
-
     public function getExperience(): ?int
     {
         return $this->Experience;
@@ -173,74 +152,50 @@ class DemonPlayer
         return $this;
     }
 
-    /**
-     * @return Collection<int, Battle>
-     */
-    public function getFighter1(): Collection
+    public function getFighter1(): ?Battle
     {
         return $this->fighter1;
     }
 
-    public function addFighter1(Battle $fighter1): static
+    public function setFighter1(?Battle $fighter1): static
     {
-        if (!$this->fighter1->contains($fighter1)) {
-            $this->fighter1->add($fighter1);
-            $fighter1->setDemonplayer1($this);
-        }
+        $this->fighter1 = $fighter1;
 
         return $this;
     }
 
-    public function removeFighter1(Battle $fighter1): static
-    {
-        if ($this->fighter1->removeElement($fighter1)) {
-            // set the owning side to null (unless already changed)
-            if ($fighter1->getDemonplayer1() === $this) {
-                $fighter1->setDemonplayer1(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Battle>
-     */
-    public function getFighter2(): Collection
+    public function getFighter2(): ?Battle
     {
         return $this->fighter2;
     }
 
-    public function addFighter2(Battle $fighter2): static
+    public function setFighter2(?Battle $fighter2): static
     {
-        if (!$this->fighter2->contains($fighter2)) {
-            $this->fighter2->add($fighter2);
-            $fighter2->setDemonplayer2($this);
-        }
+        $this->fighter2 = $fighter2;
 
         return $this;
     }
 
-    public function removeFighter2(Battle $fighter2): static
+    public function getTrait(): ?DemonTrait
     {
-        if ($this->fighter2->removeElement($fighter2)) {
-            // set the owning side to null (unless already changed)
-            if ($fighter2->getDemonplayer2() === $this) {
-                $fighter2->setDemonplayer2(null);
-            }
-        }
+        return $this->trait;
+    }
+
+    public function setTrait(?DemonTrait $trait): static
+    {
+        $this->trait = $trait;
 
         return $this;
     }
 
     public function getDemonBase(): ?DemonBase
     {
-        return $this->Demon_Base;
+        return $this->demon_base;
     }
 
-    public function setDemonBase(?DemonBase $Demon_Base): static
+    public function setDemonBase(?DemonBase $demon_base): static
     {
-        $this->Demon_Base = $Demon_Base;
+        $this->demon_base = $demon_base;
 
         return $this;
     }

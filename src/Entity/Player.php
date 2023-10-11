@@ -7,26 +7,31 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
-class Player
+class Player implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?float $gold = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    private ?int $gold = null;
 
     #[ORM\Column]
     private ?int $stage = null;
@@ -34,26 +39,23 @@ class Player
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registerDate = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    #[ORM\ManyToOne(inversedBy: 'PlayersSuggestions')]
+    private ?Suggestion $send = null;
+
+    #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'PlayersLikes')]
+    private Collection $likes;
 
     #[ORM\OneToMany(mappedBy: 'player', targetEntity: HaveItem::class)]
-    private Collection $Have_Item;
+    private Collection $have_item;
 
     #[ORM\OneToMany(mappedBy: 'player', targetEntity: DemonPlayer::class)]
-    private Collection $demon_player;
-
-    #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'playersLikes')]
-    private Collection $Likes;
-
-    #[ORM\ManyToOne(inversedBy: 'playersSuggestion')]
-    private ?Suggestion $send = null;
+    private Collection $Demon_Player;
 
     public function __construct()
     {
-        $this->Have_Item = new ArrayCollection();
-        $this->Likes = new ArrayCollection();
-        $this->demon_player = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->have_item = new ArrayCollection();
+        $this->Demon_Player = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,7 +75,39 @@ class Player
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->username;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -85,26 +119,23 @@ class Player
         return $this;
     }
 
-    public function getGold(): ?float
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getGold(): ?int
     {
         return $this->gold;
     }
 
-    public function setGold(float $gold): static
+    public function setGold(int $gold): static
     {
         $this->gold = $gold;
-
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
 
         return $this;
     }
@@ -133,14 +164,38 @@ class Player
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getSend(): ?Suggestion
     {
-        return $this->email;
+        return $this->send;
     }
 
-    public function setEmail(string $email): static
+    public function setSend(?Suggestion $send): static
     {
-        $this->email = $email;
+        $this->send = $send;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Suggestion>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Suggestion $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Suggestion $like): static
+    {
+        $this->likes->removeElement($like);
 
         return $this;
     }
@@ -150,13 +205,13 @@ class Player
      */
     public function getHaveItem(): Collection
     {
-        return $this->Have_Item;
+        return $this->have_item;
     }
 
     public function addHaveItem(HaveItem $haveItem): static
     {
-        if (!$this->Have_Item->contains($haveItem)) {
-            $this->Have_Item->add($haveItem);
+        if (!$this->have_item->contains($haveItem)) {
+            $this->have_item->add($haveItem);
             $haveItem->setPlayer($this);
         }
 
@@ -165,7 +220,7 @@ class Player
 
     public function removeHaveItem(HaveItem $haveItem): static
     {
-        if ($this->Have_Item->removeElement($haveItem)) {
+        if ($this->have_item->removeElement($haveItem)) {
             // set the owning side to null (unless already changed)
             if ($haveItem->getPlayer() === $this) {
                 $haveItem->setPlayer(null);
@@ -180,13 +235,13 @@ class Player
      */
     public function getDemonPlayer(): Collection
     {
-        return $this->demon_player;
+        return $this->Demon_Player;
     }
 
     public function addDemonPlayer(DemonPlayer $demonPlayer): static
     {
-        if (!$this->demon_player->contains($demonPlayer)) {
-            $this->demon_player->add($demonPlayer);
+        if (!$this->Demon_Player->contains($demonPlayer)) {
+            $this->Demon_Player->add($demonPlayer);
             $demonPlayer->setPlayer($this);
         }
 
@@ -195,48 +250,12 @@ class Player
 
     public function removeDemonPlayer(DemonPlayer $demonPlayer): static
     {
-        if ($this->demon_player->removeElement($demonPlayer)) {
+        if ($this->Demon_Player->removeElement($demonPlayer)) {
             // set the owning side to null (unless already changed)
             if ($demonPlayer->getPlayer() === $this) {
                 $demonPlayer->setPlayer(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Suggestion>
-     */
-    public function getLikes(): Collection
-    {
-        return $this->Likes;
-    }
-
-    public function addLike(Suggestion $like): static
-    {
-        if (!$this->Likes->contains($like)) {
-            $this->Likes->add($like);
-        }
-
-        return $this;
-    }
-
-    public function removeLike(Suggestion $like): static
-    {
-        $this->Likes->removeElement($like);
-
-        return $this;
-    }
-
-    public function getSend(): ?Suggestion
-    {
-        return $this->send;
-    }
-
-    public function setSend(?Suggestion $send): static
-    {
-        $this->send = $send;
 
         return $this;
     }

@@ -15,7 +15,7 @@ class DemonTrait
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -34,11 +34,11 @@ class DemonTrait
     private ?int $luck = null;
 
     #[ORM\OneToMany(mappedBy: 'trait', targetEntity: DemonPlayer::class)]
-    private Collection $demonPlayers;
+    private Collection $demon_player;
 
     public function __construct()
     {
-        $this->demonPlayers = new ArrayCollection();
+        $this->demon_player = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,27 +121,27 @@ class DemonTrait
     /**
      * @return Collection<int, DemonPlayer>
      */
-    public function getDemonPlayers(): Collection
+    public function getDemonPlayer(): Collection
     {
-        return $this->demonPlayers;
+        return $this->demon_player;
     }
 
     public function addDemonPlayer(DemonPlayer $demonPlayer): static
     {
-        if (!$this->demonPlayers->contains($demonPlayer)) {
-            $this->demonPlayers->add($demonPlayer);
+        if (!$this->demon_player->contains($demonPlayer)) {
+            $this->demon_player->add($demonPlayer);
             $demonPlayer->setTrait($this);
         }
 
         return $this;
     }
 
-    public function removeDemonPlayer(DemonPlayer $demonPlayer): static
+    public function removeDemonPlayer(DemonPlayer $DemonPlayer): static
     {
-        if ($this->demonPlayers->removeElement($demonPlayer)) {
+        if ($this->demon_player->removeElement($DemonPlayer)) {
             // set the owning side to null (unless already changed)
-            if ($demonPlayer->getTrait() === $this) {
-                $demonPlayer->setTrait(null);
+            if ($DemonPlayer->getTrait() === $this) {
+                $DemonPlayer->setTrait(null);
             }
         }
 

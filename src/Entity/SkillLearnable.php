@@ -18,16 +18,16 @@ class SkillLearnable
     #[ORM\Column]
     private ?int $level = null;
 
-    #[ORM\OneToMany(mappedBy: 'Skill_Learnable', targetEntity: DemonBase::class)]
-    private Collection $demonBases;
+    #[ORM\OneToMany(mappedBy: 'skill_learnable', targetEntity: DemonBase::class)]
+    private Collection $demonsBases;
 
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'skillsLearnables')]
-    private Collection $Skill;
+    private Collection $skill;
 
     public function __construct()
     {
-        $this->demonBases = new ArrayCollection();
-        $this->Skill = new ArrayCollection();
+        $this->demonsBases = new ArrayCollection();
+        $this->skill = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,27 +50,27 @@ class SkillLearnable
     /**
      * @return Collection<int, DemonBase>
      */
-    public function getDemonBases(): Collection
+    public function getDemonsBases(): Collection
     {
-        return $this->demonBases;
+        return $this->demonsBases;
     }
 
-    public function addDemonBasis(DemonBase $demonBasis): static
+    public function addDemonsBasis(DemonBase $demonsBasis): static
     {
-        if (!$this->demonBases->contains($demonBasis)) {
-            $this->demonBases->add($demonBasis);
-            $demonBasis->setSkillLearnable($this);
+        if (!$this->demonsBases->contains($demonsBasis)) {
+            $this->demonsBases->add($demonsBasis);
+            $demonsBasis->setSkillLearnable($this);
         }
 
         return $this;
     }
 
-    public function removeDemonBasis(DemonBase $demonBasis): static
+    public function removeDemonsBasis(DemonBase $demonsBasis): static
     {
-        if ($this->demonBases->removeElement($demonBasis)) {
+        if ($this->demonsBases->removeElement($demonsBasis)) {
             // set the owning side to null (unless already changed)
-            if ($demonBasis->getSkillLearnable() === $this) {
-                $demonBasis->setSkillLearnable(null);
+            if ($demonsBasis->getSkillLearnable() === $this) {
+                $demonsBasis->setSkillLearnable(null);
             }
         }
 
@@ -82,13 +82,13 @@ class SkillLearnable
      */
     public function getSkill(): Collection
     {
-        return $this->Skill;
+        return $this->skill;
     }
 
     public function addSkill(Skill $skill): static
     {
-        if (!$this->Skill->contains($skill)) {
-            $this->Skill->add($skill);
+        if (!$this->skill->contains($skill)) {
+            $this->skill->add($skill);
         }
 
         return $this;
@@ -96,7 +96,7 @@ class SkillLearnable
 
     public function removeSkill(Skill $skill): static
     {
-        $this->Skill->removeElement($skill);
+        $this->skill->removeElement($skill);
 
         return $this;
     }

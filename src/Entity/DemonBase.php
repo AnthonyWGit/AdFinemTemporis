@@ -25,7 +25,7 @@ class DemonBase
     private ?int $agi_demon_base = null;
 
     #[ORM\Column]
-    private ?int $int_demon_base = null;
+    private ?int $inte_demon_base = null;
 
     #[ORM\Column]
     private ?int $lck_demon_base = null;
@@ -33,11 +33,11 @@ class DemonBase
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $img = null;
 
-    #[ORM\OneToMany(mappedBy: 'Demon_Base', targetEntity: DemonPlayer::class)]
+    #[ORM\OneToMany(mappedBy: 'demon_base', targetEntity: DemonPlayer::class)]
     private Collection $demonPlayers;
 
-    #[ORM\ManyToOne(inversedBy: 'demonBases')]
-    private ?SkillLearnable $Skill_Learnable = null;
+    #[ORM\ManyToOne(inversedBy: 'demonsBases')]
+    private ?SkillLearnable $skill_learnable = null;
 
     public function __construct()
     {
@@ -85,14 +85,14 @@ class DemonBase
         return $this;
     }
 
-    public function getIntDemonBase(): ?int
+    public function getInteDemonBase(): ?int
     {
-        return $this->int_demon_base;
+        return $this->inte_demon_base;
     }
 
-    public function setIntDemonBase(int $int_demon_base): static
+    public function setInteDemonBase(int $inte_demon_base): static
     {
-        $this->int_demon_base = $int_demon_base;
+        $this->inte_demon_base = $inte_demon_base;
 
         return $this;
     }
@@ -153,12 +153,12 @@ class DemonBase
 
     public function getSkillLearnable(): ?SkillLearnable
     {
-        return $this->Skill_Learnable;
+        return $this->skill_learnable;
     }
 
-    public function setSkillLearnable(?SkillLearnable $Skill_Learnable): static
+    public function setSkillLearnable(?SkillLearnable $skill_learnable): static
     {
-        $this->Skill_Learnable = $Skill_Learnable;
+        $this->skill_learnable = $skill_learnable;
 
         return $this;
     }

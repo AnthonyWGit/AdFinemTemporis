@@ -15,13 +15,13 @@ class Skill
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column]
     private ?int $baseDmg = null;
 
-    #[ORM\ManyToMany(targetEntity: SkillLearnable::class, mappedBy: 'Skill')]
+    #[ORM\ManyToMany(targetEntity: SkillLearnable::class, mappedBy: 'skill')]
     private Collection $skillsLearnables;
 
     public function __construct()
