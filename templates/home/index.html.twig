@@ -16,9 +16,8 @@
         <li>Your controller at <code><a href="{{ 'C:/Users/moumo/Documents/AdFinemTemporis-An-Exam-Project/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/Users/moumo/Documents/AdFinemTemporis-An-Exam-Project/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
     </ul>
-    <p><a href=" {{path("app_login")}} ">Login</a></p>
-    <p><a href=" {{path("app_register") }}">Register</a></p>
-    <p><a href=" {{path("app_register") }}">Logout</a></p>
-    <p>Welcome {{app.user.username}}</p>
+    {% if app.user  %}
+        <p>Welcome {{app.user.username}}</p>
+    {% endif %}
 </div>
 {% endblock %}
