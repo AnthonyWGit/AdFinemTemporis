@@ -33,10 +33,22 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('email', TextType::class)
+            ->add('email', RepeatedType::class,
+            [
+                'type' => TextType::Class,
+                'invalid_message' => 'Please enter a valid email address',
+                'options' => [
+                    'attr' => ['class' => 'password-field'],
+                    'row_attr' => ['class' => 'formRow'], //This allows us to have class on our formRow and we don't have to write widget/labels/etc
+                ],
+                'required' => true,
+                'first_options' =>['label' => 'Email'],
+                'second_options' => ['label' => 'Confirm your email'],
+                'mapped' => false,
+                'constraints' => [
+            new NotBlank()]
+                ])
             ->add('plainPassword', RepeatedType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
                 'options' => [
@@ -44,8 +56,8 @@ class RegistrationFormType extends AbstractType
                     'row_attr' => ['class' => 'formRow'], //This allows us to have class on our formRow and we don't have to write widget/labels/etc
                 ],
                 'required' => true,
-                'first_options' => ['label' => 'Mot de Passe'],
-                'second_options' => ["label" => 'Entrez le Mot de passe à nouveau'],
+                'first_options' => ['label' => 'Password'],
+                'second_options' => ["label" => 'Type your password again'],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank(),
