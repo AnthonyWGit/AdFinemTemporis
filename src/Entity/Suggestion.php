@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SuggestionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,19 @@ class Suggestion
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $postDate = null;
+
+    #[ORM\ManyToMany(targetEntity: Player::class, mappedBy: 'Likes')]
+    private Collection $playersLikes;
+
+    #[ORM\OneToMany(mappedBy: 'send', targetEntity: Player::class)]
+    private Collection $playersSuggestion;
+
+    public function __construct()
+    {
+        $this->players = new ArrayCollection();
+        $this->playersLikes = new ArrayCollection();
+        $this->playersSuggestion = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,4 +108,62 @@ class Suggestion
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Player>
+     */
+    public function getPlayersLikes(): Collection
+    {
+        return $this->playersLikes;
+    }
+
+    public function addPlayersLike(Player $playersLike): static
+    {
+        if (!$this->playersLikes->contains($playersLike)) {
+            $this->playersLikes->add($playersLike);
+            $playersLike->addLike($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlayersLike(Player $playersLike): static
+    {
+        if ($this->playersLikes->removeElement($playersLike)) {
+            $playersLike->removeLike($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Player>
+     */
+    public function getPlayersSuggestion(): Collection
+    {
+        return $this->playersSuggestion;
+    }
+
+    public function addPlayersSuggestion(Player $playersSuggestion): static
+    {
+        if (!$this->playersSuggestion->contains($playersSuggestion)) {
+            $this->playersSuggestion->add($playersSuggestion);
+            $playersSuggestion->setSend($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlayersSuggestion(Player $playersSuggestion): static
+    {
+        if ($this->playersSuggestion->removeElement($playersSuggestion)) {
+            // set the owning side to null (unless already changed)
+            if ($playersSuggestion->getSend() === $this) {
+                $playersSuggestion->setSend(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
