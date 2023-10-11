@@ -9,6 +9,8 @@
 
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/looksLikeAButton.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/home.css') }}">
             <link rel="stylesheet" href="{{ asset('css/base.css') }}">
         {% endblock %}
 
@@ -17,9 +19,14 @@
     </head>
     <body>
         <nav class="navbar">
-            <a href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Home.svg') }}"></a>
-            <a href=" {{path("app_login")}} ">Login</a>
-            <a href=" {{path("app_register") }}">Register</a>
+            <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Home.svg') }}"> Home</a>
+            <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Book.svg') }}"> Encyclopedia</a>
+            <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Chem.svg') }}"> The Lab</a>
+            <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Community.svg') }}"> Community</a>
+            {% if not app.user %}
+                <a class="iconText" href=" {{path("app_login")}} ">Login</a>
+                <a class="iconText" href=" {{path("app_register") }}">Register</a>
+            {% endif %}
             {% if app.user and app.user.isverified %}
                 <a href=" {{path("app_logout") }}">Logout</a>
             {% endif %}
@@ -27,6 +34,10 @@
 
         <div id="container">
             {% block body %}
+
+            {% endblock %}
+            {% block footer %}
+                <footer class="footer"> Contact </footer>
             {% endblock %}
         </div>
     </body>
