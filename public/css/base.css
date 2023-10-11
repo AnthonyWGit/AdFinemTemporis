@@ -1,3 +1,28 @@
+:root
+{
+    --base-color1 : rgba(92, 4, 255, 0.50);
+    --base-color2 : rgba(68, 0, 85, 0.5);
+}
+
+*
+{
+    font-family: 'Tomorrow', sans-serif;
+}
+html
+{
+
+    background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
+    background-attachment: fixed;
+
+}
+
+input
+{
+    background: none;
+    border: solid 1px blue;
+    border-radius: 15px;
+    padding: 0.3rem;
+}
 .container
 {
     display: flex;
@@ -10,4 +35,117 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+    height: 3rem;
+    border-radius: 20px;
+    align-items: center;
 }
+
+.formGlobal
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formInside
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(238, 130, 238, 0.493);
+    border-radius: 15px;
+    gap: 1rem;
+}
+
+.formRegister /* this is a a form HTML not div ! */
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.formRow
+{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.centerTitle
+{
+    text-align: center;
+}
+
+.navSvg
+{
+    height: 30px;
+    width: 30px;
+}
+
+button {
+    margin: 20px;
+  }
+
+  .custom-btn {
+    width: 130px;
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+     7px 7px 20px 0px rgba(0,0,0,.1),
+     4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+  }
+
+  .btn-11 {
+    border: none;
+    background: rgb(251,33,117);
+      background: linear-gradient(0deg, rgba(251,33,117,1) 0%, rgba(234,76,137,1) 100%);
+      color: #fff;
+      overflow: hidden;
+  }
+  .btn-11:hover {
+      text-decoration: none;
+      color: #fff;
+  }
+  .btn-11:before {
+      position: absolute;
+      content: '';
+      display: inline-block;
+      top: -180px;
+      left: 0;
+      width: 30px;
+      height: 100%;
+      background-color: #fff;
+      animation: shiny-btn1 3s ease-in-out infinite;
+  }
+  .btn-11:hover{
+    opacity: .7;
+  }
+  .btn-11:active{
+    box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
+                -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+      inset -4px -4px 6px 0 rgba(255,255,255,.2),
+      inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
+  }
+  
+  
+  @-webkit-keyframes shiny-btn1 {
+      0% { -webkit-transform: scale(0) rotate(45deg); opacity: 0; }
+      80% { -webkit-transform: scale(0) rotate(45deg); opacity: 0.5; }
+      81% { -webkit-transform: scale(4) rotate(45deg); opacity: 1; }
+      100% { -webkit-transform: scale(50) rotate(45deg); opacity: 0; }
+  }
+  
