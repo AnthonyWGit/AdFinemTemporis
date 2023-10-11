@@ -2,17 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\PlayerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PlayerRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Player implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -32,16 +34,15 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column]
-    private ?int $gold = null;
+    #[ORM\Column] //Defaulting to 0
+    private ?int $gold = 0;
 
     #[ORM\Column]
-    private ?int $stage = null;
+    private ?int $stage = 0;
+    
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $registerDate = null;
-
-
+    private ?\DateTimeInterface $registerDate;
 
     #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'PlayersLikes')]
     private Collection $likes;
@@ -66,6 +67,7 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         $this->likes = new ArrayCollection();
         $this->have_item = new ArrayCollection();
         $this->Demon_Player = new ArrayCollection();
+        $this->registerDate = new DateTime();
     }
 
     public function getId(): ?int
