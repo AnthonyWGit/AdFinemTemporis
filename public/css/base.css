@@ -1,0 +1,13 @@
+.container
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.navbar
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
