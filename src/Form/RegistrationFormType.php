@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -22,11 +23,13 @@ class RegistrationFormType extends AbstractType
         $builder
              ->add('username', TextType::class,
                 [
+                    'row_attr' => ['class' => 'formRow'],
                     'constraints' => [
                 new NotBlank()]
                     ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'row_attr' => ['class' => 'formRow'],
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
@@ -38,7 +41,7 @@ class RegistrationFormType extends AbstractType
                 'type' => TextType::Class,
                 'invalid_message' => 'Please enter a valid email address',
                 'options' => [
-                    'attr' => ['class' => 'password-field'],
+                    'attr' => ['class' => 'email-field'],
                     'row_attr' => ['class' => 'formRow'], //This allows us to have class on our formRow and we don't have to write widget/labels/etc
                 ],
                 'required' => true,
@@ -48,6 +51,7 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
             new NotBlank()]
                 ])
+
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
@@ -66,6 +70,10 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Ce MdP ne correspond pas aux consignes'
                     ]),
                 ]
+            ])
+            ->add('Validate', SubmitType::class, [
+                'row_attr' => ['class' => 'formRow'],
+                'attr' => ['class' => 'btn-11 custom-btn']
             ])
             ;
     }
