@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DemonPlayerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DemonPlayerRepository::class)]
@@ -37,12 +39,7 @@ class DemonPlayer
     #[ORM\ManyToOne(inversedBy: 'Demon_Player')]
     private ?Player $player = null;
 
-    #[ORM\ManyToOne(inversedBy: 'demonsPlayer1')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Battle $fighter1 = null;
 
-    #[ORM\ManyToOne(inversedBy: 'demonsPlayer2')]
-    private ?Battle $fighter2 = null;
 
     #[ORM\ManyToOne(inversedBy: 'demon_base')]
     #[ORM\JoinColumn(nullable: false)]
@@ -50,6 +47,18 @@ class DemonPlayer
 
     #[ORM\ManyToOne(inversedBy: 'demonPlayers')]
     private ?DemonBase $demon_base = null;
+
+    #[ORM\OneToMany(mappedBy: 'demonPlayer1', targetEntity: Battle::class)]
+    private Collection $fighter;
+
+    #[ORM\OneToMany(mappedBy: 'demonPlayer2', targetEntity: Battle::class)]
+    private Collection $fighter2;
+
+    public function __construct()
+    {
+        $this->fighter = new ArrayCollection();
+        $this->fighter2 = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -152,29 +161,7 @@ class DemonPlayer
         return $this;
     }
 
-    public function getFighter1(): ?Battle
-    {
-        return $this->fighter1;
-    }
 
-    public function setFighter1(?Battle $fighter1): static
-    {
-        $this->fighter1 = $fighter1;
-
-        return $this;
-    }
-
-    public function getFighter2(): ?Battle
-    {
-        return $this->fighter2;
-    }
-
-    public function setFighter2(?Battle $fighter2): static
-    {
-        $this->fighter2 = $fighter2;
-
-        return $this;
-    }
 
     public function getTrait(): ?DemonTrait
     {
@@ -196,6 +183,66 @@ class DemonPlayer
     public function setDemonBase(?DemonBase $demon_base): static
     {
         $this->demon_base = $demon_base;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Battle>
+     */
+    public function getFighter(): Collection
+    {
+        return $this->fighter;
+    }
+
+    public function addFighter(Battle $fighter): static
+    {
+        if (!$this->fighter->contains($fighter)) {
+            $this->fighter->add($fighter);
+            $fighter->setDemonPlayer1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFighter(Battle $fighter): static
+    {
+        if ($this->fighter->removeElement($fighter)) {
+            // set the owning side to null (unless already changed)
+            if ($fighter->getDemonPlayer1() === $this) {
+                $fighter->setDemonPlayer1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Battle>
+     */
+    public function getFighter2(): Collection
+    {
+        return $this->fighter2;
+    }
+
+    public function addFighter2(Battle $fighter2): static
+    {
+        if (!$this->fighter2->contains($fighter2)) {
+            $this->fighter2->add($fighter2);
+            $fighter2->setDemonPlayer2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFighter2(Battle $fighter2): static
+    {
+        if ($this->fighter2->removeElement($fighter2)) {
+            // set the owning side to null (unless already changed)
+            if ($fighter2->getDemonPlayer2() === $this) {
+                $fighter2->setDemonPlayer2(null);
+            }
+        }
 
         return $this;
     }

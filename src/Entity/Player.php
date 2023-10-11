@@ -7,10 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: PlayerRepository::class)]
+#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 class Player implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -39,8 +41,7 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registerDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'PlayersSuggestions')]
-    private ?Suggestion $send = null;
+
 
     #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'PlayersLikes')]
     private Collection $likes;
@@ -50,6 +51,15 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'player', targetEntity: DemonPlayer::class)]
     private Collection $Demon_Player;
+
+    #[ORM\ManyToOne(inversedBy: 'players')]
+    private ?Suggestion $send = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
 
     public function __construct()
     {
@@ -164,17 +174,7 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSend(): ?Suggestion
-    {
-        return $this->send;
-    }
 
-    public function setSend(?Suggestion $send): static
-    {
-        $this->send = $send;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Suggestion>
@@ -256,6 +256,42 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
                 $demonPlayer->setPlayer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSend(): ?Suggestion
+    {
+        return $this->send;
+    }
+
+    public function setSend(?Suggestion $send): static
+    {
+        $this->send = $send;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

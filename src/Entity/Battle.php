@@ -27,6 +27,12 @@ class Battle
     #[ORM\OneToMany(mappedBy: 'fighter2', targetEntity: DemonPlayer::class)]
     private Collection $demonsPlayer2;
 
+    #[ORM\ManyToOne(inversedBy: 'fighter')]
+    private ?DemonPlayer $demonPlayer1 = null;
+
+    #[ORM\ManyToOne(inversedBy: 'fighter2')]
+    private ?DemonPlayer $demonPlayer2 = null;
+
     public function __construct()
     {
         $this->demonsPlayer1 = new ArrayCollection();
@@ -118,6 +124,30 @@ class Battle
                 $demonsPlayer2->setFighter2(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDemonPlayer1(): ?DemonPlayer
+    {
+        return $this->demonPlayer1;
+    }
+
+    public function setDemonPlayer1(?DemonPlayer $demonPlayer1): static
+    {
+        $this->demonPlayer1 = $demonPlayer1;
+
+        return $this;
+    }
+
+    public function getDemonPlayer2(): ?DemonPlayer
+    {
+        return $this->demonPlayer2;
+    }
+
+    public function setDemonPlayer2(?DemonPlayer $demonPlayer2): static
+    {
+        $this->demonPlayer2 = $demonPlayer2;
 
         return $this;
     }
