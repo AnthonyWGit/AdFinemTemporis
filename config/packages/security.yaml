@@ -40,6 +40,7 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/game, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/community, roles: [ROLE_USER, ROLE_ADMIN] }
 
 when@test:
     security:
