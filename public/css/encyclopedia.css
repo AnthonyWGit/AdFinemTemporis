@@ -28,7 +28,6 @@ td, th
 {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     flex-grow: 1;
     gap: 3rem;
     padding: 1rem;
@@ -51,8 +50,12 @@ td, th
     background-color: midnightblue;
 }
 
-@media screen and (max-width: 570px) 
+@media screen and (max-width: 600px) 
 {
+    .menuTable
+    {
+        flex-wrap: wrap;
+    }
     .menu
     {
         flex-grow: 1;
