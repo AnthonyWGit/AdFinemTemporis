@@ -4,17 +4,27 @@
 
 {% block body %}
 <div class="globalDiv">
+    {# read and display just one flash message type #}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            <p>{{ message }}</p>
+            <p>It's this one : <b>{{app.user.getSend.getTitle}}</b></p>
+        </div>
+    {% endfor %}
+
+
     <div class="div">
-        <a href="/" class="looksLikeAButtonGrey">Send an idea</a>
+        <a href=" {{ path('newSuggestion')}}" class="looksLikeAButtonGrey">Send an idea</a>
     </div>
     {% if not suggestions %}
         <p>No player has an idea to offer</p>
     {% else %}
         {% for suggestion in suggestions %} 
+        <div class="cardSuggestion">
             <p>Title : {{suggestion.title}}</p>
-            <p>{{suggestion.postContent}}</p>
-            <p>{{suggestion.postDate}}</p>
-            <p>{{suggestion.likes}}</p>
+            <p>Submitted on {{suggestion.postDate|date("Y-m-d")}} at {{suggestion.postDate|date("h A : m ")}}</p>
+            <p>{{suggestion.playersLikesCount}}</p>
+        </div>
         {% endfor %}
     {% endif %}
 </div>  
