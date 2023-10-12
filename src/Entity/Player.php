@@ -267,6 +267,11 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->send;
     }
 
+    public function getSendCount(): ?int
+    {
+        return count($this->send);
+    }
+
     public function setSend(?Suggestion $send): static
     {
         $this->send = $send;
