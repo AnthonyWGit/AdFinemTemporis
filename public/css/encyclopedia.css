@@ -1,0 +1,24 @@
+table
+{
+    text-align: center;
+    border-collapse: collapse;
+}
+td, th
+{
+    border: solid 2px black;
+    padding: 0.5rem;
+}
+.divTable
+{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 5rem 2rem 5rem;
+}
+
+@media screen  and (max-width: 400px)
+{
+    .divTable
+    {
+        padding: 2rem 0.5rem 2rem 0.5rem;
+    }
+}
