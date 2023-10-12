@@ -24,6 +24,9 @@ class Skill
     #[ORM\ManyToMany(targetEntity: SkillLearnable::class, mappedBy: 'skill')]
     private Collection $skillsLearnables;
 
+    #[ORM\Column(length: 50)]
+    private ?string $dmgType = null;
+
     public function __construct()
     {
         $this->skillsLearnables = new ArrayCollection();
@@ -81,6 +84,18 @@ class Skill
         if ($this->skillsLearnables->removeElement($skillsLearnable)) {
             $skillsLearnable->removeSkill($this);
         }
+
+        return $this;
+    }
+
+    public function getDmgType(): ?string
+    {
+        return $this->dmgType;
+    }
+
+    public function setDmgType(string $dmgType): static
+    {
+        $this->dmgType = $dmgType;
 
         return $this;
     }
