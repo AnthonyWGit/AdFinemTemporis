@@ -13,7 +13,7 @@ class DemonBaseController extends AbstractController
     #[Route('/demon/base', name: 'demonsList')]
     public function index(DemonBaseRepository $demonBaseRepository): Response
     {
-        $demonsBases = $demonBaseRepository->findBy([], ["name" => "ASC"]);
+        $demonsBases = $demonBaseRepository->findBy([], ["id" => "ASC"]);
         return $this->render('demon_base/index.html.twig', [
             'demons' => $demonsBases,
         ]);
