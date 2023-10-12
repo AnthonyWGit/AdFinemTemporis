@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Encyclopedia : Demons{% endblock %}
+
+{% block body %}
+    <div class="menuTable">
+
+
+        <div class="menu">
+            <ul>
+                <li><a href=" {{path('demonsList')}}">Gods</a></li>
+                <li><a href=" {{path('itemsList')}}">Items</a></li>
+                <li><a href=" {{path('skillsList')}}">Skills</a></li>
+                <li>Traits</li>
+            </ul>
+        </div>
+        <div class="divTable">
+        <table>
+            <thead>
+                <tr>
+                    <th><b>ID</b></th>
+                    <th><b>Name</b></th>
+                    <th><b>Base dmg</b></th>
+                    <th><b>Type dmg</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skill in skills %}
+                <tr>
+                    <td>{{skill.id}}</td>
+                    <td>{{skill.name}}</td>
+                    <td>{{skill.basedmg}}</td>
+                    <td>{{skill.dmgtype}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}
