@@ -1,0 +1,22 @@
+.globalDiv
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.div 
+{
+    display: flex;
+    padding: 1rem;
+}
+
+.cardSuggestion
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.5rem;
+}
