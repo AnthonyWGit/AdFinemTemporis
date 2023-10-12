@@ -25,9 +25,6 @@ class Suggestion
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $img = null;
 
-    #[ORM\Column]
-    private ?int $likes = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $postDate = null;
 
@@ -84,21 +81,14 @@ class Suggestion
         return $this;
     }
 
-    public function getLikes(): ?int
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(int $likes): static
-    {
-        $this->likes = $likes;
-
-        return $this;
-    }
-
     public function getPostDate(): ?\DateTimeInterface
     {
         return $this->postDate;
+    }
+
+    public function getPostDateFormat(): ?string
+    {
+        return $this->postDate->format('Y-m-d H:i:s');
     }
 
     public function setPostDate(\DateTimeInterface $postDate): static
@@ -114,6 +104,11 @@ class Suggestion
     public function getPlayersSuggestions(): Collection
     {
         return $this->PlayersSuggestions;
+    }
+
+    public function getPlayersSuggestionsCount(): int
+    {
+        return count($this->PlayersSuggestions);
     }
 
     public function addPlayersSuggestion(Player $playersSuggestion): static
@@ -144,6 +139,11 @@ class Suggestion
     public function getPlayersLikes(): Collection
     {
         return $this->PlayersLikes;
+    }
+
+    public function getPlayersLikesCount(): int
+    {
+        return count($this->PlayersLikes);
     }
 
     public function addPlayersLike(Player $playersLike): static
