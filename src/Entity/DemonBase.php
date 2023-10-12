@@ -36,15 +36,19 @@ class DemonBase
     #[ORM\OneToMany(mappedBy: 'demon_base', targetEntity: DemonPlayer::class)]
     private Collection $demonPlayers;
 
-    #[ORM\ManyToOne(inversedBy: 'demonsBases')]
-    private ?SkillLearnable $skill_learnable = null;
-
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'demonBase', targetEntity: SkillTable::class)]
+    private Collection $skill_table;
+
+    #[ORM\Column(length: 255)]
+    private ?string $pantheon = null;
 
     public function __construct()
     {
         $this->demonPlayers = new ArrayCollection();
+        $this->skill_table = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,18 +158,6 @@ class DemonBase
         return $this;
     }
 
-    public function getSkillLearnable(): ?SkillLearnable
-    {
-        return $this->skill_learnable;
-    }
-
-    public function setSkillLearnable(?SkillLearnable $skill_learnable): static
-    {
-        $this->skill_learnable = $skill_learnable;
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
@@ -177,4 +169,47 @@ class DemonBase
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, SkillTable>
+     */
+    public function getSkillTable(): Collection
+    {
+        return $this->skill_table;
+    }
+
+    public function addSkillTable(SkillTable $skillTable): static
+    {
+        if (!$this->skill_table->contains($skillTable)) {
+            $this->skill_table->add($skillTable);
+            $skillTable->setDemonBase($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkillTable(SkillTable $skillTable): static
+    {
+        if ($this->skill_table->removeElement($skillTable)) {
+            // set the owning side to null (unless already changed)
+            if ($skillTable->getDemonBase() === $this) {
+                $skillTable->setDemonBase(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPantheon(): ?string
+    {
+        return $this->pantheon;
+    }
+
+    public function setPantheon(string $pantheon): static
+    {
+        $this->pantheon = $pantheon;
+
+        return $this;
+    }
+
 }

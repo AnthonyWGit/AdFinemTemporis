@@ -54,10 +54,14 @@ class DemonPlayer
     #[ORM\OneToMany(mappedBy: 'demonPlayer2', targetEntity: Battle::class)]
     private Collection $fighter2;
 
+    #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'demonPlayers')]
+    private Collection $skill;
+
     public function __construct()
     {
         $this->fighter = new ArrayCollection();
         $this->fighter2 = new ArrayCollection();
+        $this->skill = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,6 +247,30 @@ class DemonPlayer
                 $fighter2->setDemonPlayer2(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkill(): Collection
+    {
+        return $this->skill;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skill->contains($skill)) {
+            $this->skill->add($skill);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        $this->skill->removeElement($skill);
 
         return $this;
     }

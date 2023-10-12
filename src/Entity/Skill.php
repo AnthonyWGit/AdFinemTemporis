@@ -21,16 +21,18 @@ class Skill
     #[ORM\Column]
     private ?int $baseDmg = null;
 
-    #[ORM\ManyToMany(targetEntity: SkillLearnable::class, mappedBy: 'skill')]
-    private Collection $skillsLearnables;
-
     #[ORM\Column(length: 50)]
     private ?string $dmgType = null;
 
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillTable::class)]
+    private Collection $skill_table;
+
     public function __construct()
     {
-        $this->skillsLearnables = new ArrayCollection();
+        $this->demonPlayers = new ArrayCollection();
+        $this->skill_table = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -61,32 +63,6 @@ class Skill
         return $this;
     }
 
-    /**
-     * @return Collection<int, SkillLearnable>
-     */
-    public function getSkillsLearnables(): Collection
-    {
-        return $this->skillsLearnables;
-    }
-
-    public function addSkillsLearnable(SkillLearnable $skillsLearnable): static
-    {
-        if (!$this->skillsLearnables->contains($skillsLearnable)) {
-            $this->skillsLearnables->add($skillsLearnable);
-            $skillsLearnable->addSkill($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSkillsLearnable(SkillLearnable $skillsLearnable): static
-    {
-        if ($this->skillsLearnables->removeElement($skillsLearnable)) {
-            $skillsLearnable->removeSkill($this);
-        }
-
-        return $this;
-    }
 
     public function getDmgType(): ?string
     {
@@ -99,4 +75,62 @@ class Skill
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, DemonPlayer>
+     */
+    public function getDemonPlayers(): Collection
+    {
+        return $this->demonPlayers;
+    }
+
+    public function addDemonPlayer(DemonPlayer $demonPlayer): static
+    {
+        if (!$this->demonPlayers->contains($demonPlayer)) {
+            $this->demonPlayers->add($demonPlayer);
+            $demonPlayer->addSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemonPlayer(DemonPlayer $demonPlayer): static
+    {
+        if ($this->demonPlayers->removeElement($demonPlayer)) {
+            $demonPlayer->removeSkill($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SkillTable>
+     */
+    public function getSkillTable(): Collection
+    {
+        return $this->skill_table;
+    }
+
+    public function addSkillTable(SkillTable $skillTable): static
+    {
+        if (!$this->skill_table->contains($skillTable)) {
+            $this->skill_table->add($skillTable);
+            $skillTable->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkillTable(SkillTable $skillTable): static
+    {
+        if ($this->skill_table->removeElement($skillTable)) {
+            // set the owning side to null (unless already changed)
+            if ($skillTable->getSkill() === $this) {
+                $skillTable->setSkill(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

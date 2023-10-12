@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\SkillLearnable;
+use App\Entity\SkillTable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<SkillLearnable>
+ * @extends ServiceEntityRepository<SkillTable>
  *
- * @method SkillLearnable|null find($id, $lockMode = null, $lockVersion = null)
- * @method SkillLearnable|null findOneBy(array $criteria, array $orderBy = null)
- * @method SkillLearnable[]    findAll()
- * @method SkillLearnable[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SkillTable|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SkillTable|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SkillTable[]    findAll()
+ * @method SkillTable[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SkillLearnableRepository extends ServiceEntityRepository
+class SkillTableRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SkillLearnable::class);
+        parent::__construct($registry, SkillTable::class);
     }
 
 //    /**
-//     * @return SkillLearnable[] Returns an array of SkillLearnable objects
+//     * @return SkillTable[] Returns an array of SkillTable objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class SkillLearnableRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?SkillLearnable
+//    public function findOneBySomeField($value): ?SkillTable
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')
