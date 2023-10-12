@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Encyclopedia : Demons{% endblock %}
+
+{% block body %}
+    <div class="divTable">
+    <table>
+        <thead>
+            <tr>
+                <th><b>ID</b></th>
+                <th><b>Nom</b></th>
+                <th><b>Pantheon</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demon in demons %}
+            <tr>
+                <td>{{demon.id}}</td>
+                <td>{{demon.name}}</td>
+                <td>{{demon.pantheon}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

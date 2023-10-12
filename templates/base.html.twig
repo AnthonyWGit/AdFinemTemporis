@@ -12,6 +12,7 @@
             <link rel="stylesheet" href="{{ asset('css/looksLikeAButton.css') }}">
             <link rel="stylesheet" href="{{ asset('css/home.css') }}">
             <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/encyclopedia.css') }}">
         {% endblock %}
 
         {% block javascripts %}
@@ -20,7 +21,7 @@
     <body>
         <nav class="navbar">
             <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Home.svg') }}"> Home</a>
-            <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Book.svg') }}"> Encyclopedia</a>
+            <a class="iconText" href=" {{path("demonsList")}}" ><img class="navSvg" src="{{ asset('img/Book.svg') }}"> Encyclopedia</a>
             <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Chem.svg') }}"> The Lab</a>
             <a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Community.svg') }}"> Community</a>
             {% if not app.user %}
