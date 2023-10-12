@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommunityController!{% endblock %}
+
+{% block body %}
+<div class="globalDiv">
+    <div class="div">
+        <a href="/" class="looksLikeAButtonGrey">Send an idea</a>
+    </div>
+    {% if not suggestions %}
+        <p>No player has an idea to offer</p>
+    {% else %}
+        {% for suggestion in suggestions %} 
+            <p>Title : {{suggestion.title}}</p>
+            <p>{{suggestion.postContent}}</p>
+            <p>{{suggestion.postDate}}</p>
+            <p>{{suggestion.likes}}</p>
+        {% endfor %}
+    {% endif %}
+</div>  
+{% endblock %}
