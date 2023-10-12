@@ -63,6 +63,14 @@ input
     gap: 1rem;
 }
 
+@media screen and (max-width : 800px)
+{
+    .navbar
+    {
+        height: 5rem;
+    }
+}
+
 .footer
 {
     height: 10rem;
