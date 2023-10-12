@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{# {% block meta %}
+<meta name="description" content="Formulaire création nouveau programme">
+{% endblock %} #}
+
+{% block title %}
+    {% if not edit %}
+        Create a suggestion
+    {% else %}
+        Edit your suggestion
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if not edit %}
+        <h1>Create a suggestion</h1>
+    {% else %}
+        <h1>Edit</h1>
+    {% endif %}
+    <div class="formGlobal">
+        <div class="formInside">
+        {{ form_start(formNewSuggestion) }}
+            {{ form_row(formNewSuggestion.title) }}
+            {{ form_row(formNewSuggestion.postContent) }}
+            {{ form_row(formNewSuggestion.img) }}
+            {{ form_row(formNewSuggestion.Validate) }}
+        {{ form_end(formNewSuggestion) }}
+        {{dump(formNewSuggestion)}}
+        </div>
+    </div>
+{% endblock %}
