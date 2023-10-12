@@ -24,6 +24,9 @@ class Item
     #[ORM\ManyToOne(inversedBy: 'items')]
     private ?Category $category = null;
 
+    #[ORM\Column]
+    private ?int $cost = null;
+
     public function __construct()
     {
         $this->Have_Item = new ArrayCollection();
@@ -84,6 +87,18 @@ class Item
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
+    }
+
+    public function setCost(int $cost): static
+    {
+        $this->cost = $cost;
 
         return $this;
     }
