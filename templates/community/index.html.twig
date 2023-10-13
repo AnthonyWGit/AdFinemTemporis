@@ -8,7 +8,7 @@
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">
             <p>{{ message }}</p>
-            <p>It's this one : <b>{{app.user.getSend.getTitle}}</b></p>
+            <p>It's this one : <b></b></p>
         </div>
     {% endfor %}
 
@@ -20,11 +20,28 @@
         <p>No player has an idea to offer</p>
     {% else %}
         {% for suggestion in suggestions %} 
+            {% for player in suggestion.playersSuggestions %}
         <div class="cardSuggestion">
-            <p>Title : {{suggestion.title}}</p>
-            <p>Submitted on {{suggestion.postDate|date("Y-m-d")}} at {{suggestion.postDate|date("h A : m ")}}</p>
-            <p>{{suggestion.playersLikesCount}}</p>
+            <div class="row">
+                <p>Title : {{suggestion.title}}</p>
+                <p>Author : {{player.username}}</p>
+            </div>
+            <p>Submitted on {{suggestion.postDate|date("Y-m-d")}} at {{suggestion.postDate|date("h:m A ")}}</p>
+            <p>
+                    {% if app.user in suggestion.playersLikes %}
+                        <a href="{{ path('unlikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                            <img class="navSvg" src=" {{asset("img/heart-full.svg") }}">
+                        </a>
+                    {% else %}
+                        <a href="{{ path('addLikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                            <img class="navSvg" src=" {{asset("img/heart-empty.svg") }}">
+                        </a>
+                {% endif %}
+                    {{suggestion.playersLikesCount}}
+            </p>
+
         </div>
+            {% endfor %}
         {% endfor %}
     {% endif %}
 </div>  
