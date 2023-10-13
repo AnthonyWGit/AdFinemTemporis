@@ -44,17 +44,11 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registerDate;
 
-    #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'PlayersLikes')]
-    private Collection $likes;
-
     #[ORM\OneToMany(mappedBy: 'player', targetEntity: HaveItem::class)]
     private Collection $have_item;
 
     #[ORM\OneToMany(mappedBy: 'player', targetEntity: DemonPlayer::class)]
     private Collection $Demon_Player;
-
-    #[ORM\ManyToOne(inversedBy: 'players')]
-    private ?Suggestion $send = null;
 
     #[ORM\Column(length: 100)]
     private ?string $email = null;
@@ -62,12 +56,23 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'playersSuggestions')]
+    #[ORM\JoinTable(name: "player_suggestions")]
+    private Collection $suggestions;
+
+    #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'playersLikes')]
+    #[ORM\JoinTable(name: "player_likes")]
+    private Collection $likes;
+
+
     public function __construct()
     {
-        $this->likes = new ArrayCollection();
         $this->have_item = new ArrayCollection();
         $this->Demon_Player = new ArrayCollection();
         $this->registerDate = new DateTime();
+        $this->suggestions = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -176,32 +181,6 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
-    /**
-     * @return Collection<int, Suggestion>
-     */
-    public function getLikes(): Collection
-    {
-        return $this->likes;
-    }
-
-    public function addLike(Suggestion $like): static
-    {
-        if (!$this->likes->contains($like)) {
-            $this->likes->add($like);
-        }
-
-        return $this;
-    }
-
-    public function removeLike(Suggestion $like): static
-    {
-        $this->likes->removeElement($like);
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, HaveItem>
      */
@@ -262,22 +241,6 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSend(): ?Suggestion
-    {
-        return $this->send;
-    }
-
-    public function getSendCount(): ?int
-    {
-        return count($this->send);
-    }
-
-    public function setSend(?Suggestion $send): static
-    {
-        $this->send = $send;
-
-        return $this;
-    }
 
     public function getEmail(): ?string
     {
@@ -302,4 +265,53 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Suggestion>
+     */
+    public function getSuggestions(): Collection
+    {
+        return $this->suggestions;
+    }
+
+    public function addSuggestion(Suggestion $suggestion): static
+    {
+        if (!$this->suggestions->contains($suggestion)) {
+            $this->suggestions->add($suggestion);
+        }
+
+        return $this;
+    }
+
+    public function removeSuggestion(Suggestion $suggestion): static
+    {
+        $this->suggestions->removeElement($suggestion);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Suggestion>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Suggestion $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Suggestion $like): static
+    {
+        $this->likes->removeElement($like);
+
+        return $this;
+    }
+
 }

@@ -28,16 +28,20 @@ class Suggestion
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $postDate = null;
 
-    #[ORM\OneToMany(mappedBy: 'send', targetEntity: Player::class)]
-    private Collection $PlayersSuggestions;
+    #[ORM\ManyToMany(targetEntity: Player::class, mappedBy: 'suggestions')]
+    private Collection $playersSuggestions;
 
     #[ORM\ManyToMany(targetEntity: Player::class, mappedBy: 'likes')]
-    private Collection $PlayersLikes;
+    private Collection $playersLikes;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
 
     public function __construct()
     {
-        $this->PlayersSuggestions = new ArrayCollection();
         $this->PlayersLikes = new ArrayCollection();
+        $this->playersSuggestions = new ArrayCollection();
+        $this->playersLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,19 +107,14 @@ class Suggestion
      */
     public function getPlayersSuggestions(): Collection
     {
-        return $this->PlayersSuggestions;
-    }
-
-    public function getPlayersSuggestionsCount(): int
-    {
-        return count($this->PlayersSuggestions);
+        return $this->playersSuggestions;
     }
 
     public function addPlayersSuggestion(Player $playersSuggestion): static
     {
-        if (!$this->PlayersSuggestions->contains($playersSuggestion)) {
-            $this->PlayersSuggestions->add($playersSuggestion);
-            $playersSuggestion->setSend($this);
+        if (!$this->playersSuggestions->contains($playersSuggestion)) {
+            $this->playersSuggestions->add($playersSuggestion);
+            $playersSuggestion->addSuggestion($this);
         }
 
         return $this;
@@ -123,11 +122,8 @@ class Suggestion
 
     public function removePlayersSuggestion(Player $playersSuggestion): static
     {
-        if ($this->PlayersSuggestions->removeElement($playersSuggestion)) {
-            // set the owning side to null (unless already changed)
-            if ($playersSuggestion->getSend() === $this) {
-                $playersSuggestion->setSend(null);
-            }
+        if ($this->playersSuggestions->removeElement($playersSuggestion)) {
+            $playersSuggestion->removeSuggestion($this);
         }
 
         return $this;
@@ -138,18 +134,18 @@ class Suggestion
      */
     public function getPlayersLikes(): Collection
     {
-        return $this->PlayersLikes;
+        return $this->playersLikes;
     }
 
-    public function getPlayersLikesCount(): int
+    public function getPlayersLikesCount(): ?int
     {
-        return count($this->PlayersLikes);
+        return count($this->playersLikes);
     }
 
     public function addPlayersLike(Player $playersLike): static
     {
-        if (!$this->PlayersLikes->contains($playersLike)) {
-            $this->PlayersLikes->add($playersLike);
+        if (!$this->playersLikes->contains($playersLike)) {
+            $this->playersLikes->add($playersLike);
             $playersLike->addLike($this);
         }
 
@@ -158,11 +154,24 @@ class Suggestion
 
     public function removePlayersLike(Player $playersLike): static
     {
-        if ($this->PlayersLikes->removeElement($playersLike)) {
+        if ($this->playersLikes->removeElement($playersLike)) {
             $playersLike->removeLike($this);
         }
 
         return $this;
     }
 
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+ 
 }
