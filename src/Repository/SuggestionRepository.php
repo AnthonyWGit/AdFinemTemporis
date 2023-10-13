@@ -45,4 +45,15 @@ class SuggestionRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findSuggestionsOrderedByLikes()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s, COUNT(p) AS HIDDEN likes')
+            ->leftJoin('s.playersLikes', 'p')
+            ->groupBy('s')
+            ->orderBy('likes', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

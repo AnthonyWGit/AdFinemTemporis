@@ -18,7 +18,7 @@ class CommunityController extends AbstractController
     #[Route('/community', name: 'community')]
     public function index(SuggestionRepository $suggestionRepository, PlayerRepository $playerRepository): Response
     {
-        $suggestions = $suggestionRepository->findBy([], ["postDate" => "ASC"]);
+        $suggestions = $suggestionRepository->findSuggestionsOrderedByLikes();
         return $this->render('community/index.html.twig', [
             'suggestions' => $suggestions
         ]);
