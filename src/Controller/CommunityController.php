@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Player;
 use App\Entity\Suggestion;
 use App\Form\SuggestionType;
+use App\Repository\PlayerRepository;
 use App\Repository\SuggestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,27 +16,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CommunityController extends AbstractController
 {
     #[Route('/community', name: 'community')]
-    public function index(SuggestionRepository $suggestionRepository): Response
+    public function index(SuggestionRepository $suggestionRepository, PlayerRepository $playerRepository): Response
     {
         $suggestions = $suggestionRepository->findBy([], ["postDate" => "ASC"]);
         return $this->render('community/index.html.twig', [
-            'suggestions' => $suggestions,
+            'suggestions' => $suggestions
         ]);
     }
 
     #[Route('community/suggestion/new', name: 'newSuggestion')]
-    #[Route('cummunity/suggestion/{id}/edit', name: 'editSuggestion')]
+    #[Route('community/suggestion/{id}/edit', name: 'editSuggestion')]
     public function new(Suggestion $suggestion = null, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!is_null($this->getUser()->getSend()))
+
+        foreach ($this->getUser()->getSuggestions() as $suggestion)
         {
-            $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
-            (
-                'notice',
-                'You already have made a suggestion !'
-            );
-            return $this->redirectToRoute('community');
+            if ($suggestion->getStatus("pending"))
+            {
+                $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                (
+                    'notice',
+                    'You already have made a suggestion !'
+                );
+                return $this->redirectToRoute('community');
+            }
+            else
+            {
+
+            }
         }
+
         // creates a task object and initializes some data for this example
         if ($suggestion === null) {
             $suggestion = new Suggestion();
@@ -47,7 +58,8 @@ class CommunityController extends AbstractController
 
                 $date = new \DateTime();
                 $suggestion->setPostDate($date);
-                $this->getUser()->setSend($suggestion);
+                $suggestion->setStatus("pending");
+                $suggestion->addPlayersSuggestion($this->getUser());
                 $entityManager->persist($suggestion); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
 
@@ -61,6 +73,26 @@ class CommunityController extends AbstractController
             }
         
         return $this->render("community/new.html.twig", ['formNewSuggestion' => $form, 'edit' => $suggestion->getId()]);
+    }
+
+    #[Route('community/suggestion/{id}/like/{player}', name: 'addLikeSuggestion')]
+    public function addLike(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
+    {
+        $suggestion->addPlayersLike($player);
+        $entityManager->persist($suggestion);
+        $entityManager->flush();
+        return $this->redirectToRoute('community');            
+    }
+
+    #[Route('community/suggestion/{id}/unlike/{player}', name: 'unlikeSuggestion')]
+    public function unLike(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
+    {
+        
+        $suggestion->removePlayersLike($player);
+        $entityManager->persist($suggestion);
+        $entityManager->flush();
+        return $this->redirectToRoute('community');
+    
     }
 
 }
