@@ -9,3 +9,23 @@
     justify-content: center;
     align-items: center;
 }
+
+.looksLikeAButtonBlue
+{
+    display: flex;
+    background-color: var(--blueButton);
+    border-radius: 15px;
+    padding: 0.5rem;
+    width: 10rem;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: gold;
+}
+
+.looksLikeAButtonBlue:hover
+{
+    transition: 1s;
+    background-color: var(--blueButtonHover);
+}
