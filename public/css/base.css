@@ -2,7 +2,7 @@
 {
     --base-color1 : rgba(25, 25, 112 , 0.804);
     --base-noalpha-color1 :25, 25, 112;
-    --base-color2 : hsl(320, 100%, 30%);
+    --base-color2 : hsl(320, 100%, 12%);
 }
 
 *
@@ -16,7 +16,7 @@ html
 
     background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
     background-attachment: fixed;
-    color: gold;
+    color: #ffd700;
 
 }
 
@@ -80,6 +80,8 @@ input
 .navbar a
 {
     font-size: 1.5rem;
+    text-decoration: none;
+    color: azure;
 }
 
 .formGlobal
