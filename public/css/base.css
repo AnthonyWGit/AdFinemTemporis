@@ -3,6 +3,7 @@
     --base-color1 : rgba(25, 25, 112 , 0.804);
     --base-noalpha-color1 :25, 25, 112;
     --base-color2 : hsl(320, 100%, 12%);
+    --postContentColor : rgba(0, 0, 0, 1);
 }
 
 *

@@ -85,16 +85,22 @@
 .deleteOwn
 {
     position: absolute;
-    top: 0.5rem;
+    top: 15px;
     bottom: 0;
     right: 0;
-    left: 35rem;
+    left: 540px;
     z-index: 100;
+}
+
+.deleteOwn a
+{
+    color: red;
+    text-decoration: none;
 }
 
 .content
 {
     font-size: 1rem;
-    color: rgb(0, 0, 0);
+    color: var(--postContentColor);
     white-space: pre-wrap;
 }
