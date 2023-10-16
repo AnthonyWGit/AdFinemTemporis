@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommunityController!{% endblock %}
+
+{% block body %}
+<div class="globalDiv">
+    {# read and display just one flash message type #}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            <p>{{ message }}</p>
+            <p>It's this one : <b></b></p>
+        </div>
+    {% endfor %}
+
+        <p>{{suggestion.title}}</p>
+        <p>{{suggestion.postDate|date("Y-m-d H : m A")}}</p>
+        <p>{{suggestion.postContent}}</p>
+        <p>{{suggestion.status}}</p>
+    </div>
+ 
+{% endblock %}
