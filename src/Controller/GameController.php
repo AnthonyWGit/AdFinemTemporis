@@ -8,11 +8,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GameController extends AbstractController
 {
-    #[Route('/game', name: 'app_game')]
+    #[Route('/game', name: 'game')]
     public function index(): Response
     {
-        return $this->render('game/index.html.twig', [
-            'controller_name' => 'GameController',
-        ]);
+        if ($this->getUser()->getStage() == 0)
+        {
+            return $this->render('game/index.html.twig', [
+                'controller_name' => 'GameController',
+            ]);           
+        }
+        else
+        {
+
+        }
     }
 }
