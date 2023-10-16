@@ -3,7 +3,7 @@
 {% block title %}Hello CommunityController!{% endblock %}
 
 {% block body %}
-<div class="globalDiv">
+<div class="globalDivColor">
     {# read and display just one flash message type #}
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">
@@ -11,11 +11,12 @@
             <p>It's this one : <b></b></p>
         </div>
     {% endfor %}
-
-        <p>{{suggestion.title}}</p>
-        <p>{{suggestion.postDate|date("Y-m-d H : m A")}}</p>
-        <p>{{suggestion.postContent}}</p>
-        <p>{{suggestion.status}}</p>
+    <div class="textArea">
+            <p><b>{{suggestion.title}} | {{player.username}}</b></p>
+            <p>Creation date : <b>{{suggestion.postDate|date("Y-m-d H : m A")}}</b></p>
+            <p class="content">{{suggestion.postContent}}</p>
+            <p>{{suggestion.status}}</p>
+        </div>
     </div>
  
 {% endblock %}
