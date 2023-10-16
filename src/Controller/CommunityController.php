@@ -75,11 +75,12 @@ class CommunityController extends AbstractController
         return $this->render("community/new.html.twig", ['formNewSuggestion' => $form, 'edit' => $suggestion->getId()]);
     }
 
-    #[Route('community/suggestion/detail/{title}-{player}', name: 'detailSuggestion')]
-    public function detail(Suggestion $suggestion): Response
+    #[Route('community/suggestion/detail/{title}{player}', name: 'detailSuggestion')]
+    public function detail(Suggestion $suggestion, Player $player): Response
     {
         return $this->render('community/detail.html.twig', [
-            'suggestion' => $suggestion
+            'suggestion' => $suggestion,
+            'player' => $player
         ]);
     }
 
@@ -100,7 +101,26 @@ class CommunityController extends AbstractController
         $entityManager->persist($suggestion);
         $entityManager->flush();
         return $this->redirectToRoute('community');
-    
     }
 
+    #[Route('community/suggestion/{id}/delete/{player}', name: 'deleteSuggestion')]
+    public function delete(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
+    {
+        if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author
+        {
+            $suggestion->removePlayersSuggestion($player);
+            $entityManager->persist($suggestion);
+            $entityManager->flush();
+            return $this->redirectToRoute('community');            
+        }
+
+        else
+        {
+            $this->addFlash(
+                'error',
+                "You can't do that !"
+            );
+            return $this->redirectToRoute("community");
+        }
+    }
 }
