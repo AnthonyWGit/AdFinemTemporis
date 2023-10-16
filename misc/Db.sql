@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.category : ~2 rows (environ)
-INSERT INTO `category` (`id`, `name`) VALUES
+REPLACE INTO `category` (`id`, `name`) VALUES
 	(1, 'Healing'),
 	(2, 'Utility');
 
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `demon_base` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.demon_base : ~3 rows (environ)
-INSERT INTO `demon_base` (`id`, `str_demon_base`, `end_demon_base`, `agi_demon_base`, `inte_demon_base`, `lck_demon_base`, `img`, `name`, `pantheon`) VALUES
+REPLACE INTO `demon_base` (`id`, `str_demon_base`, `end_demon_base`, `agi_demon_base`, `inte_demon_base`, `lck_demon_base`, `img`, `name`, `pantheon`) VALUES
 	(1, 5, 5, 5, 5, 5, NULL, 'Ymir', 'Norse'),
 	(2, 5, 5, 5, 5, 5, NULL, 'Hades', 'Greek'),
 	(3, 5, 5, 5, 5, 5, NULL, 'Horus', 'Egyptian');
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `demon_trait` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.demon_trait : ~6 rows (environ)
-INSERT INTO `demon_trait` (`id`, `name`, `strength`, `endurance`, `agility`, `intelligence`, `luck`) VALUES
+REPLACE INTO `demon_trait` (`id`, `name`, `strength`, `endurance`, `agility`, `intelligence`, `luck`) VALUES
 	(1, 'Sturdy', 0, 10, -5, 0, 0),
 	(2, 'Agile', 0, 0, 10, 0, 0),
 	(3, 'Frail', -5, -5, 10, 0, 5),
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `item` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.item : ~3 rows (environ)
-INSERT INTO `item` (`id`, `category_id`, `name`, `cost`) VALUES
+REPLACE INTO `item` (`id`, `category_id`, `name`, `cost`) VALUES
 	(1, 1, 'Potion', 0),
 	(2, 1, 'Super Potion', 0),
 	(3, 1, 'Hyper Potion', 0);
@@ -187,14 +187,15 @@ CREATE TABLE IF NOT EXISTS `player` (
   `is_verified` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_98197A65F85E0677` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table adfinemtemporis.player : ~4 rows (environ)
-INSERT INTO `player` (`id`, `username`, `password`, `gold`, `stage`, `register_date`, `email`, `roles`, `is_verified`) VALUES
+-- Listage des données de la table adfinemtemporis.player : ~5 rows (environ)
+REPLACE INTO `player` (`id`, `username`, `password`, `gold`, `stage`, `register_date`, `email`, `roles`, `is_verified`) VALUES
 	(1, 'Olalal', '$2y$13$nfKUHgbppLCB74JcIBmYc.ckMIte6jgfzxRir25HtbwTbkcaeazCC', 0, 0, '2023-10-11 10:43:53', 'ola@gmail.com', '[]', 0),
 	(2, 'Olalale', '$2y$13$d4qayu3defJ6iO4Ssr.rbOBxjp1g2HSvNm2YsmgOE1WjEwyIiSHym', 0, 0, '2023-10-11 10:44:47', 'ola@gmail.com', '["ROLE_USER"]', 1),
 	(4, 'User', '$2y$13$Oy57JjphDud1/cbc0MT0M.s/PfKt1UWg/tVLnP9Rqso1YxC0koFM2', 0, 0, '2023-10-11 13:05:13', 'user@gmail.com', '["ROLE_USER"]', 1),
-	(5, 'Admin', '$2y$13$bu3ITkY7nVaBBlBjgxxcxexB7GVdv7XL0xj.LofbBCLRKEU432QDC', 0, 0, '2023-10-12 11:12:40', 'admin@gmail.com', '["ROLE_ADMIN"]', 1);
+	(5, 'Admin', '$2y$13$bu3ITkY7nVaBBlBjgxxcxexB7GVdv7XL0xj.LofbBCLRKEU432QDC', 0, 0, '2023-10-12 11:12:40', 'admin@gmail.com', '["ROLE_ADMIN"]', 1),
+	(7, 'UserTwo', '$2y$13$CMcsnzGceFX/2YiL1Mpt5.vNLySi035fyLB6yZfjVpqChJLQqVg..', 0, 0, '2023-10-16 09:51:47', 'thisemail@gmail.com', '[]', 1);
 
 -- Listage de la structure de table adfinemtemporis. player_likes
 CREATE TABLE IF NOT EXISTS `player_likes` (
@@ -207,12 +208,11 @@ CREATE TABLE IF NOT EXISTS `player_likes` (
   CONSTRAINT `FK_F6B8353BA41BB822` FOREIGN KEY (`suggestion_id`) REFERENCES `suggestion` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table adfinemtemporis.player_likes : ~0 rows (environ)
-INSERT INTO `player_likes` (`player_id`, `suggestion_id`) VALUES
-	(4, 10),
-	(4, 11),
-	(4, 12),
-	(5, 11);
+-- Listage des données de la table adfinemtemporis.player_likes : ~4 rows (environ)
+REPLACE INTO `player_likes` (`player_id`, `suggestion_id`) VALUES
+	(4, 13),
+	(7, 13),
+	(7, 21);
 
 -- Listage de la structure de table adfinemtemporis. player_suggestions
 CREATE TABLE IF NOT EXISTS `player_suggestions` (
@@ -225,10 +225,10 @@ CREATE TABLE IF NOT EXISTS `player_suggestions` (
   CONSTRAINT `FK_C9816F81A41BB822` FOREIGN KEY (`suggestion_id`) REFERENCES `suggestion` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table adfinemtemporis.player_suggestions : ~1 rows (environ)
-INSERT INTO `player_suggestions` (`player_id`, `suggestion_id`) VALUES
-	(4, 12),
-	(5, 11);
+-- Listage des données de la table adfinemtemporis.player_suggestions : ~2 rows (environ)
+REPLACE INTO `player_suggestions` (`player_id`, `suggestion_id`) VALUES
+	(4, 13),
+	(7, 21);
 
 -- Listage de la structure de table adfinemtemporis. skill
 CREATE TABLE IF NOT EXISTS `skill` (
@@ -239,8 +239,8 @@ CREATE TABLE IF NOT EXISTS `skill` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table adfinemtemporis.skill : ~10 rows (environ)
-INSERT INTO `skill` (`id`, `name`, `base_dmg`, `dmg_type`) VALUES
+-- Listage des données de la table adfinemtemporis.skill : ~19 rows (environ)
+REPLACE INTO `skill` (`id`, `name`, `base_dmg`, `dmg_type`) VALUES
 	(1, 'Charge', 100, 'phys'),
 	(2, 'Stomp', 200, 'phys'),
 	(3, 'Fire', 100, 'mag'),
@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `skill_table` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.skill_table : ~0 rows (environ)
-INSERT INTO `skill_table` (`id`, `level`, `skill_id`, `demon_base_id`) VALUES
+REPLACE INTO `skill_table` (`id`, `level`, `skill_id`, `demon_base_id`) VALUES
 	(1, 1, 4, 1),
 	(2, 10, 13, 1),
 	(3, 15, 14, 1);
@@ -287,17 +287,14 @@ CREATE TABLE IF NOT EXISTS `suggestion` (
   `post_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `post_date` datetime NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table adfinemtemporis.suggestion : ~1 rows (environ)
-INSERT INTO `suggestion` (`id`, `title`, `post_content`, `img`, `post_date`, `status`) VALUES
-	(8, 'Some', 'Sugg', NULL, '2023-10-13 08:20:33', 'pending'),
-	(9, 'Some', 'zzz', NULL, '2023-10-13 08:21:15', 'pending'),
-	(10, 'SSS', 'Sza', NULL, '2023-10-13 08:32:04', 'pending'),
-	(11, 'Isa', 'azedaq', NULL, '2023-10-13 13:52:46', 'pending'),
-	(12, 'qzdz', 'qzdz', NULL, '2023-10-13 14:26:59', 'pending');
+-- Listage des données de la table adfinemtemporis.suggestion : ~5 rows (environ)
+REPLACE INTO `suggestion` (`id`, `title`, `post_content`, `img`, `post_date`, `status`) VALUES
+	(13, 'Title', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus dictum leo ac nisl convallis sollicitudin. Cras nec ligula vel augue faucibus malesuada. Nulla tellus enim, volutpat sit amet tempus eu, laoreet et nisi. Cras sit amet dolor odio. Nulla nec sem velit. Suspendisse non maximus urna, a congue quam. Maecenas eu lorem molestie, venenatis eros eget, pulvinar est. Donec ornare mi vitae sem blandit, eget molestie erat sodales. Nullam a eros at purus malesuada sagittis quis at nibh. Nullam ut augue euismod, placerat eros non, volutpat nisi. In hac habitasse platea dictumst. Mauris sodales dui ante, nec pellentesque quam vestibulum eget. Morbi ut imperdiet diam. Vestibulum tristique nibh a ligula pharetra pulvinar non eget enim.\r\n\r\nCurabitur ex nunc, lacinia id mattis ut, mollis quis lectus. Nullam sit amet finibus purus, quis hendrerit nunc. Ut sed blandit nunc. Nullam semper euismod volutpat. Fusce convallis, augue vel pulvinar tempus, erat nibh porttitor velit, at tempus ex orci vitae lacus. Etiam est odio, pretium nec purus non, ornare vestibulum velit. Sed vitae libero nec orci mattis suscipit at placerat orci. Integer elementum elementum tempus. Sed consectetur libero ac risus aliquam condimentum.\r\n\r\nAenean lorem felis, mattis non nisi ut, lacinia ornare lorem. Etiam tempus consequat pretium. Curabitur consectetur turpis vitae augue euismod, efficitur molestie enim accumsan. Integer sagittis euismod posuere. Sed euismod eget quam efficitur convallis. Phasellus malesuada elit et nibh auctor dictum. Sed nulla diam, laoreet sit amet justo at, gravida ultricies lorem. Duis at purus ut velit efficitur faucibus. Cras eu molestie risus, vitae elementum libero. Morbi id molestie erat.\r\n\r\nSed augue tellus, porta id orci ac, accumsan venenatis leo. Cras vehicula imperdiet justo, congue volutpat risus cursus eu. Mauris eleifend finibus quam in lobortis. Ut eu ornare neque. Aliquam erat volutpat. In blandit sed massa non elementum. Morbi congue eleifend dolor, sit amet tincidunt erat hendrerit sed. Pellentesque in nisi congue, tristique massa non, ultricies felis.\r\n\r\nPraesent porttitor tempor velit nec ornare. Sed fringilla auctor sapien, eu aliquam sem elementum nec. Curabitur sed orci lacinia, sodales erat sit amet, hendrerit turpis. Integer consectetur velit non turpis sagittis faucibus. Fusce aliquam id est a tempus. Etiam luctus tellus sed dui malesuada euismod. Donec pharetra lorem et blandit volutpat. Suspendisse finibus interdum ipsum. Sed ac elit augue. Aenean vel lorem et nisi consequat feugiat. Cras aliquam ornare neque, id porta nibh consequat ac. Pellentesque sagittis, ante sit amet varius fringilla, odio neque consectetur lectus, facilisis rutrum sem diam in justo.\r\n\r\nPraesent mollis ipsum elit, id commodo elit egestas ac. Phasellus vel lacus et odio ultricies ullamcorper. Morbi pellentesque libero sapien, quis consequat lectus hendrerit eu. Vestibulum ullamcorper ligula ac urna tempus, in varius ex luctus. Proin elit enim, hendrerit eget ullamcorper quis, aliquam sit amet felis. Phasellus eget neque elementum, porttitor nulla sit amet, iaculis massa. Duis lectus arcu, iaculis gravida enim ut, venenatis tincidunt nisi. Donec rutrum euismod velit, sit amet maximus massa ornare et. Praesent eget augue mollis, viverra sapien vitae, faucibus augue.\r\n\r\nMaecenas scelerisque tellus ipsum, sed aliquam orci pellentesque in. Vestibulum dui enim, viverra ac dictum quis, faucibus nec justo. Aenean finibus feugiat dolor, nec interdum arcu accumsan et. Aenean consectetur mi non faucibus consequat. Praesent ac pretium felis, at fringilla odio. Donec scelerisque nisi ac lorem eleifend scelerisque. Aliquam fringilla ex nulla, ac semper mi dictum non. Sed in risus et diam mollis cursus nec vel dui. Integer eget felis lacinia diam interdum luctus vitae sed lorem. Nulla facilisi. Nunc dolor magna, sodales sit amet risus ut, gravida porta ex. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec sit amet rutrum augue. Etiam porta lacus felis, nec cursus nibh maximus sed. Ut venenatis enim libero, sit amet vulputate felis dapibus id.', NULL, '2023-10-16 09:23:09', 'pending'),
+	(21, 'DZD', 'WHY DO YOU RIGOLE', 'placeholder-jpg-652d2fd3df486.jpg', '2023-10-16 12:42:59', 'pending');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
