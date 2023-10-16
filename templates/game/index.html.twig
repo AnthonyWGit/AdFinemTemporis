@@ -11,7 +11,7 @@
 
     <div class="bottomLeft">
         <p id="mute">Mute/unmute</p>
-        <input type="range" id="volume" name="volume" min="0" max="100" step="1"/>
+        <input type="range" id="volume" name="volume" min="0" value="25" max="100" step="1"/>
         <label for="volume">Volume</label>
     </div>
 
@@ -23,11 +23,39 @@
                 index++;
                 setTimeout(typeWriter, 50); // Delay between each character
             }
+            else
+            {   setTimeout(function (){
+                isTypingInProgress = false
+                audio.pause()
+                audio.currentTime = 0; //stopping audio
+                index = 0
+                document.querySelector(".TextDiv").innerHTML = ""
+                typeWriter2()
+            }, 2000) // Do nothing and wait 3 seconds 
+
+            }
+        }
+
+        function typeWriter2() {
+            if (index < text2.length) {
+                document.querySelector(".TextDiv").innerHTML += text2.charAt(index);
+                index++;
+                setTimeout(typeWriter2, 50); // Delay between each character
+            }
+            else
+            {   setTimeout(function (){
+                isTypingInProgress = false
+                audio.pause()
+                audio.currentTime = 0; //stopping audio
+            }, 2000) // Do nothing and wait 3 seconds 
+            
+            }
         }
 
         //Vars initialization
         const text = "Those dreams never felt so real. Night became as deep as ink. Something is happening. Somewhere, somehow." + 
         "How will you shape your fate ? ";
+        const text2 = "A long corridor. Endless, wrapped in shadows. In the distance, three figures. To which one are you drawn to ?"
         let index = 0;
         let range = document.querySelector("#volume")
         let rangeValue = document.querySelector("#volume").value
@@ -37,7 +65,7 @@
         audio.onerror = function() {
             console.error("Error: Audio could not be played.");
         };
-        
+
         document.getElementById('yesButton').addEventListener('click', function() {
             audio.muted = false; // Unmute the audio
             audio.volume = 0.3;
