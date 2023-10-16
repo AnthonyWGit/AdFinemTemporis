@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your account{% endblock %}
+
+{% block body %}
+<div class="globalDivGap">
+    <h1 class="centerTitle">Manage your account</h1>
+        <h2>Your credentials</h2>
+        <div class="globalDiv">
+            <p>Username : <b>{{app.user.username}}</b></p>
+            <p>Email : <b>{{app.user.email}}</b></p>
+        </div>
+        <h2 class="centerTitle">Change credentials</h2>
+        <div class="row">
+            <a class="looksLikeAButtonBlue" href="{{path("accountPasswordChange")}}"> Change password</a>
+            <a class="looksLikeAButtonBlue" href="{{path("accountEmailChange")}}"> Change email</a>
+        </div>  
+        <p>Delete your account</p>
+    </div>
+{% endblock %}
