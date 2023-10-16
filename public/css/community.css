@@ -23,6 +23,7 @@
     gap: 0.5rem;
     background-color: rgba(0, 0, 0, 0.486);
     backdrop-filter: blur(150%);
+    position: relative;
 }
 
 .cardBoard
@@ -30,4 +31,20 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.block
+{
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.zPos
+{
+    z-index: 100;
+    position: relative;
 }
