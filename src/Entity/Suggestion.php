@@ -173,5 +173,5 @@ class Suggestion
         return $this;
     }
 
- 
+
 }
