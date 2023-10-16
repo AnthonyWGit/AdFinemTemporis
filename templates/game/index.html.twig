@@ -1,20 +1,80 @@
-{% extends 'base.html.twig' %}
+{% extends 'game.html.twig' %}
 
-{% block title %}Hello GameController!{% endblock %}
+{% block title %}The Beginning{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="TextDiv gameGlobalDiv">
+        <div class="ephemeral">Do you want sound ? </div>
+        <button class="ephemeral" id="yesButton">Yes</button>
+        <button class="ephemeral" id="noButton">No</button>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="bottomLeft">
+        <p id="mute">Mute/unmute</p>
+        <input type="range" id="volume" name="volume" min="0" max="100" step="1"/>
+        <label for="volume">Volume</label>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/moumo/Documents/AdFinemTemporis-An-Exam-Project/src/Controller/GameController.php'|file_link(0) }}">src/Controller/GameController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/moumo/Documents/AdFinemTemporis-An-Exam-Project/templates/game/index.html.twig'|file_link(0) }}">templates/game/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <script>
+
+        function typeWriter() {
+            if (index < text.length) {
+                document.querySelector(".TextDiv").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 50); // Delay between each character
+            }
+        }
+
+        //Vars initialization
+        const text = "Those dreams never felt so real. Night became as deep as ink. Something is happening. Somewhere, somehow." + 
+        "How will you shape your fate ? ";
+        let index = 0;
+        let range = document.querySelector("#volume")
+        let rangeValue = document.querySelector("#volume").value
+        let ephemeral = document.querySelectorAll(".ephemeral")
+        let isTypingInProgress = false;
+        const audio = new Audio("{{ asset('sfx/typewriter.mp3') }}");
+        audio.onerror = function() {
+            console.error("Error: Audio could not be played.");
+        };
+        
+        document.getElementById('yesButton').addEventListener('click', function() {
+            audio.muted = false; // Unmute the audio
+            audio.volume = 0.3;
+            audio.play();
+            ephemeral.forEach(function (element) {
+                element.remove()
+            }); 
+            typeWriter();
+        });
+
+        document.getElementById('noButton').addEventListener('click', function() {
+            audio.pause(); // Pause the audio
+            audio.currentTime = 0; // Reset audio to the beginning
+            ephemeral.forEach(function (element) {
+                element.remove()
+            }); 
+            typeWriter();
+        });
+
+        document.querySelector('#mute').addEventListener('click', function() {
+            if (audio.muted == false)
+            {
+                audio.muted = true; // Unmute the audio
+                audio.play();
+            }
+            else
+            {
+                audio.muted = false; // Unmute the audio            
+            }
+        });
+
+        volume.addEventListener('input', function() {
+            rangeValue = document.querySelector("#volume").value
+            audio.volume = (rangeValue / 100)
+            console.log(rangeValue);
+        });
+
+        
+    </script>
 {% endblock %}

@@ -1,0 +1,17 @@
+.gameGlobalDiv
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    font-size: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.bottomLeft
+{
+    display: flex;
+    padding: 1rem;
+}
