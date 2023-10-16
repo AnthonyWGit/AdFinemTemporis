@@ -75,6 +75,14 @@ class CommunityController extends AbstractController
         return $this->render("community/new.html.twig", ['formNewSuggestion' => $form, 'edit' => $suggestion->getId()]);
     }
 
+    #[Route('community/suggestion/detail/{title}-{player}', name: 'detailSuggestion')]
+    public function detail(Suggestion $suggestion): Response
+    {
+        return $this->render('community/detail.html.twig', [
+            'suggestion' => $suggestion
+        ]);
+    }
+
     #[Route('community/suggestion/{id}/like/{player}', name: 'addLikeSuggestion')]
     public function addLike(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
     {
