@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\FileUploader;
 
 class CommunityController extends AbstractController
 {
@@ -26,7 +27,7 @@ class CommunityController extends AbstractController
 
     #[Route('community/suggestion/new', name: 'newSuggestion')]
     #[Route('community/suggestion/{id}/edit', name: 'editSuggestion')]
-    public function new(Suggestion $suggestion = null, Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Suggestion $suggestion = null, FileUploader $fileUploader = null, Request $request, EntityManagerInterface $entityManager): Response
     {
 
         foreach ($this->getUser()->getSuggestions() as $suggestion)
@@ -59,6 +60,13 @@ class CommunityController extends AbstractController
                 $date = new \DateTime();
                 $suggestion->setPostDate($date);
                 $suggestion->setStatus("pending");
+                $imgFile = $form->get('img')->getData();
+
+                if ($imgFile) {
+                    $imgFileName = $fileUploader->upload($imgFile);
+                    $suggestion->setImg($imgFileName);
+                }
+
                 $suggestion->addPlayersSuggestion($this->getUser());
                 $entityManager->persist($suggestion); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
@@ -88,7 +96,6 @@ class CommunityController extends AbstractController
     public function addLike(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
     {
         $suggestion->addPlayersLike($player);
-        $entityManager->persist($suggestion);
         $entityManager->flush();
         return $this->redirectToRoute('community');            
     }
@@ -98,7 +105,6 @@ class CommunityController extends AbstractController
     {
         
         $suggestion->removePlayersLike($player);
-        $entityManager->persist($suggestion);
         $entityManager->flush();
         return $this->redirectToRoute('community');
     }
@@ -109,7 +115,7 @@ class CommunityController extends AbstractController
         if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author
         {
             $suggestion->removePlayersSuggestion($player);
-            $entityManager->persist($suggestion);
+            $entityManager->remove($suggestion);
             $entityManager->flush();
             return $this->redirectToRoute('community');            
         }
