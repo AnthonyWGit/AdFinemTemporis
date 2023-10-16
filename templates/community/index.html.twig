@@ -12,6 +12,12 @@
         </div>
     {% endfor %}
 
+    {% for message in app.flashes('error') %}
+    <div class="flash-notice">
+        <p>{{ message }}</p>
+    </div>
+{% endfor %}
+
 
     <div class="div">
         <a href=" {{ path('newSuggestion')}}" class="looksLikeAButtonGrey">Send an idea</a>
@@ -25,6 +31,13 @@
             {% for suggestion in suggestions %} 
                 {% for player in suggestion.playersSuggestions %}
                     <div class="cardSuggestion">
+                        {% if app.user in suggestion.playersSuggestions %}
+                            <div class="deleteOwn">
+                                <a class="zPos" href="{{ path('deleteSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                    X
+                                </a>
+                            </div>
+                        {% endif %}
                         <div class="row">
                             <p>Title : {{suggestion.title}}</p>
                             <p>Author : {{player.username}}</p>
@@ -41,7 +54,8 @@
                                     </a>
                             {% endif %}
                                 {{suggestion.playersLikesCount}}
-                                <a class="block" href=" {{ path("detailSuggestion", {'title' : suggestion.title, 'player' : player.username}) }}"></a>
+                                {{dump(player)}}
+                                <a class="block" href=" {{ path("detailSuggestion", {'title' : suggestion.title, 'player' : player.id}) }}"></a>
                         </p>
 
                     </div>
