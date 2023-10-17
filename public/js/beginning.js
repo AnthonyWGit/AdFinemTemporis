@@ -2,7 +2,7 @@ function typeWriter() {
     if (index < text.length) {
         document.querySelector(".TextDiv").innerHTML += text.charAt(index);
         index++;
-        setTimeout(typeWriter, 5); // Delay between each character
+        setTimeout(typeWriter, 50); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -19,7 +19,7 @@ function typeWriter2() {
     if (index < text2.length) {
         document.querySelector(".TextDiv").innerHTML += text2.charAt(index);
         index++;
-        setTimeout(typeWriter2, 5); // Delay between each character
+        setTimeout(typeWriter2, 50); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -35,7 +35,7 @@ function typeWriter3() {
     if (index < text3.length) {
         document.querySelector("#part2").innerHTML += text3.charAt(index);
         index++;
-        setTimeout(typeWriter3, 5); // Delay between each character
+        setTimeout(typeWriter3, 50); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -51,7 +51,7 @@ function typeWriter4() {
     if (index < text4.length) {
         document.querySelector("#part3").innerHTML += text4.charAt(index);
         index++;
-        setTimeout(typeWriter4, 5); // Delay between each character
+        setTimeout(typeWriter4, 50); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -67,7 +67,7 @@ function typeWriter5() {
     if (index < text5.length) {
         document.querySelector("#part4").innerHTML += text5.charAt(index);
         index++;
-        setTimeout(typeWriter5, 5); // Delay between each character
+        setTimeout(typeWriter5, 50); // Delay between each character
     }
     else
     {   setTimeout(function (){
