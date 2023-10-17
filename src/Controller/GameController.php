@@ -36,8 +36,13 @@ class GameController extends AbstractController
         }
         else if ($this->getUser()->getStage() == 1)
         {
+            $demonchoice = $this->getUser()->getDemonPlayer();
+            foreach ($demonchoice as $demon)
+            {
+                $demon = $demon;
+            }
             return $this->render('game/stageOne.html.twig', [
-                'controller_name' => 'GameController',
+                'demon' => $demon,
             ]);    
         }
         else
