@@ -16,6 +16,24 @@ function typeWriter() {
 
     }
 }
+function typeWriter2() {
+    if (index < text2.length) {
+        document.querySelector(".TextDiv").innerHTML += text2.charAt(index);
+        index++;
+        setTimeout(typeWriter2, 1); // Delay between each character
+    }
+    else
+    {   setTimeout(function (){
+        isTypingInProgress = false
+        index = 0
+        document.querySelector(".TextDiv").innerHTML = ""
+        document.querySelector(".textContent").innerHTML = ""
+        typeTextChunk2()
+    }, 2000) // Do nothing and wait 2 seconds 
+
+    }
+}
+
 
 // Function to type a specific chunk of text
 function typeTextChunk() {
@@ -23,6 +41,25 @@ function typeTextChunk() {
      var currentChunk = textChunks[currentChunkIndex];
       textContent.innerHTML = currentChunk; // Set the whole chunk at once
       console.log(currentChunkIndex)
+    }
+  }
+
+  function typeTextChunk2() 
+  {
+    console.log("next")
+    currentCharIndex = 0;
+    currentChunkIndex = 0;
+    currentIndex = 0
+    maxCharacters = calculateMaxCharacters(textBox);
+    console.log(textToDisplay2)
+    console.log(maxCharacters)
+    textChunks = breakTextIntoChunks(textToDisplay2, maxCharacters)
+
+    if (currentChunkIndex < textChunks.length) 
+    {
+        var currentChunk = textChunks[currentChunkIndex];
+        textContent.innerHTML = currentChunk; // Set the whole chunk at once
+        console.log(currentChunkIndex)
     }
   }
   
@@ -35,6 +72,10 @@ function typeTextChunk() {
         {
             currentChunkIndex++;
             typeTextChunk();
+        }
+        else if (currentChunkIndex == textChunks.length - 1)
+        {
+            typeWriter2()
         }
     } 
     else if (event.key === 'ArrowLeft') 
@@ -49,14 +90,14 @@ function typeTextChunk() {
 
 //estimate the number of chars you can put in the box
 function calculateMaxCharacters(textBox) {
-    const computedStyle = window.getComputedStyle(textBox);
-    const width = textBox.offsetWidth;
-    const height = textBox.offsetHeight;
-    const fontSize = parseFloat(computedStyle.fontSize);
+    let computedStyle = window.getComputedStyle(textBox);
+    let width = textBox.offsetWidth;
+    let height = textBox.offsetHeight;
+    let fontSize = parseFloat(computedStyle.fontSize);
   
-    const charactersHorizontally = Math.floor(width / (fontSize )); // Adjust the factor as needed
-    const charactersVertically = Math.floor(height / (fontSize));
-    const totalChars = charactersHorizontally * charactersVertically
+    let charactersHorizontally = Math.floor(width / (fontSize )); // Adjust the factor as needed
+    let charactersVertically = Math.floor(height / (fontSize));
+    let totalChars = charactersHorizontally * charactersVertically
     console.log(charactersHorizontally)
     console.log(charactersVertically)
     return totalChars;
@@ -64,7 +105,7 @@ function calculateMaxCharacters(textBox) {
 
   // Break your textContent into chunks : i want to go a bit past max chuckSize and not cut into a middle of a bord
   function breakTextIntoChunks(text, chunkSize) {
-    const chunks = [];
+    let chunks = [];
     while (currentIndex < text.length) {
         let chunk = text.substring(currentIndex, currentIndex + chunkSize);
 
@@ -95,13 +136,7 @@ $(document).ready(function() {
 });
 
 //Vars initialization
-//Texts
-var jsVar = $(".TextDiv").data("var");
-let text = jsVar + " joined your team !"
-
-let index = 0;
-let isTypingInProgress = false;
-
+// Other : soound 
 const mp3FilePath = '/sfx/typewriter.mp3';
 var audio = new Audio(mp3FilePath);
 
@@ -112,31 +147,42 @@ let ephemeral = document.querySelectorAll(".ephemeral")
 let textBox = document.querySelector(".textBox")
 let speakerBox = document.querySelector(".speakerBox")
 let textContent = document.querySelector('.textContent');
+
+var jsVar = $(".TextDiv").data("var");
+//Texts
+let text = jsVar + " joined your team !"
+let text2 = "Some screams are heard, far away, lost in the void. They echo through nothing."
+let textToDisplay = "I didn't think you would be a birdie person. I... am quite surprised. Maybe you wonder why you are here now..."
+let textToDisplay2 = "I'll explain to you soon, in time. But for now, let's join our forces together. You'll need me."
+
+let index = 0;
+let isTypingInProgress = false;
 let isScrolling = false;
 let currentChunkIndex = 0;
-let currentCharIndex = 0;
+let currentCharIndex = 0;   
 let currentIndex = 0;
+let maxCharacters = calculateMaxCharacters(textBox);
+console.log(`Maximum characters that can fit: ${maxCharacters}`);
+let textChunks = breakTextIntoChunks(textToDisplay, maxCharacters);
+console.log(`Number of text chunks: ${textChunks.length}`);
+console.log(textChunks)
 
-let textToDisplay = "I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward." +
-"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+
-"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+
-"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
-+"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+
+// test with long text
+// let textToDisplay = "I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward." +
+// "I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +
+// "I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +
+// "I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
+// +"I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward."
 
 // Function to handle Spacebar key press for scrolling
-
-  
-
-const maxCharacters = calculateMaxCharacters(textBox);
-console.log(`Maximum characters that can fit: ${maxCharacters}`);
-
 //eventListeners
 document.querySelector('#mute').addEventListener('click', function() {
     if (audio.muted == false)
@@ -155,10 +201,4 @@ volume.addEventListener('input', function() {
     audio.volume = (rangeValue / 100)
     console.log(rangeValue);
 });
-
-
-const textChunks = breakTextIntoChunks(textToDisplay, maxCharacters);
-console.log(`Number of text chunks: ${textChunks.length}`);
-console.log(textChunks)
-
 typeWriter();
