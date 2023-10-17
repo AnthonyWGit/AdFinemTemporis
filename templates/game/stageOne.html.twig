@@ -4,20 +4,18 @@
 
 {% block body %}
     <div class="TextDiv gameGlobalDiv">
-        <div class="ephemeral">Do you want sound ? </div>
-        <button class="ephemeral" id="yesButton">Yes</button>
-        <button class="ephemeral" id="noButton">No</button>
-    </div>
-    <div class="gameGlobalDiv" id="part2">
-
-    </div>
-    <div class="gameGlobalDiv" id="part3">
-
+        
     </div>
 
-    <div class="gameGlobalDiv" id="part4">
+    <div class="centerTextBox">
+        <div class="speakerBox">
+            
+        </div>
+        <div class="textBox">
 
+        </div>
     </div>
+
 
     <div class="bottomLeft">
         <p id="mute">Mute/unmute</p>
@@ -26,6 +24,6 @@
     </div>
 
     {% block js %}
-        <script src="{{ asset("js/beginning.js")}}"></script>
+        <script src="{{ asset("js/stageOne.js")}}"></script>
     {% endblock %}
 {% endblock %}
