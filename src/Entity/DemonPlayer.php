@@ -16,25 +16,25 @@ class DemonPlayer
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $str_points = null;
+    private ?int $str_points = 0;
 
     #[ORM\Column]
-    private ?int $end_points = null;
+    private ?int $end_points = 0;
 
     #[ORM\Column]
-    private ?int $agi_points = null;
+    private ?int $agi_points = 0;
 
     #[ORM\Column]
-    private ?int $int_points = null;
+    private ?int $int_points = 0;
 
     #[ORM\Column]
-    private ?int $lck_points = null;
+    private ?int $lck_points = 0;
 
     #[ORM\Column]
-    private ?int $Experience = null;
+    private ?int $Experience = 0;
 
     #[ORM\Column]
-    private ?int $LvlUp_Points = null;
+    private ?int $LvlUp_Points = 0;
 
     #[ORM\ManyToOne(inversedBy: 'Demon_Player')]
     private ?Player $player = null;
