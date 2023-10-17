@@ -1,0 +1,270 @@
+:root
+{
+    --base-color1 : rgba(25, 25, 112 , 0.804);
+    --base-noalpha-color1 :25, 25, 112;
+    --base-color2 : hsl(320, 100%, 12%);
+    --postContentColor : rgba(0, 0, 0, 1);
+    --blueButton : rgba(47, 0, 255,0.5);
+    --blueButtonHover : rgba(47, 0, 255,0.75);
+    --textBoxColor : rgba(240, 255, 255, 0.45);
+}
+
+*
+{
+    font-family: 'Tomorrow', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+html
+{
+
+    background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
+    background-attachment: fixed;
+    color: #ffd700;
+
+}
+
+h1
+{
+    padding: 1rem;
+}
+input
+{
+    background: none;
+    border: solid 1px blue;
+    border-radius: 15px;
+    padding: 0.3rem;
+}
+
+#container
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 100dvh;
+}
+
+.iconText
+{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.navbar
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.navbar ul
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(50px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
+    height: 3rem;
+    border-radius: 20px;
+    align-items: center;
+    padding: 0.2rem;
+    margin: 0.5rem;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.navbar li
+{
+    list-style: none;
+}
+
+.navbar a:hover{ 
+    animation: pulse 1s infinite;
+    animation-timing-function: linear;   
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1) ;}
+    100% { transform: scale(1); }
+    }
+  
+
+
+@media screen and (min-width : 801px) and (max-width : 1000px)
+{
+    .navbar ul
+    {
+        height: 5rem;
+    }
+}
+
+@media screen and (max-width : 800px)
+{
+    .navbar ul
+    {
+        height: 8rem;
+    }
+}
+
+
+#menuShowHide {
+	position:absolute;
+	left:-999em;
+}
+
+#mainMenu 
+{
+    display:none;
+}
+@media screen and (max-width:500px)
+{
+        .navbar ul
+        {
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: nowrap;
+            height: 25rem;
+        }    
+}
+
+
+#menuShowHide + label:before {
+    content:"Show menu";
+}
+#menuShowHide:checked + label:before {
+    content:"Hide Menu";
+}
+
+#menuShowHide:checked ~ #mainMenu {
+    display:block;
+}
+
+.footer
+{
+    margin-top: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.navbar a
+{
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: azure;
+}
+
+.formGlobal
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.formInside
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(238, 130, 238, 0.493);
+    border-radius: 15px;
+    gap: 1rem;
+}
+
+.formRegister /* this is a a form HTML not div ! */
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.formRow
+{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.centerTitle
+{
+    text-align: center;
+}
+
+.navSvg
+{
+    height: 30px;
+    width: 30px;
+}
+
+button {
+    margin: 20px;
+  }
+
+  .custom-btn {
+    width: 130px;
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+     7px 7px 20px 0px rgba(0,0,0,.1),
+     4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+  }
+
+  .btn-11 {
+    border: none;
+    background: rgb(251,33,117);
+      background: linear-gradient(0deg, rgba(251,33,117,1) 0%, rgba(234,76,137,1) 100%);
+      color: #fff;
+      overflow: hidden;
+  }
+  .btn-11:hover {
+      text-decoration: none;
+      color: #fff;
+  }
+  .btn-11:before {
+      position: absolute;
+      content: '';
+      display: inline-block;
+      top: -180px;
+      left: 0;
+      width: 30px;
+      height: 100%;
+      background-color: #fff;
+      animation: shiny-btn1 3s ease-in-out infinite;
+  }
+  .btn-11:hover{
+    opacity: .7;
+  }
+  .btn-11:active{
+    box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
+                -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+      inset -4px -4px 6px 0 rgba(255,255,255,.2),
+      inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
+  }
+  
+  
+  @-webkit-keyframes shiny-btn1 {
+      0% { -webkit-transform: scale(0) rotate(45deg); opacity: 0; }
+      80% { -webkit-transform: scale(0) rotate(45deg); opacity: 0.5; }
+      81% { -webkit-transform: scale(4) rotate(45deg); opacity: 1; }
+      100% { -webkit-transform: scale(50) rotate(45deg); opacity: 0; }
+  }
+
+.rowButtons
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+}
