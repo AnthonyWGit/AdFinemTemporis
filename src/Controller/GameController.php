@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\DemonBase;
 use App\Entity\DemonTrait;
 use App\Entity\DemonPlayer;
+use App\Repository\PlayerRepository;
 use App\Repository\DemonBaseRepository;
 use App\Repository\DemonTraitRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,6 +52,16 @@ class GameController extends AbstractController
         }
     }
 
+    #[Route('/game/combat', name: 'combat')]
+    public function combat(?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
+    {
+        $playerDemons = $this->getUser()->getDemonPlayer();
+        $playerDemon = $playerDemons[0];
+        $this->cpuDemonGen($demonBaseRepository, $demonTraitRepository,$playerRepository, $entityManager);
+        return $this->redirectToRoute("app_home");
+    }
+
+
     #[Route('/game/choice/{name}', name: 'choice', requirements : ['name' =>  '\w+'])]
     public function choiceHorus(string $name, DemonBaseRepository $demonBaseRepository, DemonTraitRepository $demonTraitRepository, EntityManagerInterface $entityManager): Response
     {
@@ -87,7 +98,22 @@ class GameController extends AbstractController
 
     public function pickDemonBase(DemonBaseRepository $demonBaseRepository, string $demonName) : DemonBase
     {
-        $horus = $demonBaseRepository->findOneBy(["name" => "Horus"]);
-        return $horus;
+        $demon = $demonBaseRepository->findOneBy(["name" => $demonName]);
+        return $demon;
+    }
+
+    
+    public function cpuDemonGen(?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
+    {
+        $trait = $this->traitGen($demonTraitRepository);
+        $imp = $this->pickDemonBase($demonBaseRepository, 'imp');
+        $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
+        $demonPlayer = new DemonPlayer; //create a demon
+        $demonPlayer->setDemonBase($imp); //set base template
+        $demonPlayer->setTrait($trait); //generate a trait
+        $cpu->addDemonPlayer($demonPlayer);
+        $entityManager->persist($demonPlayer);
+        $entityManager->flush();
+        return $demonPlayer;
     }
 }
