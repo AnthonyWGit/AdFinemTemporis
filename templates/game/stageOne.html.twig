@@ -1,9 +1,11 @@
 {% extends 'game.html.twig' %}
 
+{% set var = demon.getDemonBase.name %}
+
 {% block title %}The Beginning{% endblock %}
 
 {% block body %}
-    <div class="TextDiv gameGlobalDiv">
+    <div class="TextDiv gameGlobalDiv" data-var="{{ var }}">
         
     </div>
 
@@ -12,7 +14,9 @@
             
         </div>
         <div class="textBox">
+            <div class="textContent">
 
+            </div>
         </div>
     </div>
 
