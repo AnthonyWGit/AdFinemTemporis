@@ -8,6 +8,16 @@
         <button class="ephemeral" id="yesButton">Yes</button>
         <button class="ephemeral" id="noButton">No</button>
     </div>
+    <div class="gameGlobalDiv" id="part2">
+
+    </div>
+    <div class="gameGlobalDiv" id="part3">
+
+    </div>
+
+    <div class="gameGlobalDiv" id="part4">
+
+    </div>
 
     <div class="bottomLeft">
         <p id="mute">Mute/unmute</p>
@@ -15,94 +25,5 @@
         <label for="volume">Volume</label>
     </div>
 
-    <script>
 
-        function typeWriter() {
-            if (index < text.length) {
-                document.querySelector(".TextDiv").innerHTML += text.charAt(index);
-                index++;
-                setTimeout(typeWriter, 50); // Delay between each character
-            }
-            else
-            {   setTimeout(function (){
-                isTypingInProgress = false
-                audio.pause()
-                audio.currentTime = 0; //stopping audio
-                index = 0
-                document.querySelector(".TextDiv").innerHTML = ""
-                typeWriter2()
-            }, 2000) // Do nothing and wait 3 seconds 
-
-            }
-        }
-
-        function typeWriter2() {
-            if (index < text2.length) {
-                document.querySelector(".TextDiv").innerHTML += text2.charAt(index);
-                index++;
-                setTimeout(typeWriter2, 50); // Delay between each character
-            }
-            else
-            {   setTimeout(function (){
-                isTypingInProgress = false
-                audio.pause()
-                audio.currentTime = 0; //stopping audio
-            }, 2000) // Do nothing and wait 3 seconds 
-            
-            }
-        }
-
-        //Vars initialization
-        const text = "Those dreams never felt so real. Night became as deep as ink. Something is happening. Somewhere, somehow." + 
-        "How will you shape your fate ? ";
-        const text2 = "A long corridor. Endless, wrapped in shadows. In the distance, three figures. To which one are you drawn to ?"
-        let index = 0;
-        let range = document.querySelector("#volume")
-        let rangeValue = document.querySelector("#volume").value
-        let ephemeral = document.querySelectorAll(".ephemeral")
-        let isTypingInProgress = false;
-        const audio = new Audio("{{ asset('sfx/typewriter.mp3') }}");
-        audio.onerror = function() {
-            console.error("Error: Audio could not be played.");
-        };
-
-        document.getElementById('yesButton').addEventListener('click', function() {
-            audio.muted = false; // Unmute the audio
-            audio.volume = 0.3;
-            audio.play();
-            ephemeral.forEach(function (element) {
-                element.remove()
-            }); 
-            typeWriter();
-        });
-
-        document.getElementById('noButton').addEventListener('click', function() {
-            audio.pause(); // Pause the audio
-            audio.currentTime = 0; // Reset audio to the beginning
-            ephemeral.forEach(function (element) {
-                element.remove()
-            }); 
-            typeWriter();
-        });
-
-        document.querySelector('#mute').addEventListener('click', function() {
-            if (audio.muted == false)
-            {
-                audio.muted = true; // Unmute the audio
-                audio.play();
-            }
-            else
-            {
-                audio.muted = false; // Unmute the audio            
-            }
-        });
-
-        volume.addEventListener('input', function() {
-            rangeValue = document.querySelector("#volume").value
-            audio.volume = (rangeValue / 100)
-            console.log(rangeValue);
-        });
-
-        
-    </script>
 {% endblock %}
