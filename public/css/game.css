@@ -15,3 +15,43 @@
     display: flex;
     padding: 1rem;
 }
+
+.textBox
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 80%;
+    height: 10rem;
+    background-color: var(--textBoxColor);
+    backdrop-filter: blur(20px) saturate(150%);
+    border-radius: 15px;
+}
+
+.centerTextBox
+{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.leftSpeakerBox
+{
+    display: flex;
+
+}
+
+.speakerBox
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 12.50%;
+    height: 2rem;
+    background-color: var(--textBoxColor);
+    backdrop-filter: blur(20px) saturate(150%);
+    border-radius: 15px;
+    position: absolute;
+    top: -22%;
+    left: 12%;
+}
