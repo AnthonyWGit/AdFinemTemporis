@@ -27,8 +27,27 @@ function typeWriter2() {
         isTypingInProgress = false
         index = 0
         document.querySelector(".TextDiv").innerHTML = ""
+        $('.centerTextBox').show();
         document.querySelector(".textContent").innerHTML = ""
         typeTextChunk2()
+    }, 2000) // Do nothing and wait 2 seconds 
+
+    }
+}
+
+function typeWriter3() {
+    if (index < text3.length) {
+        
+        document.querySelector(".TextDiv").innerHTML += text3.charAt(index);
+        index++;
+        setTimeout(typeWriter3, 1); // Delay between each character
+    }
+    else
+    {   setTimeout(function (){
+        isTypingInProgress = false
+        index = 0
+        document.querySelector(".TextDiv").innerHTML = ""
+        document.querySelector(".textContent").innerHTML = ""
     }, 2000) // Do nothing and wait 2 seconds 
 
     }
@@ -60,33 +79,11 @@ function typeTextChunk() {
         var currentChunk = textChunks[currentChunkIndex];
         textContent.innerHTML = currentChunk; // Set the whole chunk at once
         console.log(currentChunkIndex)
+        dialogPassed = 1
     }
   }
   
-  // Event listener to start typing when spacebar is pressed
-  document.addEventListener('keydown', function (event) 
-  {
-    if (event.key === 'ArrowRight') 
-    {
-        if (currentChunkIndex < textChunks.length - 1) 
-        {
-            currentChunkIndex++;
-            typeTextChunk();
-        }
-        else if (currentChunkIndex == textChunks.length - 1)
-        {
-            typeWriter2()
-        }
-    } 
-    else if (event.key === 'ArrowLeft') 
-    {
-        if (currentChunkIndex > 0) 
-        {
-            currentChunkIndex--;
-            typeTextChunk();
-        }
-    }
-});
+
 
 //estimate the number of chars you can put in the box
 function calculateMaxCharacters(textBox) {
@@ -147,11 +144,12 @@ let ephemeral = document.querySelectorAll(".ephemeral")
 let textBox = document.querySelector(".textBox")
 let speakerBox = document.querySelector(".speakerBox")
 let textContent = document.querySelector('.textContent');
-
+let dialogPassed = 0;
 var jsVar = $(".TextDiv").data("var");
 //Texts
 let text = jsVar + " joined your team !"
 let text2 = "Some screams are heard, far away, lost in the void. They echo through nothing."
+let text3 = "You are walking with your new companion. He makes some great good company. Shh, something is comming !"
 let textToDisplay = "I didn't think you would be a birdie person. I... am quite surprised. Maybe you wonder why you are here now..."
 let textToDisplay2 = "I'll explain to you soon, in time. But for now, let's join our forces together. You'll need me."
 
@@ -184,6 +182,41 @@ console.log(textChunks)
 
 // Function to handle Spacebar key press for scrolling
 //eventListeners
+
+  // Event listener to start typing when spacebar is pressed
+  document.addEventListener('keydown', function (event) 
+  {
+    if (event.key === 'ArrowRight') 
+    {
+        if (currentChunkIndex < textChunks.length - 1) 
+        {
+            currentChunkIndex++;
+            typeTextChunk();
+        }
+        else if (currentChunkIndex == textChunks.length - 1)
+        {
+            if(dialogPassed == 0)
+            {
+                $('.centerTextBox').hide();
+                typeWriter2()                
+            }
+            else if (dialogPassed == 1)
+            {
+                $('.centerTextBox').hide();
+                typeWriter3()
+            }
+        }
+    } 
+    else if (event.key === 'ArrowLeft') 
+    {
+        if (currentChunkIndex > 0) 
+        {
+            currentChunkIndex--;
+            typeTextChunk();
+        }
+    }
+});
+
 document.querySelector('#mute').addEventListener('click', function() {
     if (audio.muted == false)
     {
