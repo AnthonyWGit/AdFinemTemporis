@@ -45,6 +45,9 @@ class DemonBase
     #[ORM\Column(length: 255)]
     private ?string $pantheon = null;
 
+    #[ORM\Column]
+    private ?int $baseHp = 1;
+
     public function __construct()
     {
         $this->demonPlayers = new ArrayCollection();
@@ -208,6 +211,18 @@ class DemonBase
     public function setPantheon(string $pantheon): static
     {
         $this->pantheon = $pantheon;
+
+        return $this;
+    }
+
+    public function getBaseHp(): ?int
+    {
+        return $this->baseHp;
+    }
+
+    public function setBaseHp(int $baseHp): static
+    {
+        $this->baseHp = $baseHp;
 
         return $this;
     }
