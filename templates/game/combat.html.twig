@@ -6,9 +6,15 @@
     <div class="TextDiv gameGlobalDiv">
         {{cpuDemon.getMaxHp}}
         {{cpuDemon.getLevel}}
+        {% for skill in cpuDemon.skills %}
+            {{skill.name}}
+        {% endfor %}
         {% for demon in playerDemons %}
             {{demon.getMaxHp}}
             {{demon.getLevel}}
+            {% for skill in demon.skills %}
+                {{skill.name}}
+            {% endfor %}
         {% endfor %}
     </div>
 
