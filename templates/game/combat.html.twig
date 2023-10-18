@@ -1,0 +1,27 @@
+{% extends 'game.html.twig' %}
+
+{% block title %}The Beginning{% endblock %}
+
+{% block body %}
+    <div class="TextDiv gameGlobalDiv">
+        {{cpuDemon.getMaxHp}}
+        {{cpuDemon.getLevel}}
+        {% for demon in playerDemons %}
+            {{demon.getMaxHp}}
+            {{demon.getLevel}}
+        {% endfor %}
+    </div>
+
+
+    <div class="bottomLeft">
+        <p id="mute">Mute/unmute</p>
+        <input type="range" id="volume" name="volume" min="0" value="25" max="100" step="1"/>
+        <label for="volume">Volume</label>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset("js/stageOne.js")}}"></script>
+{% endblock %}
