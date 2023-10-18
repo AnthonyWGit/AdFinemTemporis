@@ -6,6 +6,7 @@ use App\Repository\DemonPlayerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Service\LevelCalculator;
 
 #[ORM\Entity(repositoryClass: DemonPlayerRepository::class)]
 class DemonPlayer
@@ -274,4 +275,21 @@ class DemonPlayer
 
         return $this;
     }
+
+    public function getLevel() : int
+    {
+        $experience = $this->getExperience();
+        return LevelCalculator::calculateLevel($experience);
+    }
+
+    public function getMaxHp() : int
+    {
+        $baseEnd = $this->getDemonBase()->getEndDemonBase();
+        $bonusPoints = $this->getEndPoints();
+        $level = $this->getLevel();
+        $total = $baseEnd + $bonusPoints;
+        $baseHp = $this->getDemonBase()->getBaseHp();
+        return LevelCalculator::calcMaxHp($total, $baseHp,$level);
+    }
+
 }
