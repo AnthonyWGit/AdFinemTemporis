@@ -27,6 +27,9 @@ class Skill
     #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillTable::class)]
     private Collection $skill_table;
 
+    #[ORM\ManyToMany(mappedBy: 'skill', targetEntity: DemonPlayer::class)]
+    private Collection $demonPlayers;
+
     public function __construct()
     {
         $this->demonPlayers = new ArrayCollection();

@@ -21,12 +21,6 @@ class Battle
     #[ORM\Column]
     private ?int $goldEarned = 0;
 
-    #[ORM\OneToMany(mappedBy: 'fighter1', targetEntity: DemonPlayer::class)]
-    private Collection $demonsPlayer1;
-
-    #[ORM\OneToMany(mappedBy: 'fighter2', targetEntity: DemonPlayer::class)]
-    private Collection $demonsPlayer2;
-
     #[ORM\ManyToOne(inversedBy: 'fighter')]
     private ?DemonPlayer $demonPlayer1 = null;
 

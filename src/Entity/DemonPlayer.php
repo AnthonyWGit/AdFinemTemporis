@@ -42,7 +42,7 @@ class DemonPlayer
 
 
 
-    #[ORM\ManyToOne(inversedBy: 'demon_base')]
+    #[ORM\ManyToOne(inversedBy: 'demon_player')]
     #[ORM\JoinColumn(nullable: false)]
     private ?DemonTrait $trait = null;
 
