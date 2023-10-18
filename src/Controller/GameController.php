@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Skill;
+use App\Entity\Battle;
 use App\Entity\DemonBase;
 use App\Entity\DemonTrait;
 use App\Entity\DemonPlayer;
+use App\Repository\SkillRepository;
 use App\Repository\PlayerRepository;
 use App\Repository\DemonBaseRepository;
 use App\Repository\DemonTraitRepository;
+use App\Repository\SkillTableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,16 +73,21 @@ class GameController extends AbstractController
     }
 
     #[Route('/game/combat', name: 'combat')]
-    public function combat(Request $request, ?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
+    public function combat(Request $request, ?Battle $battle, ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
     {
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' )
         {
+            $battle = new Battle;
             $playerDemons = $this->getUser()->getDemonPlayer();
             $playerDemon = $playerDemons[0];
-            $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $demonTraitRepository,$playerRepository, $entityManager);
-            $playerDemons = $this->getUser()->getDemonPlayer();
-            $playerDemon[0]->
+            $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $skillRepository , $demonTraitRepository,$playerRepository, $entityManager);
+            // $playerDemons[0]->addFighter($battle);
+            // $generatedCpu->addFighter2($battle);
+            $playerDemon->addFighter($battle);
+            $playerDemon->addFighter2($battle);
+            $entityManager->persist($battle);
+            $entityManager->flush();
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons
@@ -94,15 +103,21 @@ class GameController extends AbstractController
 
 
     #[Route('/game/choice/{name}', name: 'choice', requirements : ['name' =>  '\w+'])]
-    public function choiceHorus(string $name, DemonBaseRepository $demonBaseRepository, DemonTraitRepository $demonTraitRepository, EntityManagerInterface $entityManager): Response
+    public function choiceHorus(string $name, SkillRepository $skillRepository, SkillTableRepository $skillTableRepository,
+    DemonBaseRepository $demonBaseRepository, DemonTraitRepository $demonTraitRepository,
+    EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()->getStage() == 0 && $name == 'Horus')
         {
             $horus = $this->pickDemonBase($demonBaseRepository, 'horus');
             $horusTrait = $this->traitGen($demonTraitRepository);
             $demonPlayer = new DemonPlayer; //create a demon
+            $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $horus->getId()],["id" => "ASC"]);
+            $skill = $skills[0]; //level on will only have on skill
+            $skill = $skill->getSkill();
             $demonPlayer->setDemonBase($horus); //set base template
             $demonPlayer->setTrait($horusTrait); //generate a trait
+            $demonPlayer->addSkill($skill);
             $this->getUser()->addDemonPlayer($demonPlayer);
             $this->getUser()->setStage(1);
             $entityManager->persist($demonPlayer);
@@ -118,13 +133,8 @@ class GameController extends AbstractController
     public function traitGen(DemonTraitRepository $demonTraitRepository) : DemonTrait
     {
         $traits = $demonTraitRepository->findBy([], ["name" => "ASC"]); 
-        $randomSetTraits = [];
-        foreach ($traits as $trait)
-        {
-            $randomSetTraits[] = $trait;
-        }
-        $pickedTrait = array_rand($randomSetTraits);
-        return $randomSetTraits[$pickedTrait];
+        $pickedTrait = array_rand($traits);
+        return $traits[$pickedTrait];
     }
 
     public function pickDemonBase(DemonBaseRepository $demonBaseRepository, string $demonName) : DemonBase
@@ -133,16 +143,40 @@ class GameController extends AbstractController
         return $demon;
     }
 
+    public function pickOneSkill(SkillRepository $skillRepo, string $skillName) : Skill
+    {
+        $skill = $skillRepository->findOneBy(["name" => $skillName]);
+        return $skill;
+    }
+
+    public function pickAllLearnableSkills(SkillTableRepository $skillTableRepository, int $demonId)
+    {
+        $skills = $skillTableRepository->findBy(["demonBase" => $demonId], ["id" => "ASC"]);
+        return $skills;
+    }
+
     
-    public function cpuDemonGen(string $string, ?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
+    public function cpuDemonGen(string $string, ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepo ,?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
     {
         $trait = $this->traitGen($demonTraitRepository);
-        $imp = $this->pickDemonBase($demonBaseRepository, $string);
+        $imp = $this->pickDemonBase($demonBaseRepository, 'imp');
         $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
+        $skillsTable = $this->pickAllLearnableSkills($skillRepo, $imp->getId());
+        if (count($skillsTable) > 6)
+        {
+            $randSetOfSkills = array_rand($skills, 6);
+            $skills = $skills[$randSetOfSkills];
+        }
         $demonPlayer = new DemonPlayer; //create a demon
         $demonPlayer->setDemonBase($imp); //set base template
         $demonPlayer->setTrait($trait); //generate a trait
+        foreach ($skillsTable as $skillTable) //it gives the id in the skill table but so we need to getskill
+        {
+            $skill = $skillTable->getSkill();
+            $demonPlayer->addSkill($skill);
+        }
         $cpu->addDemonPlayer($demonPlayer);
+
         $entityManager->persist($demonPlayer);
         $entityManager->flush();
         return $demonPlayer;
