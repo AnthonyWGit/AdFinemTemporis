@@ -16,10 +16,10 @@ class Battle
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $xpEarned = null;
+    private ?int $xpEarned = 0;
 
     #[ORM\Column]
-    private ?int $goldEarned = null;
+    private ?int $goldEarned = 0;
 
     #[ORM\OneToMany(mappedBy: 'fighter1', targetEntity: DemonPlayer::class)]
     private Collection $demonsPlayer1;
@@ -80,7 +80,7 @@ class Battle
     {
         if (!$this->demonsPlayer1->contains($demonsPlayer1)) {
             $this->demonsPlayer1->add($demonsPlayer1);
-            $demonsPlayer1->setFighter1($this);
+            $demonsPlayer1->addFighter($this);
         }
 
         return $this;
@@ -90,8 +90,8 @@ class Battle
     {
         if ($this->demonsPlayer1->removeElement($demonsPlayer1)) {
             // set the owning side to null (unless already changed)
-            if ($demonsPlayer1->getFighter1() === $this) {
-                $demonsPlayer1->setFighter1(null);
+            if ($demonsPlayer1->getFighter() === $this) {
+                $demonsPlayer1->addFighter(null);
             }
         }
 
@@ -110,7 +110,7 @@ class Battle
     {
         if (!$this->demonsPlayer2->contains($demonsPlayer2)) {
             $this->demonsPlayer2->add($demonsPlayer2);
-            $demonsPlayer2->setFighter2($this);
+            $demonsPlayer2->addFighter2($this);
         }
 
         return $this;
@@ -121,7 +121,7 @@ class Battle
         if ($this->demonsPlayer2->removeElement($demonsPlayer2)) {
             // set the owning side to null (unless already changed)
             if ($demonsPlayer2->getFighter2() === $this) {
-                $demonsPlayer2->setFighter2(null);
+                $demonsPlayer2->addFighter2(null);
             }
         }
 
