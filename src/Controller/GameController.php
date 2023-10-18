@@ -74,15 +74,21 @@ class GameController extends AbstractController
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' )
         {
-            dd("ok");
+            $playerDemons = $this->getUser()->getDemonPlayer();
+            $playerDemon = $playerDemons[0];
+            $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $demonTraitRepository,$playerRepository, $entityManager);
+            $playerDemons = $this->getUser()->getDemonPlayer();
+            $playerDemon[0]->
+            return $this->render('game/combat.html.twig', [
+                'cpuDemon' => $generatedCpu,
+                'playerDemons' => $playerDemons
+            ]);    
         }
         else
         {
             dd("not ok");
         }
-        $playerDemons = $this->getUser()->getDemonPlayer();
-        $playerDemon = $playerDemons[0];
-        $this->cpuDemonGen($demonBaseRepository, $demonTraitRepository,$playerRepository, $entityManager);
+
         return $this->redirectToRoute("app_home");
     }
 
@@ -128,10 +134,10 @@ class GameController extends AbstractController
     }
 
     
-    public function cpuDemonGen(?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
+    public function cpuDemonGen(string $string, ?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
     {
         $trait = $this->traitGen($demonTraitRepository);
-        $imp = $this->pickDemonBase($demonBaseRepository, 'imp');
+        $imp = $this->pickDemonBase($demonBaseRepository, $string);
         $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
         $demonPlayer = new DemonPlayer; //create a demon
         $demonPlayer->setDemonBase($imp); //set base template
