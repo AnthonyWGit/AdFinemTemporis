@@ -48,6 +48,23 @@ function typeWriter3() {
         index = 0
         document.querySelector(".TextDiv").innerHTML = ""
         document.querySelector(".textContent").innerHTML = ""
+        //send data back to controller so user can't bypass stuff via typing url directly 
+        $.ajax({
+            url: '/endpoint',
+            type: "POST",
+            data: {
+              'A': 'b'
+            },
+            success: function(data) {
+              console.log("SUCCESS " + data);
+            },
+            error: function() {
+              console.log("ERROR");
+            }
+          });
+
+          window.location.replace("/game/combat");
+
     }, 2000) // Do nothing and wait 2 seconds 
 
     }

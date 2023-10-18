@@ -26,6 +26,22 @@ class GameController extends AbstractController
     //     return new JsonResponse($data);
     // }
 
+
+    #[Route('/endpoint', name: 'endpoint')]
+    public function checkSignal(Request $request) {
+        $output = $request->request->get('A');
+        $session = $request->getSession();
+        $session->set('placeholder','a');
+        return new Response($output);
+    }
+
+    #[Route('/test/sessionReset', name: 'sessionReset')]
+    public function reset(Request $request) {
+        $session = $request->getSession();
+        $session->clear();
+        return $this->redirectToRoute("app_home");
+    }
+
     #[Route('/game', name: 'game')]
     public function index(): Response
     {
@@ -53,8 +69,17 @@ class GameController extends AbstractController
     }
 
     #[Route('/game/combat', name: 'combat')]
-    public function combat(?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
+    public function combat(Request $request, ?DemonBaseRepository $demonBaseRepository, ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
     {
+        $session = $request->getSession();
+        if ($session->get('placeholder') == 'a' )
+        {
+            dd("ok");
+        }
+        else
+        {
+            dd("not ok");
+        }
         $playerDemons = $this->getUser()->getDemonPlayer();
         $playerDemon = $playerDemons[0];
         $this->cpuDemonGen($demonBaseRepository, $demonTraitRepository,$playerRepository, $entityManager);
