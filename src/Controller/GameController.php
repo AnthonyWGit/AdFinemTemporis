@@ -8,6 +8,7 @@ use App\Entity\DemonBase;
 use App\Entity\DemonTrait;
 use App\Entity\DemonPlayer;
 use App\Repository\SkillRepository;
+use App\Repository\BattleRepository;
 use App\Repository\PlayerRepository;
 use App\Repository\DemonBaseRepository;
 use App\Repository\DemonTraitRepository;
@@ -49,6 +50,8 @@ class GameController extends AbstractController
     #[Route('/game', name: 'game')]
     public function index(): Response
     {
+        if ($this->isGranted("ROLE_IN_COMBAT")) return $this->redirectToRoute("combat");
+
         if ($this->getUser()->getStage() == 0)
         {
             return $this->render('game/index.html.twig', [
@@ -73,20 +76,32 @@ class GameController extends AbstractController
     }
 
     #[Route('/game/combat', name: 'combat')]
-    public function combat(Request $request, ?Battle $battle, ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
+    public function combat(Request $request, ?Battle $battle, 
+    ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
+    ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
+    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_IN_COMBAT')) $this->getUser()->addRole('IN_COMBAT');
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' )
         {
+            $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
             $battle = new Battle;
             $playerDemons = $this->getUser()->getDemonPlayer();
-            $playerDemon = $playerDemons[0];
+            $playerDemonsArray = [];
+            foreach ($playerDemons as $playerDemon)
+            {
+                $playerDemonsArray[] = $playerDemon;
+            }
             $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $skillRepository , $demonTraitRepository,$playerRepository, $entityManager);
             // $playerDemons[0]->addFighter($battle);
             // $generatedCpu->addFighter2($battle);
-            $playerDemon->addFighter($battle);
-            $playerDemon->addFighter2($battle);
+            $playerDemonsArray[0]->addFighter($battle);
+            $generatedCpu->addFighter2($battle);
+            $entityManager->persist($this->getUser());
             $entityManager->persist($battle);
+            $this->getUser()->addRole("IN_COMBAT");
+            $entityManager->persist($this->getUser());
             $entityManager->flush();
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
@@ -95,7 +110,15 @@ class GameController extends AbstractController
         }
         else
         {
-            dd("not ok");
+            $idPLayer = $this->getUser()->getDemonPlayer();
+            $idPLayer = $idPLayer[0];
+            $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
+            $playerDemons = $this->getUser()->getDemonPlayer();
+            $generatedCpu = $battleContent->getDemonPlayer2();
+            return $this->render('game/combat.html.twig', [
+                'cpuDemon' => $generatedCpu,
+                'playerDemons' => $playerDemons
+            ]);    
         }
 
         return $this->redirectToRoute("app_home");
@@ -109,14 +132,36 @@ class GameController extends AbstractController
     {
         if ($this->getUser()->getStage() == 0 && $name == 'Horus')
         {
-            $horus = $this->pickDemonBase($demonBaseRepository, 'horus');
-            $horusTrait = $this->traitGen($demonTraitRepository);
+            switch($name)
+            {
+                case "Horus":
+                    $demonBase = $this->pickDemonBase($demonBaseRepository, 'horus');
+                    $playerDemonTrait = $this->traitGen($demonTraitRepository);
+                    $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
+                    $skill = $skills[0]; //level on will only have on skill
+                    $skill = $skill->getSkill();
+                    break;
+
+                case "Xiuhcoatl":
+                    $demonBase = $this->pickDemonBase($demonBaseRepository, 'Xiuhcoatl');
+                    $playerDemonTrait = $this->traitGen($demonTraitRepository);
+                    $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
+                    $skill = $skills[0]; //level on will only have on skill
+                    $skill = $skill->getSkill();
+                    break;
+                
+                case "Chernobog":
+                    $demonBase = $this->pickDemonBase($demonBaseRepository, 'horus');
+                    $playerDemonTrait = $this->traitGen($demonTraitRepository);
+                    $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
+                    $skill = $skills[0]; //level on will only have on skill
+                    $skill = $skill->getSkill();
+                    break;
+            }
+
             $demonPlayer = new DemonPlayer; //create a demon
-            $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $horus->getId()],["id" => "ASC"]);
-            $skill = $skills[0]; //level on will only have on skill
-            $skill = $skill->getSkill();
-            $demonPlayer->setDemonBase($horus); //set base template
-            $demonPlayer->setTrait($horusTrait); //generate a trait
+            $demonPlayer->setDemonBase($demonBase); //set base template
+            $demonPlayer->setTrait($playerDemonTrait); //generate a trait
             $demonPlayer->addSkill($skill);
             $this->getUser()->addDemonPlayer($demonPlayer);
             $this->getUser()->setStage(1);
@@ -181,4 +226,13 @@ class GameController extends AbstractController
         $entityManager->flush();
         return $demonPlayer;
     }
+
+    // public function inBattleCheck(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository)
+    // {
+    //     $session = $request->getSession();
+    //     $firstDemonPlayer = $this->getUser()->getDemonPlayer();
+    //     $firstDemonPlayer = $firstDemonPlayer[0]->getId();
+    //     $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
+    //     return $inBattle;
+    // }
 }
