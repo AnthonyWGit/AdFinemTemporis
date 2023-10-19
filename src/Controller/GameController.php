@@ -81,9 +81,8 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->isGranted('ROLE_IN_COMBAT')) $this->getUser()->addRole('IN_COMBAT');
         $session = $request->getSession();
-        if ($session->get('placeholder') == 'a' )
+        if ($session->get('placeholder') == 'a' && !$this->isGranted('ROLE_IN_COMBAT')) //Condition to start a new combat
         {
             $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
             $battle = new Battle;
@@ -100,7 +99,7 @@ class GameController extends AbstractController
             $generatedCpu->addFighter2($battle);
             $entityManager->persist($this->getUser());
             $entityManager->persist($battle);
-            $this->getUser()->addRole("IN_COMBAT");
+            $this->getUser()->addRole("ROLE_IN_COMBAT");
             $entityManager->persist($this->getUser());
             $entityManager->flush();
             return $this->render('game/combat.html.twig', [
@@ -108,7 +107,7 @@ class GameController extends AbstractController
                 'playerDemons' => $playerDemons
             ]);    
         }
-        else
+        else if ($this->isGranted('ROLE_IN_COMBAT')) //combat is still in progress so the user is put in it 
         {
             $idPLayer = $this->getUser()->getDemonPlayer();
             $idPLayer = $idPLayer[0];
