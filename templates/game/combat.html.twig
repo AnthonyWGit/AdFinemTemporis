@@ -3,20 +3,45 @@
 {% block title %}The Beginning{% endblock %}
 
 {% block body %}
-    <div class="TextDiv gameGlobalDiv">
-        {{cpuDemon.getMaxHp}}
-        {{cpuDemon.getLevel}}
-        {% for skill in cpuDemon.skills %}
-            {{skill.name}}
-        {% endfor %}
-        {% for demon in playerDemons %}
-            {{demon.getMaxHp}}
-            {{demon.getLevel}}
+    <div class="TextDiv gameGlobalDivCombat">
+        <div class="putRight">
+            <div class="infosCPU">
+                <p><b>Level</b> : {{cpuDemon.getLevel}}</p>
+                <div class="hpBar"></div>
+                <p>{{cpuDemon.getMaxHp}} HP</p>
+                
+            </div>
+    </div>
+
+        <div class="infosSelf">
+            {% for demon in playerDemons %}
+                <p><b>Level</b> : {{demon.getLevel}}</p>
+                <div class="hpBar"></div>
+                <p>{{demon.getMaxHp}} HP</p>
             {% for skill in demon.skills %}
                 {{skill.name}}
             {% endfor %}
         {% endfor %}
+        </div>
     </div>
+
+    <div class="centerTextBox">
+        <div class="textBoxCombat">
+            <div class="textContentCombat">
+                <strong>What do you want to do ? </strong>
+                <div class="spaceActions">
+                    <p><i>Action</i></p>
+                    <p><i>Items</i></p>
+                    <p><i>Flee</i></p>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% for skill in cpuDemon.skills %}
+            {{skill.name}}
+        {% endfor %}
+
+
 
 
     <div class="bottomLeft">
@@ -29,5 +54,5 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{{ asset("js/stageOne.js")}}"></script>
+    {# <script src="{{ asset("js/stageOne.js")}}"></script> #}
 {% endblock %}

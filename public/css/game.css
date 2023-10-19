@@ -10,6 +10,8 @@
     text-align: center;
 }
 
+
+
 .bottomLeft
 {
     display: flex;
@@ -33,6 +35,23 @@
     overflow: hidden;
 }
 
+.textBoxCombat
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 80%;
+    height: 7.5rem;
+    background-color: var(--textBoxColor);
+    backdrop-filter: blur(20px) saturate(150%);
+    border-radius: 15px;
+    padding: 1rem;
+    font-size: 1.2rem;
+    max-height: 10rem; /* Adjust to your preferred height */
+    position: relative;
+    overflow: hidden;
+}
+
 .textContent
 {
     height: 100%;
@@ -40,6 +59,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.textContentCombat
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.spaceActions
+{
+    display: flex;
+    gap: 1rem;
 }
 .centerTextBox
 {
@@ -69,4 +105,55 @@
     left: 12%;
     align-items: center;
     color: black;
+}
+
+.gameGlobalDivCombat
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1rem;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.infosSelf
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 7rem;
+    width: 14rem;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px) saturate(200%);
+    padding: 1rem;
+}
+
+.infosCPU
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 7rem;
+    width: 14rem;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px) saturate(200%);
+    padding: 1rem;
+}
+
+.hpBar
+{
+    width: 10rem;
+    height: 1.5rem;
+    background-color: green;
+    border-radius: 15px;
+    margin: 0.5rem;
+}
+
+.putRight
+{
+    display: flex;
+    justify-content: flex-end;
 }
