@@ -100,17 +100,30 @@ class GameController extends AbstractController
             // $playerDemons[0]->addFighter($battle);
             // $generatedCpu->addFighter2($battle);
             $playerDemonsArray[0]->addFighter($battle);
+            $playerDemon = $playerDemonsArray[0];
             $generatedCpu->addFighter2($battle);
-            $entityManager->persist($this->getUser());
             $entityManager->persist($battle);
             $this->getUser()->addRole("ROLE_IN_COMBAT");
             // $token = new UsernamePasswordToken($this->getUser(), null, 'main', $this->getUser()->getRoles());
             // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
+            if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
+            {
+                $initiative = $this->getUser()->getUsername();
+            }
+            else if($playerDemon->getTotalAgi() < $generatedCpu->getTotalAgi())
+            {
+                $initiative = 'CPU';
+            }
+            else
+            {
+                $initiative = rand($initiative = $this->getUser()->getUsername() , 'CPU');
+            }
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
-                'playerDemons' => $playerDemons
+                'playerDemons' => $playerDemons,
+                'intiative' => $initiative
             ]);    
         }
         else if ($this->isGranted('ROLE_IN_COMBAT')) //combat is still in progress so the user is put in it 
