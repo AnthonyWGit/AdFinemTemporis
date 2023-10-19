@@ -292,4 +292,30 @@ class DemonPlayer
         return LevelCalculator::calcMaxHp($total, $baseHp,$level);
     }
 
+    public function getTotalStr(): int
+    {
+        return $this->getStrPoints() + $this->getDemonBase()->getStrDemonBase();
+    }
+
+    public function getTotalEnd(): int
+    {
+        return $this->getEndPoints() + $this->getDemonBase()->getEndDemonBase();
+    }
+
+    public function getTotalAgi(): int
+    {
+        return $this->getAgiPoints() + $this->getDemonBase()->getAgiDemonBase();
+    }
+
+    public function getTotalInt(): int
+    {
+        return $this->getIntPoints() + $this->getDemonBase()->getIntDemonBase();
+    }
+
+    public function getTotalLck(): int
+    {
+        return $this->getLckPoints() + $this->getDemonBase()->getLckDemonBase();
+    }
+
+
 }
