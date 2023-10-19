@@ -18,7 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 
 class GameController extends AbstractController
 {
@@ -79,7 +83,7 @@ class GameController extends AbstractController
     public function combat(Request $request, ?Battle $battle, 
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
-    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager): Response
+    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' && !$this->isGranted('ROLE_IN_COMBAT')) //Condition to start a new combat
@@ -100,6 +104,8 @@ class GameController extends AbstractController
             $entityManager->persist($this->getUser());
             $entityManager->persist($battle);
             $this->getUser()->addRole("ROLE_IN_COMBAT");
+            // $token = new UsernamePasswordToken($this->getUser(), null, 'main', $this->getUser()->getRoles());
+            // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
             return $this->render('game/combat.html.twig', [
@@ -234,4 +240,19 @@ class GameController extends AbstractController
     //     $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
     //     return $inBattle;
     // }
+
+    /**
+     * Use this method to refresh token roles immediately ||By PixelShaped https://github.com/symfony/symfony/issues/39763#issuecomment-925903934
+     */
+    // public function refreshToken($user, TokenStorageInterface $tokenStorage): void
+    // {
+    //     $token = new UsernamePasswordToken(
+    //         $user,
+    //         null,
+    //         'main', // your firewall name
+    //         $user->getRoles()
+    //     );
+    //     $tokenStorage->setToken($token);
+    // }
+
 }
