@@ -136,4 +136,35 @@ class Skill
         return $this;
     }
 
+    public function dmgCalc(DemonPlayer $demonPlayer1, DemonPlayer $demonPlayer2) : int
+    {
+        if ($this->getDmgType() == "phys")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer->getTotalStr()));
+            $endReduction = $dmgCalcPure - ($demon2->getTotalEnd());
+            $dmgDone = $dmgCalcPure - $endReduction;
+            return $dmgDone;
+        }
+        else if ($this->getDmgType() == "mag")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer->getTotalInt()));
+            $endReduction = $dmgCalcPure - ($demon2->getTotalEnd());
+            $dmgDone = $dmgCalcPure - $endReduction;
+            return $dmgDone;
+        }
+        else if ($this->getDmgType() == "str/agi")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + (($demonPlayer->getTotalStr()) * 0.3) + (($demonPlayer->getTotalAgi() * 0.7)));
+            $endReduction = $dmgCalcPure - ($demon2->getTotalEnd());
+            $dmgDone = $dmgCalcPure - $endReduction;
+            return $dmgDone;
+        }
+        else if ($this->getDmgType() == "int pure")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer->getTotalInt()) * 0.1);
+            $dmgDone = $dmgCalcPure;
+            return $dmgDone;
+        }
+    }
+
 }
