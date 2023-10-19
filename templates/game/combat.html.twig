@@ -6,6 +6,7 @@
     <div class="TextDiv gameGlobalDivCombat">
         <div class="putRight">
             <div class="infosCPU">
+                <p>{{cpuDemon.demonBase.name}}</p>
                 <p><b>Level</b> : {{cpuDemon.getLevel}}</p>
                 <div class="hpBar"></div>
                 <p>{{cpuDemon.getMaxHp}} HP</p>
@@ -15,6 +16,7 @@
 
         <div class="infosSelf">
             {% for demon in playerDemons %}
+                <p>{{demon.demonBase.name}}</p>
                 <p><b>Level</b> : {{demon.getLevel}}</p>
                 <div class="hpBar"></div>
                 <p>{{demon.getMaxHp}} HP</p>
