@@ -28,11 +28,11 @@
     <div class="centerTextBox">
         <div class="textBoxCombat">
             <div class="textContentCombat">
-                <strong>What do you want to do ? </strong>
+                <p id="strong"><strong>What do you want to do ? </strong></p>
                 <div class="spaceActions">
-                    <p><i>Action</i></p>
-                    <p><i>Items</i></p>
-                    <p><i>Flee</i></p>
+                    <p id="actions"><i>Actions</i></p>
+                    <p id="Items"><i>Items</i></p>
+                    <p id="Flee"><i>Flee</i></p>
                 </div>
             </div>
         </div>
@@ -54,5 +54,5 @@
 {% endblock %}
 
 {% block js %}
-    {# <script src="{{ asset("js/stageOne.js")}}"></script> #}
+    <script src="{{ asset("js/combat.js")}}"></script>
 {% endblock %}
