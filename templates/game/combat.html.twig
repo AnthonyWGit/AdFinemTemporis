@@ -9,7 +9,7 @@
                 <p>{{cpuDemon.demonBase.name}}</p>
                 <p><b>Level</b> : {{cpuDemon.getLevel}}</p>
                 <div class="hpBar"></div>
-                <p>{{cpuDemon.getMaxHp}} HP</p>
+                <p><span id="currentHpCPU">{{cpuDemon.getMaxHp}} HP</span> / <span id="maxHpCPU">{{cpuDemon.getMaxHp}} HP</span></p>
                 
             </div>
     </div>
@@ -19,10 +19,7 @@
                 <p>{{demon.demonBase.name}}</p>
                 <p><b>Level</b> : {{demon.getLevel}}</p>
                 <div class="hpBar"></div>
-                <p>{{demon.getMaxHp}} HP</p>
-            {% for skill in demon.skills %}
-                {{skill.name}}
-            {% endfor %}
+                <p><span id="currentHpPlayer">{{demon.getMaxHp}} HP</span> / <span id="maxHpPlayer">{{demon.getMaxHp}} HP</span></p>
         {% endfor %}
         </div>
     </div>
