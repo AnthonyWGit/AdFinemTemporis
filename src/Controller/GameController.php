@@ -53,9 +53,10 @@ class GameController extends AbstractController
     }
 
     #[Route('/game', name: 'game')]
-    public function index(): Response
+    public function index(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository): Response
     {
-        if ($this->isGranted("ROLE_IN_COMBAT")) return $this->redirectToRoute("combat");
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
+        // if ($this->isGranted("ROLE_IN_COMBAT")) return $this->redirectToRoute("combat");
 
         if ($this->getUser()->getStage() == 0)
         {
@@ -76,7 +77,7 @@ class GameController extends AbstractController
         }
         else
         {
-
+            $this->redirectToRoute("app_home");
         }
     }
 
@@ -215,6 +216,7 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
         $session = $request->getSession();
         if ($session->get('isCombatResolved')) 
         {
@@ -230,22 +232,69 @@ class GameController extends AbstractController
                 $currentXp = $playerDemon->getExperience();
                 $goldEarned = $battle->getGoldEarned();
                 $xpEarned =  $battle->getXpEarned();
+                $session->set("playerDemons", $playerDemons);
                 $totalXp = $xpEarned + $currentXp;
                 $totalGold = $goldEarned + $currentGold;
                 $this->getUser()->setGold($totalGold);
                 $playerDemon->setExperience($totalXp);
-                $session->remove('Winner');
-                $session->remove("isCombatResolved");
                 $entityManager->remove($battle);
                 $entityManager->remove($generatedCpu);
                 $entityManager->flush();
-                return $this->redirectToRoute("app_home");                
+                if (($this->getUser()->getStage() < 3 && $session->get("isCombatResolved") == "Yes"))
+                {
+                    $this->getUser()->setStage(2);
+                    $entityManager->flush();
+                }
+                $session->remove('Winner');
+                $session->remove("isCombatResolved");
+                return $this->redirectToRoute("stageTwo");
             }
-
         }
-
     }
 
+    #[Route('/game/stageTwo', name: 'stageTwo')]
+    public function stageTwo(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
+    {
+        $session = $request->getSession();
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
+        if ($this->getUser()->getStage() != 2) 
+        {
+            return $this->redirectToRoute("app_home");
+        }
+
+        $allDemons = $this->getUser()->getDemonPlayer();
+        foreach ($allDemons as $demon)
+        {
+            $demonLevel = $demon->getLevel();
+            $learnableSkill =  $skillTableRepository->findOneBy(["level" => $demonLevel, "demonBase" => $demon->getDemonBase()->getId()]);
+            if ($learnableSkill !== null)
+            {
+                $skill = $learnableSkill->getSkill();
+                $demon->addSkill($skill);
+                $this->addFlash(
+                    'notice',
+                    'One of your Demon gained a new skill !'
+                );
+            } 
+            
+            foreach ($session->get('playerDemons') as $demonBefore)
+            {
+                if ($demonBefore->getLevel() != $demonLevel)
+                {
+                    $this->addFlash(
+                        'notice',
+                        ''.$demon->getBase()->getName() .'gained a level !'
+                    );
+                }
+            }
+            $em->persist($demon);
+            $em->flush();
+        }
+
+        return $this->render('game/stageTwo.html.twig', [
+            'demon' => $allDemons,
+        ]);    
+    }
 
     #[Route('/game/combat', name: 'combat')]
     public function combat(Request $request, ?Battle $battle, 
@@ -253,7 +302,7 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle =false;
 
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle) //Condition to start a new combat
@@ -288,6 +337,7 @@ class GameController extends AbstractController
             {
                 $initiative = rand($initiative = $this->getUser()->getUsername() , 'CPU');
             }
+            $session->set('playerDemonLevel', $playerDemon->getLevel());
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
@@ -319,7 +369,10 @@ class GameController extends AbstractController
                 'initiative' => $initiative
             ]);    
         }
-
+        else if ($this->getUser()->getStage() == 2)
+        {
+            return $this->redirectToRoute("stageTwo");
+        }
         return $this->redirectToRoute("app_home");
     }
 
@@ -430,6 +483,7 @@ class GameController extends AbstractController
     {
         $session = $request->getSession();
         $firstDemonPlayer = $this->getUser()->getDemonPlayer();
+        if ($firstDemonPlayer->isEmpty()) return $this->redirectToRoute("app_home");
         $firstDemonPlayer = $firstDemonPlayer[0]->getId();
         $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
         return $inBattle;
