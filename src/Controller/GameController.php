@@ -86,6 +86,7 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
 {
+
     // This is an AJAX request
     // Prepare your data here. This could be an object, an array, etc.
     // For example, let's use the same data you were passing to the Twig template:
@@ -95,6 +96,21 @@ class GameController extends AbstractController
     $playerDemons = $this->getUser()->getDemonPlayer();
     $playerDemon = $playerDemons[0];
     $generatedCpu = $battleContent->getDemonPlayer2();
+
+    if ($request->request->get("isCombatResolved") == "Yes")
+    {
+        if ($request->request->get("Winner") == $this->getUser()->getUsername())
+        {
+            $request->getSession()->set("isCombatResolved" , 'Yes');
+            $request->getSession()->set("Winner" , $this->getUser()->getUsername());
+            $data =
+                [
+                    'button' => 'endCombat'
+                ];
+            return new JsonResponse;
+        }
+    }
+
     if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
     {
         $initiative = $this->getUser()->getUsername();
@@ -147,28 +163,75 @@ class GameController extends AbstractController
     #[Route('/game/ajaxe/SkillUsed', name: 'SkillUsedAjax')]
     public function skillUsed(Request $request, SkillRepository $skillRepository, DemonPlayerRepository $demonPlayerRepository, PlayerRepository $playerRepository): Response
     {
-        $currentCPUHp = $request->request->get('hpCurrentCPU');
-        $skillUsed = $request->request->get('skill');
-        $demonPlayerId = $request->request->get('demonPlayer1Id');
-        $cpuDemonId = $request->request->get('demonPlayer2Id');
-        // $demonPlayerId = 118;
-        // $cpuDemonId = 119;
-        $skillObj = $skillRepository->findOneBy(["name" => $skillUsed]);
-        $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
-        $cpuDemonObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
-        $dmgDone = $skillObj->dmgCalc($demonPlayerObj, $cpuDemonObj);
+        $turn = $request->request->get('turn');
+        if ($turn == "Player1")
+        {
+            $currentCPUHp = $request->request->get('hpCurrentCPU');
+            $skillUsed = $request->request->get('skill');
+            $demonPlayerId = $request->request->get('demonPlayer1Id');
+            $cpuDemonId = $request->request->get('demonPlayer2Id');
+            // $demonPlayerId = 118;
+            // $cpuDemonId = 119;
+            $skillObj = $skillRepository->findOneBy(["name" => $skillUsed]);
+            $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
+            $demonCPUObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
+            $dmgDone = $skillObj->dmgCalc($demonPlayerObj, $demonCPUObj);
 
-        // $dmgDone = 1;
-        $data = 
-        [
-            'dmg' => $dmgDone,
-            'skillObj' => $skillObj,
-            'demon1' => $demonPlayerId,
-            'demon2' => $cpuDemonId,
-            'skillused' => $skillUsed
-        ];
+            // $dmgDone = 1;
+            $data = 
+            [
+                'dmg' => $dmgDone,
+            ];
 
-        return new JsonResponse($data);
+            return new JsonResponse($data);
+        }
+        else
+        {
+            $currentCPUHp = $request->request->get('hpCurrentCPU');
+            $skillUsed = $request->request->get('skill');
+            $demonPlayerId = $request->request->get('demonPlayer1Id');
+            $cpuDemonId = $request->request->get('demonPlayer2Id');
+            // $demonPlayerId = 118;
+            // $cpuDemonId = 119;
+            $skillObj = $skillRepository->findOneBy(["name" => $skillUsed]);
+            $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
+            $demonCPUObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
+            $dmgDone = $skillObj->dmgCalc($demonCPUObj, $demonPlayerObj);
+
+            // $dmgDone = 1;
+            $data = 
+            [
+                'dmg' => $dmgDone,
+            ];
+
+            return new JsonResponse($data);
+        }
+
+    }
+
+    #[Route('/game/combat/resolve', name: 'combatResolve')]
+    public function combatResolve(Request $request, ?Battle $battle, 
+    ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
+    ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
+    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+    {
+        $session = $request->getSession();
+        if ($session->get('isCombatResolved')) 
+        {
+            if ($session->get('Winner') == $this->getUser()->getUsername())
+            $idPLayer = $this->getUser()->getDemonPlayer();
+            $idPLayer = $idPLayer[0];
+            $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
+            $playerDemons = $this->getUser()->getDemonPlayer();
+            $playerDemon = $playerDemons[0];
+            $generatedCpu = $battleContent->getDemonPlayer2();
+            $this->getUser()->setGold($this->getUser()->getGold() + $battleContent->getGoldEarned());
+            $playerDemon->setExperience( $playerDemon->getExperience() + $battleContent->getXpEarned());
+            $session->remove('Winner');
+            $session->remove("isCombatResolved");
+            return $this->redirectToRoute("app_home");
+        }
+
     }
 
 
@@ -181,8 +244,11 @@ class GameController extends AbstractController
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' && !$this->isGranted('ROLE_IN_COMBAT')) //Condition to start a new combat
         {
+            $session->remove('placeholder');
             $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
             $battle = new Battle;
+            $battle->setXpEarned(600);
+            $battle->setGoldEarned(30);
             $playerDemons = $this->getUser()->getDemonPlayer();
             $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $skillRepository , $demonTraitRepository,$playerRepository, $entityManager);
             // $playerDemons[0]->addFighter($battle);
@@ -191,7 +257,7 @@ class GameController extends AbstractController
             $playerDemon->addFighter($battle);
             $generatedCpu->addFighter2($battle);
             $entityManager->persist($battle);
-            $this->getUser()->addRole("ROLE_IN_COMBAT");
+            // $this->getUser()->addRole("ROLE_IN_COMBAT");
             // $token = new UsernamePasswordToken($this->getUser(), null, 'main', $this->getUser()->getRoles());
             // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
@@ -236,7 +302,7 @@ class GameController extends AbstractController
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
-                'initiative' => 'initiative'
+                'initiative' => $initiative
             ]);    
         }
 
