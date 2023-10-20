@@ -329,7 +329,7 @@ class GameController extends AbstractController
     DemonBaseRepository $demonBaseRepository, DemonTraitRepository $demonTraitRepository,
     EntityManagerInterface $entityManager): Response
     {
-        if ($this->getUser()->getStage() == 0 && $name == 'Horus')
+        if ($this->getUser()->getStage() == 0)
         {
             switch($name)
             {
@@ -350,7 +350,7 @@ class GameController extends AbstractController
                     break;
                 
                 case "Chernobog":
-                    $demonBase = $this->pickDemonBase($demonBaseRepository, 'horus');
+                    $demonBase = $this->pickDemonBase($demonBaseRepository, 'Chernobog');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
                     $skill = $skills[0]; //level on will only have on skill
