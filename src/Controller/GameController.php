@@ -79,6 +79,69 @@ class GameController extends AbstractController
         }
     }
 
+    #[Route('/ajaxe/combatAjax', name: 'combatAjax')]
+public function combatAjax(Request $request, ?Battle $battle, 
+?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
+?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
+?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+{
+    // This is an AJAX request
+    // Prepare your data here. This could be an object, an array, etc.
+    // For example, let's use the same data you were passing to the Twig template:
+    $idPLayer = $this->getUser()->getDemonPlayer();
+    $idPLayer = $idPLayer[0];
+    $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
+    $playerDemons = $this->getUser()->getDemonPlayer();
+    $playerDemon = $playerDemons[0];
+    $generatedCpu = $battleContent->getDemonPlayer2();
+    if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
+    {
+        $initiative = $this->getUser()->getUsername();
+    }
+    else if($playerDemon->getTotalAgi() < $generatedCpu->getTotalAgi())
+    {
+        $initiative = 'CPU';
+    }
+    else
+    {
+    }
+    // Prepare the data to return as JSON
+    $data = [
+        'cpuDemon' => [
+            'id' => $generatedCpu->getId(),
+            'name' => $generatedCpu->getDemonBase()->getName(),
+            'skills' => array_map(function ($skill) 
+            {
+                return $skill->getName(); // adjust this based on your Skill entity structure
+            }, $generatedCpu->getSkills()->toArray())
+            
+            // add other fields as needed
+        ],
+        'playerDemons' => array_map(function($demon) {
+            return [
+                'id' => $demon->getId(),
+                'name' => $demon->getDemonBase()->getName(),
+                'skills' => array_map(function ($skill) {
+                    return $skill->getName(); // adjust this based on your Skill entity structure
+                }, $demon->getSkills()->toArray())
+                // add other fields as needed
+            ];
+        }, $playerDemons->toArray()),
+        'initiative' => [
+            'initiative' => $initiative
+        ],
+        'playersNames' => [
+            'player1' => $this->getUser()->getUsername(),
+            'player2' => 'CPU'
+        ]
+    ];
+    
+    // Return the data as a JSON response
+    return new JsonResponse($data);
+    
+}
+
+
     #[Route('/game/combat', name: 'combat')]
     public function combat(Request $request, ?Battle $battle, 
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
@@ -91,16 +154,11 @@ class GameController extends AbstractController
             $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
             $battle = new Battle;
             $playerDemons = $this->getUser()->getDemonPlayer();
-            $playerDemonsArray = [];
-            foreach ($playerDemons as $playerDemon)
-            {
-                $playerDemonsArray[] = $playerDemon;
-            }
             $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $skillRepository , $demonTraitRepository,$playerRepository, $entityManager);
             // $playerDemons[0]->addFighter($battle);
             // $generatedCpu->addFighter2($battle);
-            $playerDemonsArray[0]->addFighter($battle);
-            $playerDemon = $playerDemonsArray[0];
+            $playerDemon = $playerDemons[0];
+            $playerDemon->addFighter($battle);
             $generatedCpu->addFighter2($battle);
             $entityManager->persist($battle);
             $this->getUser()->addRole("ROLE_IN_COMBAT");
@@ -132,10 +190,23 @@ class GameController extends AbstractController
             $idPLayer = $idPLayer[0];
             $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
             $playerDemons = $this->getUser()->getDemonPlayer();
+            $playerDemon = $playerDemons[0];
             $generatedCpu = $battleContent->getDemonPlayer2();
+            if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
+            {
+                $initiative = $this->getUser()->getUsername();
+            }
+            else if($playerDemon->getTotalAgi() < $generatedCpu->getTotalAgi())
+            {
+                $initiative = 'CPU';
+            }
+            else
+            {
+            }
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
-                'playerDemons' => $playerDemons
+                'playerDemons' => $playerDemons,
+                'initiative' => 'initiative'
             ]);    
         }
 
