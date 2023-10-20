@@ -1,13 +1,16 @@
 function actionsClick(event) {
-    spaceActions.classList.add("hidden"); 
-    strongS.classList.add('hidden'); 
-    createDiv.classList.remove('hidden'); 
-
-    if (divCreated == 0 ) {
+    spaceActions.classList.toggle("hidden"); 
+    strongS.classList.toggle('hidden'); 
+    if (divCreated == 0 ) 
+    {
         divCreated = 1;
         textContentCombat.appendChild(createDiv);
         createSkills(ajaxResponse.playerDemons);
         createDiv.appendChild(createPara); 
+    }
+    else
+    {
+        document.querySelector(".new").classList.toggle("hidden")
     }
 }
 
@@ -26,15 +29,14 @@ function createSkills(playerDemons) {
     });
 }
 function backElement(event) {
-    spaceActions.classList.remove("hidden"); // Show the original menu
-    strongS.classList.remove('hidden'); // Show the strongS element
-    createDiv.classList.add('hidden'); // Hide the skills
+    document.querySelector(".new").classList.toggle("hidden")
+    spaceActions.classList.toggle("hidden"); // Show the original menu
+    strongS.classList.toggle('hidden'); // Hide the title of the combat
 }
 function playerSkillClicked(event)
 {
     event.target.removeEventListener('click', playerSkillClicked)
-    turn = turn + 1
-    turnName = player2Name
+
     document.querySelector(".new").classList.toggle('hidden')
     $.ajax({
         url: '/game/ajaxe/SkillUsed',  // The URL of the route you defined in your Symfony controller
@@ -45,24 +47,83 @@ function playerSkillClicked(event)
             demonPlayer2Id : demonPlayer2Id, 
             hpCurrentCPU : hpCurrentCPU,
             hpCurrentPlayer : hpCurrentPlayer,
+            turn : "Player1",
         }
     }).done(function(response) //The rest of the code is loaded only if ajax request is done 
-        {
+        {//This means this is cpu turn 
             console.log(response)
+            turn = turn + 1
+            turnName = player2Name
+            hpCurrentCPU = hpCurrentCPU - response.dmg
+            document.querySelector("#currentHpCPU").innerHTML = hpCurrentCPU + " HP"
+            if (hpCurrentCPU < 1)
+            {
+                playerWon()
+            }
+            else
+            {
+                ennemyTurn()                
+            }
+ 
         })
 }
 function ennemyTurn(event)
 {
-    if (event.key === 'ArrowUp')
-    {
-        textContentCombat.classList.toggle('hidden')    
-    }
+    
+    let randomSkill = ajaxResponse.cpuDemon.skills[Math.floor(Math.random() * ajaxResponse.cpuDemon.skills.length)];
+    console.log(randomSkill)
+    $.ajax({
+        url: '/game/ajaxe/SkillUsed',  // The URL of the route you defined in your Symfony controller
+        method: 'POST',  // Or 'POST', depending on your needs
+        data : {
+            skill : randomSkill, 
+            demonPlayer1Id : demonPlayer1Id, 
+            demonPlayer2Id : demonPlayer2Id, 
+            hpCurrentCPU : hpCurrentCPU,
+            hpCurrentPlayer : hpCurrentPlayer,
+            turn : "CPU",
+        }
+    }).done(function(response) //The rest of the code is loaded only if ajax request is done 
+        {//This means this is cpu turn 
+            console.log(response)
+            turnName = player2Name
+            hpCurrentPlayer = hpCurrentPlayer - response.dmg
+            textEnnemy.innerHTML = "Ennemy used " + randomSkill + "!" + "\n" + "It hit for " + response.dmg + " damage !"
+            document.querySelector("#currentHpPlayer").innerHTML = hpCurrentPlayer + " HP"
+            textContentCombat.appendChild(textEnnemy)
+            setTimeout(playerTurn, 2000)
+
+        })
+}
+
+function playerTurn()
+{
+    textContentCombat.removeChild(textEnnemy);
+    console.log("hi")
+    spaceActions.classList.toggle("hidden"); 
+    strongS.classList.toggle('hidden'); 
+    document.querySelectorAll(".skill").forEach(element => {
+        element.addEventListener('click',playerSkillClicked)
+    });
 
 }
+
+function playerWon()
+{
+    $.ajax({
+        url: '/ajaxe/combatAjax',  // The URL of the route you defined in your Symfony controller
+        method: 'POST',  // Or 'POST', depending on your needs
+        data:
+        {
+            'isCombatResolved' : "Yes",
+            'Winner' : player1Name
+        }
+    }).done(function(response) //The rest of the code is loaded only if ajax request is done 
+        {
+            setTimeout(window.location.replace("/game/combat/resolve"), 3000);
+        })
+}
 //Sending ajax request to get combat data 
-
-let ajaxResponse = null;
-
 $.ajax({
     url: '/ajaxe/combatAjax',  // The URL of the route you defined in your Symfony controller
     method: 'GET',  // Or 'POST', depending on your needs
@@ -102,6 +163,7 @@ $.ajax({
         
 });
 
+let ajaxResponse = null;
 let player1Name = ''
 let player2Name = ''
 let initiative = ''
@@ -128,7 +190,8 @@ let createPara = document.createElement("p")
 createPara.innerHTML = "back"
 createPara.classList = "j"
 
+let textEnnemy = document.createElement("p")
 createDiv.appendChild(createPara)
 let createParaSkills = document.createElement("p")
 //event listeners
-document.addEventListener("keydown", ennemyTurn)
+// document.addEventListener("keydown", ennemyTurn)
