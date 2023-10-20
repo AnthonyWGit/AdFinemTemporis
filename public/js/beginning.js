@@ -127,10 +127,12 @@ createButtonHorus.addEventListener("click", choiceHorus)
 const createButtonXiuhcoatl = document.createElement("button")
 createButtonXiuhcoatl.textContent = "Select"
 createButtonXiuhcoatl.setAttribute('id','choiceXiuhcoatl')
+createButtonXiuhcoatl.addEventListener("click", choiceXiuhcoatl)
 
 const createButtonChernobog = document.createElement("button")
 createButtonChernobog.textContent = "Select"
 createButtonChernobog.setAttribute('id','choiceChernobog')
+createButtonChernobog.addEventListener("click", choiceChernobog)
 //eventListeners
 document.getElementById('yesButton').addEventListener('click', function() {
     audio.muted = false; // Unmute the audio
