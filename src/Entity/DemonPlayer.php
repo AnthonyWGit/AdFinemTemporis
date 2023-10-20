@@ -285,9 +285,10 @@ class DemonPlayer
     public function getMaxHp() : int
     {
         $baseEnd = $this->getDemonBase()->getEndDemonBase();
-        $bonusPoints = $this->getEndPoints();
+        $bonusLvlUpPoints = $this->getLevelUpPoints() * 10;
+        $bonusEndPoints = $this->getEndPoints();
         $level = $this->getLevel();
-        $total = $baseEnd + $bonusPoints;
+        $total = $baseEnd + ($bonusEndPoints * 20) + $bonusLvlUpPoints;
         $baseHp = $this->getDemonBase()->getBaseHp();
         return LevelCalculator::calcMaxHp($total, $baseHp,$level);
     }
