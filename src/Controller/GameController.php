@@ -219,17 +219,29 @@ class GameController extends AbstractController
         if ($session->get('isCombatResolved')) 
         {
             if ($session->get('Winner') == $this->getUser()->getUsername())
-            $idPLayer = $this->getUser()->getDemonPlayer();
-            $idPLayer = $idPLayer[0];
-            $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
-            $playerDemons = $this->getUser()->getDemonPlayer();
-            $playerDemon = $playerDemons[0];
-            $generatedCpu = $battleContent->getDemonPlayer2();
-            $this->getUser()->setGold($this->getUser()->getGold() + $battleContent->getGoldEarned());
-            $playerDemon->setExperience( $playerDemon->getExperience() + $battleContent->getXpEarned());
-            $session->remove('Winner');
-            $session->remove("isCombatResolved");
-            return $this->redirectToRoute("app_home");
+            {
+                $idPLayer = $this->getUser()->getDemonPlayer();
+                $idPLayer = $idPLayer[0];
+                $battle = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
+                $playerDemons = $this->getUser()->getDemonPlayer();
+                $playerDemon = $playerDemons[0];
+                $generatedCpu = $battle->getDemonPlayer2();
+                $currentGold = $this->getUser()->getGold();
+                $currentXp = $playerDemon->getExperience();
+                $goldEarned = $battle->getGoldEarned();
+                $xpEarned =  $battle->getXpEarned();
+                $totalXp = $xpEarned + $currentXp;
+                $totalGold = $goldEarned + $currentGold;
+                $this->getUser()->setGold($totalGold);
+                $playerDemon->setExperience($totalXp);
+                $session->remove('Winner');
+                $session->remove("isCombatResolved");
+                $entityManager->remove($battle);
+                $entityManager->remove($generatedCpu);
+                $entityManager->flush();
+                return $this->redirectToRoute("app_home");                
+            }
+
         }
 
     }
@@ -241,8 +253,10 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
+
         $session = $request->getSession();
-        if ($session->get('placeholder') == 'a' && !$this->isGranted('ROLE_IN_COMBAT')) //Condition to start a new combat
+        if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle) //Condition to start a new combat
         {
             $session->remove('placeholder');
             $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
@@ -280,7 +294,7 @@ class GameController extends AbstractController
                 'intiative' => $initiative
             ]);    
         }
-        else if ($this->isGranted('ROLE_IN_COMBAT')) //combat is still in progress so the user is put in it 
+        else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $inBattle) //combat is still in progress so the user is put in it 
         {
             $idPLayer = $this->getUser()->getDemonPlayer();
             $idPLayer = $idPLayer[0];
@@ -412,14 +426,14 @@ class GameController extends AbstractController
         return $demonPlayer;
     }
 
-    // public function inBattleCheck(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository)
-    // {
-    //     $session = $request->getSession();
-    //     $firstDemonPlayer = $this->getUser()->getDemonPlayer();
-    //     $firstDemonPlayer = $firstDemonPlayer[0]->getId();
-    //     $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
-    //     return $inBattle;
-    // }
+    public function inBattleCheck(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository)
+    {
+        $session = $request->getSession();
+        $firstDemonPlayer = $this->getUser()->getDemonPlayer();
+        $firstDemonPlayer = $firstDemonPlayer[0]->getId();
+        $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
+        return $inBattle;
+    }
 
     /**
      * Use this method to refresh token roles immediately ||By PixelShaped https://github.com/symfony/symfony/issues/39763#issuecomment-925903934
