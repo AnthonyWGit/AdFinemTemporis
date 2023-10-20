@@ -136,34 +136,34 @@ class Skill
         return $this;
     }
 
-    public function dmgCalc(DemonPlayer $demonPlayer1, DemonPlayer $demonPlayer2) : int
+    public function dmgCalc(DemonPlayer $demonPlayer1, DemonPlayer $demonPlayer2) : float
     {
         if ($this->getDmgType() == "phys")
         {
-            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer->getTotalStr()));
-            $endReduction = $dmgCalcPure - ($demon2->getTotalEnd());
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalStr()));
+            $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
             $dmgDone = $dmgCalcPure - $endReduction;
-            return $dmgDone;
+            return ceil($dmgDone);
         }
         else if ($this->getDmgType() == "mag")
         {
-            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer->getTotalInt()));
-            $endReduction = $dmgCalcPure - ($demon2->getTotalEnd());
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalInt()));
+            $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
             $dmgDone = $dmgCalcPure - $endReduction;
-            return $dmgDone;
+            return ceil($dmgDone);
         }
         else if ($this->getDmgType() == "str/agi")
         {
-            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + (($demonPlayer->getTotalStr()) * 0.3) + (($demonPlayer->getTotalAgi() * 0.7)));
-            $endReduction = $dmgCalcPure - ($demon2->getTotalEnd());
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + (($demonPlayer1->getTotalStr()) * 0.3) + (($demonPlayer1->getTotalAgi() * 0.7)));
+            $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
             $dmgDone = $dmgCalcPure - $endReduction;
-            return $dmgDone;
+            return ceil($dmgDone);
         }
         else if ($this->getDmgType() == "int pure")
         {
-            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer->getTotalInt()) * 0.1);
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalInt()) * 0.1);
             $dmgDone = $dmgCalcPure;
-            return $dmgDone;
+            return ceil($dmgDone);
         }
     }
 
