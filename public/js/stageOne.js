@@ -10,7 +10,7 @@ function typeWriter() {
         index = 0
         document.querySelector(".TextDiv").innerHTML = ""
         $('.centerTextBox').show();
-        speakerBox.innerHTML = "Horus"
+        speakerBox.innerHTML = jsVar
         typeTextChunk()
     }, 2000) // Do nothing and wait 2 seconds 
 
@@ -162,13 +162,37 @@ let textBox = document.querySelector(".textBox")
 let speakerBox = document.querySelector(".speakerBox")
 let textContent = document.querySelector('.textContent');
 let dialogPassed = 0;
-var jsVar = $(".TextDiv").data("var");
+let jsVar = $(".TextDiv").data("var");
+console.log(jsVar)
 //Texts
 let text = jsVar + " joined your team !"
-let text2 = "Some screams are heard, far away, lost in the void. They echo through nothing."
-let text3 = "You are walking with your new companion. He makes some great good company. Shh, something is comming !"
-let textToDisplay = "I didn't think you would be a birdie person. I... am quite surprised. Maybe you wonder why you are here now..."
-let textToDisplay2 = "I'll explain to you soon, in time. But for now, let's join our forces together. You'll need me."
+let text2 = ''
+let text3 = ""
+let textToDisplay = ''
+let textToDisplay2 = ''
+
+if (jsVar == "Horus")
+{
+    text2 = "Some screams are heard, far away, lost in the void. They echo through nothing."
+    text3 = "You are walking with your new companion. He makes some great good company. Shh, something is comming !"
+    textToDisplay = "I didn't think you would be a birdie person. I... am quite surprised. Maybe you wonder why you are here now..."
+    textToDisplay2 = "I'll explain to you soon, in time. But for now, let's join our forces together. You'll need me."    
+}
+else if(jsVar == "Chernobog")
+{
+    text2 = "Some screams are heard, far away, lost in the void. They echo through nothing."
+    text3 = "You are walking with your new companion. He makes some great good company. Shh, something is comming !"
+    textToDisplay = "Ah, so you seek to bath in this black sea even more ? I admire that. We should dive in..."
+    textToDisplay2 = "I'll explain to you soon, in time. We will walk this path together. Something tells me this is gonna be fun."   
+}
+else if (jsVar == "Xiuhcoatl")
+{
+    text2 = "Some screams are heard, far away, lost in the void. They echo through nothing."
+    text3 = "You are walking with your new companion. He makes some great good company. Shh, something is comming !"
+    textToDisplay = "Drawn to the arcanes, are you ? The air around us is heavy. I feel a storm comming."
+    textToDisplay2 = "Burning stuff to ashes has always been more fun together. We shall pierce through this veil of shadows with burning fire." 
+}
+
 
 let index = 0;
 let isTypingInProgress = false;
