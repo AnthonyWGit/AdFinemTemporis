@@ -14,6 +14,7 @@ use App\Repository\DemonBaseRepository;
 use App\Repository\DemonTraitRepository;
 use App\Repository\SkillTableRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\DemonPlayerRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -80,10 +81,10 @@ class GameController extends AbstractController
     }
 
     #[Route('/ajaxe/combatAjax', name: 'combatAjax')]
-public function combatAjax(Request $request, ?Battle $battle, 
-?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
-?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
-?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+    public function combatAjax(Request $request, ?Battle $battle, 
+    ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
+    ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
+    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
 {
     // This is an AJAX request
     // Prepare your data here. This could be an object, an array, etc.
@@ -109,6 +110,7 @@ public function combatAjax(Request $request, ?Battle $battle,
     $data = [
         'cpuDemon' => [
             'id' => $generatedCpu->getId(),
+            'hpMax' =>$generatedCpu->getMaxHp(),
             'name' => $generatedCpu->getDemonBase()->getName(),
             'skills' => array_map(function ($skill) 
             {
@@ -120,6 +122,7 @@ public function combatAjax(Request $request, ?Battle $battle,
         'playerDemons' => array_map(function($demon) {
             return [
                 'id' => $demon->getId(),
+                'hpMax' =>$demon->getMaxHp(),
                 'name' => $demon->getDemonBase()->getName(),
                 'skills' => array_map(function ($skill) {
                     return $skill->getName(); // adjust this based on your Skill entity structure
@@ -140,6 +143,33 @@ public function combatAjax(Request $request, ?Battle $battle,
     return new JsonResponse($data);
     
 }
+
+    #[Route('/game/ajaxe/SkillUsed', name: 'SkillUsedAjax')]
+    public function skillUsed(Request $request, SkillRepository $skillRepository, DemonPlayerRepository $demonPlayerRepository, PlayerRepository $playerRepository): Response
+    {
+        $currentCPUHp = $request->request->get('hpCurrentCPU');
+        $skillUsed = $request->request->get('skill');
+        $demonPlayerId = $request->request->get('demonPlayer1Id');
+        $cpuDemonId = $request->request->get('demonPlayer2Id');
+        // $demonPlayerId = 118;
+        // $cpuDemonId = 119;
+        $skillObj = $skillRepository->findOneBy(["name" => $skillUsed]);
+        $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
+        $cpuDemonObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
+        $dmgDone = $skillObj->dmgCalc($demonPlayerObj, $cpuDemonObj);
+
+        // $dmgDone = 1;
+        $data = 
+        [
+            'dmg' => $dmgDone,
+            'skillObj' => $skillObj,
+            'demon1' => $demonPlayerId,
+            'demon2' => $cpuDemonId,
+            'skillused' => $skillUsed
+        ];
+
+        return new JsonResponse($data);
+    }
 
 
     #[Route('/game/combat', name: 'combat')]
