@@ -212,19 +212,25 @@ class GameController extends AbstractController
 
     #[Route('/game/combat/resolve', name: 'combatResolve')]
     public function combatResolve(Request $request, ?Battle $battle, 
-    ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
+    ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillTableRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
         $session = $request->getSession();
+        
         if ($session->get('isCombatResolved')) 
         {
             if ($session->get('Winner') == $this->getUser()->getUsername())
             {
-                $idPLayer = $this->getUser()->getDemonPlayer();
-                $idPLayer = $idPLayer[0];
-                $battle = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
+                $playerDemons = $this->getUser()->getDemonPlayer();
+                $session->set("playerDemons", $playerDemons);
+                foreach($session->get("playerDemons", $playerDemons) as $a)
+                {
+                    dump($a->getLevel());
+                }
+                $playerDemon = $playerDemons[0];
+                $battle = $battleRepository->findOneBy(["demonPlayer1" => $playerDemon]);
                 $playerDemons = $this->getUser()->getDemonPlayer();
                 $playerDemon = $playerDemons[0];
                 $generatedCpu = $battle->getDemonPlayer2();
@@ -232,7 +238,6 @@ class GameController extends AbstractController
                 $currentXp = $playerDemon->getExperience();
                 $goldEarned = $battle->getGoldEarned();
                 $xpEarned =  $battle->getXpEarned();
-                $session->set("playerDemons", $playerDemons);
                 $totalXp = $xpEarned + $currentXp;
                 $totalGold = $goldEarned + $currentGold;
                 $this->getUser()->setGold($totalGold);
@@ -247,6 +252,46 @@ class GameController extends AbstractController
                 }
                 $session->remove('Winner');
                 $session->remove("isCombatResolved");
+                foreach($session->get("playerDemons", $playerDemons) as $a)
+                {
+                    dump($a->getLevel());
+                }
+                $allDemons = $this->getUser()->getDemonPlayer();
+
+                foreach ($playerDemons as $demon)
+                {
+                    $demonLevel = $demon->getLevel();
+                    $learnableSkill =  $skillTableRepository->findOneBy(["level" => $demonLevel, "demonBase" => $demon->getDemonBase()->getId()]);
+                    if ($learnableSkill !== null)
+                    {
+                        $skill = $learnableSkill->getSkill(); 
+                        $demon->addSkill($skill);
+                        $this->addFlash(
+                            'notice',
+                            'One of your Demon gained a new skill !'
+                        );
+                    } 
+                    
+                    foreach ($session->get('playerDemons') as $demonBefore)
+                    {
+
+                        if ($demonBefore->getLevel() != $demonLevel)
+                        {
+                            $this->addFlash(
+                                'noticeLevel',
+                                $demon->getDemonBase()->getName() .'gained a level !'
+                            );
+                        }
+                        foreach($session->get("playerDemons", $playerDemons) as $a)
+                        {
+                            dump($a->getLevel());
+                            dd();
+                        }
+                    }
+                    $entityManager->persist($demon);
+                    $entityManager->flush();
+                }
+
                 return $this->redirectToRoute("stageTwo");
             }
         }
@@ -261,38 +306,10 @@ class GameController extends AbstractController
         {
             return $this->redirectToRoute("app_home");
         }
-
-        $allDemons = $this->getUser()->getDemonPlayer();
-        foreach ($allDemons as $demon)
-        {
-            $demonLevel = $demon->getLevel();
-            $learnableSkill =  $skillTableRepository->findOneBy(["level" => $demonLevel, "demonBase" => $demon->getDemonBase()->getId()]);
-            if ($learnableSkill !== null)
-            {
-                $skill = $learnableSkill->getSkill();
-                $demon->addSkill($skill);
-                $this->addFlash(
-                    'notice',
-                    'One of your Demon gained a new skill !'
-                );
-            } 
-            
-            foreach ($session->get('playerDemons') as $demonBefore)
-            {
-                if ($demonBefore->getLevel() != $demonLevel)
-                {
-                    $this->addFlash(
-                        'notice',
-                        ''.$demon->getBase()->getName() .'gained a level !'
-                    );
-                }
-            }
-            $em->persist($demon);
-            $em->flush();
-        }
+        
 
         return $this->render('game/stageTwo.html.twig', [
-            'demon' => $allDemons,
+            'demon' => $this->getUser()->getDemonPlayer(),
         ]);    
     }
 
