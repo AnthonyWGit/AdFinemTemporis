@@ -3,20 +3,21 @@
 {% block title %}The Beginning{% endblock %}
 
 {% block body %}
-    <div class="TextDiv">
+    <div class="TextDiv gameGlobalDiv">
         {% for message in app.flashes('notice') %}
-        <div class="flash-notice">
             <p>{{ message }}</p>
-        </div>
-    {% endfor %}
+        {% endfor %}
+        {% for message in app.flashes('noticeLevel') %}
+            <p>{{ message }}</p>
+        {% endfor %}
     </div>
 
-    <div class="centerTextBox">
-        <div class="speakerBox">
+    <div class="centerTextBox hidden">
+        <div class="speakerBox hidden">
             
         </div>
-        <div class="textBox">
-            <div class="textContent">
+        <div class="textBox hidden">
+            <div class="textContent hidden">
 
             </div>
         </div>
