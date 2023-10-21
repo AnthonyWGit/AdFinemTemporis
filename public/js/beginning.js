@@ -101,12 +101,12 @@ function choiceChernobog()
 
 //Vars initialization
 //Texts
-const text = "Those dreams never felt so real. Night became as deep as ink. Something is happening. Somewhere, somehow." + 
+let text = "Those dreams never felt so real. Night became as deep as ink. Something is happening. Somewhere, somehow." + 
 "How will you shape your fate ? ";
-const text2 = "A long corridor. Endless, wrapped in shadows. In the distance, three figures. To which one are you drawn to ?"
-const text3 = "The first one is a radiant eagle standing on two legs. His gaze is lost into the horizon."
-const text4 = "The second is a floting serpent. Ethereal, hanging in the air; suspended by time."
-const text5 = "The third is barely visible. It is shrouded in darkness, blending in with its surroundings."
+let text2 = "A long corridor. Endless, wrapped in shadows. In the distance, three figures. To which one are you drawn to ?"
+let text3 = "The first one is a radiant eagle standing on two legs. His gaze is lost into the horizon."
+let text4 = "The second is a floting serpent. Ethereal, hanging in the air; suspended by time."
+let text5 = "The third is barely visible. It is shrouded in darkness, blending in with its surroundings."
 
 let index = 0;
 let isTypingInProgress = false
@@ -171,4 +171,4 @@ volume.addEventListener('input', function() {
     console.log(rangeValue);
 });
 
-document.addEventListener('keyup', choiceHorus);
+document.addEventListener('keyup', choiceChernobog);
