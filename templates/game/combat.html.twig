@@ -8,7 +8,9 @@
             <div class="infosCPU">
                 <p>{{cpuDemon.demonBase.name}}</p>
                 <p><b>Level</b> : {{cpuDemon.getLevel}}</p>
-                <div class="hpBar"></div>
+                <div class="hpBar" id="hpBarCPU">
+                    <div class="hpFillCPU" id="hpFillCPU"></div>
+                </div>
                 <p><span id="currentHpCPU">{{cpuDemon.getMaxHp}} HP</span> / <span id="maxHpCPU">{{cpuDemon.getMaxHp}} HP</span></p>
                 
             </div>
@@ -18,7 +20,9 @@
             {% for demon in playerDemons %}
                 <p>{{demon.demonBase.name}}</p>
                 <p><b>Level</b> : {{demon.getLevel}}</p>
-                <div class="hpBar"></div>
+                <div class="hpBar" id="hpBarPlayer">
+                    <div class="hpFillPlayer" id="hpFillPlayer"></div>
+                </div>
                 <p><span id="currentHpPlayer">{{demon.getMaxHp}} HP</span> / <span id="maxHpPlayer">{{demon.getMaxHp}} HP</span></p>
         {% endfor %}
         </div>
