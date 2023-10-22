@@ -5,8 +5,10 @@
     --base-color2 : hsl(320, 100%, 12%);
     --postContentColor : rgba(0, 0, 0, 1);
     --blueButton : rgba(47, 0, 255,0.5);
+    --blackButton : rgba(8, 3, 29, 0.992);
     --blueButtonHover : rgba(47, 0, 255,0.75);
     --textBoxColor : rgba(240, 255, 255, 0.45);
+    --basicTextColor : #ffd700;
 }
 
 *
@@ -20,10 +22,14 @@ html
 
     background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
     background-attachment: fixed;
-    color: #ffd700;
+    color: var(--basicTextColor);
 
 }
-
+.linkNoBase
+{
+    text-decoration: none;
+    color: var(--basicTextColor);
+}
 h1
 {
     padding: 1rem;
@@ -269,4 +275,10 @@ button {
     justify-content: center;
     gap: 2rem;
     padding: 1rem;
+}
+
+.pex
+{
+    display: flex;
+    justify-content: center;
 }
