@@ -17,28 +17,6 @@ function typeTextChunk() {
     }
   }
 
-//   function typeTextChunk2() 
-//   {
-//     console.log("next")
-//     currentCharIndex = 0;
-//     currentChunkIndex = 0;
-//     currentIndex = 0
-//     maxCharacters = calculateMaxCharacters(textBox);
-//     console.log(textToDisplay2)
-//     console.log(maxCharacters)
-//     textChunks = breakTextIntoChunks(textToDisplay2, maxCharacters)
-
-//     if (currentChunkIndex < textChunks.length) 
-//     {
-//         var currentChunk = textChunks[currentChunkIndex];
-//         textContent.innerHTML = currentChunk; // Set the whole chunk at once
-//         console.log(currentChunkIndex)
-//         dialogPassed = 1
-//     }
-//   }
-  
-
-
 //estimate the number of chars you can put in the box
 function calculateMaxCharacters(textBox) {
     let computedStyle = window.getComputedStyle(textBox);
@@ -82,11 +60,10 @@ function calculateMaxCharacters(textBox) {
 $(document).ready(function() {
     // Hide the centerTextBox when the document is ready because we want to display X has joined your team ! 
     $('.centerTextBox').hide();
-    setTimeout(function()
-        {
-            $('.toHide').remove()
-            typeWriter()
-        }),2000
+    setTimeout(function() {
+        $('.toHide').remove();
+    }, 5000); // moved the closing parenthesis here
+    typeWriter();
 });
 
 //Vars initialization
