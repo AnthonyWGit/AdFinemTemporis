@@ -1,9 +1,11 @@
 {% extends 'game.html.twig' %}
 
+{% set var = demon.getDemonBase.name %}
+
 {% block title %}The Beginning{% endblock %}
 
 {% block body %}
-    <div class="TextDiv gameGlobalDiv">
+    <div class="TextDiv gameGlobalDiv toHide">
         {% for message in app.flashes('notice') %}
             <p>{{ message }}</p>
         {% endfor %}
@@ -12,12 +14,16 @@
         {% endfor %}
     </div>
 
-    <div class="centerTextBox hidden">
-        <div class="speakerBox hidden">
+    <div class="TextDiv gameGlobalDiv" id='data' data-var="{{ var }}">
+        
+    </div>
+
+    <div class="centerTextBox">
+        <div class="speakerBox">
             
         </div>
-        <div class="textBox hidden">
-            <div class="textContent hidden">
+        <div class="textBox">
+            <div class="textContent">
 
             </div>
         </div>
@@ -30,9 +36,8 @@
         <label for="volume">Volume</label>
     </div>
 
-
 {% endblock %}
 
 {% block js %}
-
+    <script src="{{ asset("js/stageTwo.js")}}"></script>
 {% endblock %}
