@@ -297,17 +297,17 @@ class GameController extends AbstractController
     #[Route('/game/stageTwo', name: 'stageTwo')]
     public function stageTwo(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
     {
+        $starter = $this->getUser()->getDemonPlayer();
         $session = $request->getSession();
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
         if ($this->getUser()->getStage() != 2) 
         {
             return $this->redirectToRoute("app_home");
         }
-        
-
         return $this->render('game/stageTwo.html.twig', [
-            'demon' => $this->getUser()->getDemonPlayer(),
-        ]);    
+            'demon' => $starter[0],
+            'demons' => $starter,
+        ]);
     }
 
     #[Route('/game/combat', name: 'combat')]
