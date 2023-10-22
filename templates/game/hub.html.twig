@@ -2,10 +2,21 @@
 
 
 
-{% block title %}The Beginning{% endblock %}
+{% block title %}Game Hub{% endblock %}
 
 {% block body %}
+
+<div class="TextDiv gameGlobalDiv toHide">
+    {% for message in app.flashes('notice') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    {% for message in app.flashes('noticeLevel') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+</div>
+
     <p>This is the hub menu</p>
+    <a href="combat">Combat</a>
 {% endblock %}
 
 {% block js %}
