@@ -55,6 +55,7 @@ function playerSkillClicked(event)
             turn = turn + 1
             turnName = player2Name
             hpCurrentCPU = hpCurrentCPU - response.dmg
+            document.querySelector("#hpFillCPU").style.width = hpCurrentCPU + '%'
             document.querySelector("#currentHpCPU").innerHTML = hpCurrentCPU + " HP"
             if (hpCurrentCPU < 1)
             {
