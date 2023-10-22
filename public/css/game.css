@@ -147,11 +147,23 @@
 {
     width: 10rem;
     height: 1.5rem;
-    background-color: green;
     border-radius: 15px;
     margin: 0.5rem;
 }
 
+#hpFillCPU
+{
+    transition: all 1s;
+    background-color: green;
+    width: 100%;
+}
+
+#hpFillPlayer
+{
+    transition: 1s;
+    background-color: green;
+    width: 100%;
+}
 .putRight
 {
     display: flex;
