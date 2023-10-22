@@ -18,4 +18,12 @@ class DemonBaseController extends AbstractController
             'demons' => $demonsBases,
         ]);
     }
+
+    #[Route('/demon/base/show/{name}', name: 'demonDetail')]
+    public function detail(DemonBase $demon, DemonBaseRepository $demonBaseRepository): Response
+    {
+        return $this->render('demon_base/detail.html.twig', [
+            'demon' => $demon,
+        ]);
+    }
 }
