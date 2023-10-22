@@ -95,7 +95,7 @@ class DemonBase
         return $this;
     }
 
-    public function getInteDemonBase(): ?int
+    public function getIntDemonBase(): ?int
     {
         return $this->inte_demon_base;
     }
