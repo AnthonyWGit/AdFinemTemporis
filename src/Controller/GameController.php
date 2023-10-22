@@ -83,9 +83,13 @@ class GameController extends AbstractController
                 'demon' => $demon,
             ]);    
         }
+        else if ($this->getUser()->getStage() == 9999)
+        {
+            return $this->redirectToRoute("hub");
+        }
         else
         {
-            $this->redirectToRoute("app_home");
+            return $this->redirectToRoute("app_home");
         }
     }
 
@@ -185,13 +189,11 @@ class GameController extends AbstractController
             $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
             $demonCPUObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
             $dmgDone = $skillObj->dmgCalc($demonPlayerObj, $demonCPUObj);
-
             // $dmgDone = 1;
             $data = 
             [
                 'dmg' => $dmgDone,
             ];
-
             return new JsonResponse($data);
         }
         else
@@ -295,6 +297,7 @@ class GameController extends AbstractController
                         );
                     }
                 }
+                if ($this->getUser()->getStage() == 9999) return $this->redirectToRoute("hub");
                 return $this->redirectToRoute("stageTwo");
             }  
         }
@@ -342,7 +345,7 @@ class GameController extends AbstractController
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle =false;
 
         $session = $request->getSession();
-        if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle) //Condition to start a new combat
+        if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
             $session->remove('placeholder');
             $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
