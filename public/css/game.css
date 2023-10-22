@@ -147,7 +147,6 @@
 {
     width: 10rem;
     height: 1.5rem;
-    border-radius: 15px;
     margin: 0.5rem;
 }
 
@@ -156,6 +155,8 @@
     transition: all 1s;
     background-color: green;
     width: 100%;
+    height: 100%;
+    border-radius: 15px;
 }
 
 #hpFillPlayer
@@ -163,6 +164,8 @@
     transition: 1s;
     background-color: green;
     width: 100%;
+    height: 100%;
+    border-radius: 15px;
 }
 .putRight
 {
