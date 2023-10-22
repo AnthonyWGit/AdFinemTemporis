@@ -14,13 +14,15 @@ td, th
     flex-direction: column;
     padding: 2rem 5rem 2rem 5rem;
     flex-grow: 1;
+
 }
 
-@media screen  and (max-width: 400px)
+@media screen  and (max-width: 500px)
 {
     .divTable
     {
         padding: 2rem 0.5rem 2rem 0.5rem;
+        overflow-y: auto;
     }
 }
 
