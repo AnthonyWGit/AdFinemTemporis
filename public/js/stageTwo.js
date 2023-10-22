@@ -17,25 +17,25 @@ function typeTextChunk() {
     }
   }
 
-  function typeTextChunk2() 
-  {
-    console.log("next")
-    currentCharIndex = 0;
-    currentChunkIndex = 0;
-    currentIndex = 0
-    maxCharacters = calculateMaxCharacters(textBox);
-    console.log(textToDisplay2)
-    console.log(maxCharacters)
-    textChunks = breakTextIntoChunks(textToDisplay2, maxCharacters)
+//   function typeTextChunk2() 
+//   {
+//     console.log("next")
+//     currentCharIndex = 0;
+//     currentChunkIndex = 0;
+//     currentIndex = 0
+//     maxCharacters = calculateMaxCharacters(textBox);
+//     console.log(textToDisplay2)
+//     console.log(maxCharacters)
+//     textChunks = breakTextIntoChunks(textToDisplay2, maxCharacters)
 
-    if (currentChunkIndex < textChunks.length) 
-    {
-        var currentChunk = textChunks[currentChunkIndex];
-        textContent.innerHTML = currentChunk; // Set the whole chunk at once
-        console.log(currentChunkIndex)
-        dialogPassed = 1
-    }
-  }
+//     if (currentChunkIndex < textChunks.length) 
+//     {
+//         var currentChunk = textChunks[currentChunkIndex];
+//         textContent.innerHTML = currentChunk; // Set the whole chunk at once
+//         console.log(currentChunkIndex)
+//         dialogPassed = 1
+//     }
+//   }
   
 
 
@@ -151,18 +151,15 @@ console.log(textChunks)
             currentChunkIndex++;
             typeTextChunk();
         }
-        else if (currentChunkIndex == textChunks.length - 1)
+        else 
         {
-            if(dialogPassed == 0)
+            $.ajax({
+                url: "/ajaxe/setStage/9999",
+                method: "GET",
+            }).done(function()
             {
-                $('.centerTextBox').hide();
-                typeWriter2()                
-            }
-            else if (dialogPassed == 1)
-            {
-                $('.centerTextBox').hide();
-                typeWriter3()
-            }
+                window.location.replace('/game/hub')
+            })
         }
     } 
     else if (event.key === 'ArrowLeft') 
