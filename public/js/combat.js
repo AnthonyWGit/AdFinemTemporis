@@ -21,10 +21,10 @@ function createSkills(playerDemons) {
             let skillElement = document.createElement('p');
             skillElement.textContent = skill;
             skillElement.classList.add('skill'); // Add a class to each skill paragraph
+            skillElement.skillUsed = skill; // Add the skill as a property of the element
             skillElement.addEventListener('click', playerSkillClicked);
             createDiv.appendChild(skillElement);
-            skillUsed = skill
-            console.log(skillUsed)
+            console.log(skill)
         });
     });
 }
@@ -36,7 +36,7 @@ function backElement(event) {
 function playerSkillClicked(event)
 {
     event.target.removeEventListener('click', playerSkillClicked)
-
+    let skillUsed = event.target.skillUsed;
     document.querySelector(".new").classList.toggle('hidden')
     $.ajax({
         url: '/game/ajaxe/SkillUsed',  // The URL of the route you defined in your Symfony controller
@@ -55,7 +55,7 @@ function playerSkillClicked(event)
             turn = turn + 1
             turnName = player2Name
             hpCurrentCPU = hpCurrentCPU - response.dmg
-            document.querySelector("#hpFillCPU").style.width = hpCurrentCPU + '%'
+            document.querySelector("#hpFillCPU").style.width = ((hpCurrentCPU / hpMaxCPU)* 100) + '%'
             document.querySelector("#currentHpCPU").innerHTML = hpCurrentCPU + " HP"
             if (hpCurrentCPU < 1)
             {
@@ -90,6 +90,7 @@ function ennemyTurn(event)
             turnName = player2Name
             hpCurrentPlayer = hpCurrentPlayer - response.dmg
             textEnnemy.innerHTML = "Ennemy used " + randomSkill + "!" + "\n" + "It hit for " + response.dmg + " damage !"
+            document.querySelector("#hpFillPlayer").style.width = ((hpCurrentPlayer / hpMaxPlayer)*100) + '%'
             document.querySelector("#currentHpPlayer").innerHTML = hpCurrentPlayer + " HP"
             textContentCombat.appendChild(textEnnemy)
             setTimeout(playerTurn, 2000)
@@ -150,6 +151,8 @@ $.ajax({
     demonPlayer2Id = response.cpuDemon.id
     hpCurrentPlayer = response.playerDemons[0].hpMax //Will need fixing bc no loop
     hpCurrentCPU = response.cpuDemon.hpMax
+    hpMaxPlayer = hpCurrentPlayer
+    hpMaxCPU = hpCurrentCPU
     if (initiative == player1Name)
     {
         console.log("Player turn")
@@ -172,11 +175,12 @@ let clickable = 0
 let divCreated = 0
 let turn = 1
 let turnName = ''
-let skillUsed = ''
 let demonPlayer1Id = ''
 let demonPlayer2Id = ''
 let hpCurrentPlayer = ''
 let hpCurrentCPU  =''
+let hpMaxPlayer = ''
+let hpMaxCPU  =''
 //Query selectors
 let textContentCombat = document.querySelector(".textContentCombat")
 let actions = document.querySelector("#actions")
