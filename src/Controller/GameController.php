@@ -211,7 +211,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/game/combat/resolve', name: 'combatResolve')]
-    public function combatResolve(Request $request, ?Battle $battle, 
+    public function combatResolve(Request $request, ?Battle $battle, ?DemonPlayerRepository $demonPlayerRepository,
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillTableRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
@@ -223,16 +223,17 @@ class GameController extends AbstractController
         {
             if ($session->get('Winner') == $this->getUser()->getUsername())
             {
+                $session->getFlashBag()->clear();
                 $playerDemons = $this->getUser()->getDemonPlayer();
-                $session->set("playerDemons", $playerDemons);
-                foreach($session->get("playerDemons", $playerDemons) as $a)
+                $allDemons = $this->getUser()->getDemonPlayer();
+                // Store each demon's level before the XP addition
+                $levelsBefore = [];
+                foreach ($allDemons as $demonBefore) 
                 {
-                    dump($a->getLevel());
+                    $levelsBefore[$demonBefore->getId()] = $demonBefore->getLevel();
                 }
                 $playerDemon = $playerDemons[0];
                 $battle = $battleRepository->findOneBy(["demonPlayer1" => $playerDemon]);
-                $playerDemons = $this->getUser()->getDemonPlayer();
-                $playerDemon = $playerDemons[0];
                 $generatedCpu = $battle->getDemonPlayer2();
                 $currentGold = $this->getUser()->getGold();
                 $currentXp = $playerDemon->getExperience();
@@ -242,6 +243,13 @@ class GameController extends AbstractController
                 $totalGold = $goldEarned + $currentGold;
                 $this->getUser()->setGold($totalGold);
                 $playerDemon->setExperience($totalXp);
+                // Add XP and store each demon's level after the XP addition
+                $levelsAfter = [];
+                foreach ($playerDemons as $demonAfter) {
+                    // Add XP to $demonAfter here...
+
+                    $levelsAfter[$demonAfter->getId()] = $demonAfter->getLevel();
+                }
                 $entityManager->remove($battle);
                 $entityManager->remove($generatedCpu);
                 $entityManager->flush();
@@ -252,11 +260,6 @@ class GameController extends AbstractController
                 }
                 $session->remove('Winner');
                 $session->remove("isCombatResolved");
-                foreach($session->get("playerDemons", $playerDemons) as $a)
-                {
-                    dump($a->getLevel());
-                }
-                $allDemons = $this->getUser()->getDemonPlayer();
 
                 foreach ($playerDemons as $demon)
                 {
@@ -270,32 +273,26 @@ class GameController extends AbstractController
                             'notice',
                             'One of your Demon gained a new skill !'
                         );
-                    } 
-                    
-                    foreach ($session->get('playerDemons') as $demonBefore)
-                    {
-
-                        if ($demonBefore->getLevel() != $demonLevel)
-                        {
-                            $this->addFlash(
-                                'noticeLevel',
-                                $demon->getDemonBase()->getName() .'gained a level !'
-                            );
-                        }
-                        foreach($session->get("playerDemons", $playerDemons) as $a)
-                        {
-                            dump($a->getLevel());
-                            dd();
-                        }
+                        $entityManager->persist($demon);
+                        $entityManager->flush();
                     }
-                    $entityManager->persist($demon);
-                    $entityManager->flush();
                 }
-
+                // Compare each demon's level before and after the XP addition
+                foreach ($levelsBefore as $id => $levelBefore) {
+                    if ($levelBefore != $levelsAfter[$id]) {
+                        $strId = (strval($id));
+                        $this->addFlash(
+                            'noticeLevel',
+                            $demonPlayerRepository->findOneBy(["id" => strval($id)])->getDemonBase()->getName() .' gained a level !'
+                        );
+                    }
+                }
                 return $this->redirectToRoute("stageTwo");
-            }
+            }  
         }
     }
+          
+        
 
     #[Route('/game/stageTwo', name: 'stageTwo')]
     public function stageTwo(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
