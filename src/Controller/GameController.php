@@ -37,6 +37,14 @@ class GameController extends AbstractController
     // }
 
 
+    #[Route('/ajaxe/setStage/{stage}', name: 'setStage')]
+    public function setStage(string $stage, Request $request, EntityManagerInterface $em) 
+    {
+        $this->getUser()->setStage($stage);
+        $em->flush();
+        return new Response();
+    }
+
     #[Route('/endpoint', name: 'endpoint')]
     public function checkSignal(Request $request) {
         $output = $request->request->get('A');
@@ -306,6 +314,21 @@ class GameController extends AbstractController
         }
         return $this->render('game/stageTwo.html.twig', [
             'demon' => $starter[0],
+            'demons' => $starter,
+        ]);
+    }
+
+    #[Route('/game/hub', name: 'hub')]
+    public function hub(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
+    {
+        $starter = $this->getUser()->getDemonPlayer();
+        $session = $request->getSession();
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
+        if ($this->getUser()->getStage() != 9999) 
+        {
+            return $this->redirectToRoute("app_home");
+        }
+        return $this->render('game/hub.html.twig', [
             'demons' => $starter,
         ]);
     }
