@@ -93,3 +93,37 @@ td, th
     backdrop-filter: saturate(200%);
     color: rgba(255, 215, 0, 1);
 }
+
+.divDemon
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.stat {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 2rem 0 0 0;
+}
+
+.stat-name {
+    /* Style for the stat name (Strength, Endurance, etc.) */
+}
+
+.stat-bar {
+    height: 1rem;
+}
+
+.stat-value {
+    height: 100%;
+    background-color: blue; /* Or any color you prefer */
+}
+
+.stat-number {
+    /* Style for the stat number */
+}
