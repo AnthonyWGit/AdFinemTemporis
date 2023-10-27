@@ -17,7 +17,7 @@
 
         <div class="divTable">
             {% if is_granted('ROLE_ADMIN') %}
-            <div class="pex"><a class="looksLikeAButtonBlack">Add a new one</a></div>
+            <div class="pex"><a class="looksLikeAButtonBlack" href="{{path('newDemonBase')}}">Add a new one</a></div>
         {% endif %}
         <table>
             <thead>
@@ -37,7 +37,7 @@
                     <td><a class="linkNoBase" href="{{ path('demonDetail', {'name' : demon.name}) }}">{{demon.name}}</a></td>
                     <td>{{demon.pantheon}}</td>
                     {% if is_granted('ROLE_ADMIN') %}
-                    <td><i>X Edit</i></td>
+                    <td><i>X<a href=" {{path('newDemonBase', {'name' : demon.name})}}">Edit</a></i></td>
                 {% endif %}
                 </tr>
                 {% endfor %}
