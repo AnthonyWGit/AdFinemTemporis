@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add a Demon">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an existing Demon
+    {% else %}
+        Add a new Demon 
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<h1 class="centerTitle">Create a new Demon</h1>
+<div class="formGlobal">
+    <div class="formInside">
+        {{ form_errors(formNewDemonBase) }}
+
+        {{ form_start(formNewDemonBase) }}
+            {{ form_row(formNewDemonBase.name) }}
+            {{ form_row(formNewDemonBase.baseHp) }}
+            {{ form_row(formNewDemonBase.lore) }}
+            {{ form_row(formNewDemonBase.pantheon) }}
+            {{ form_row(formNewDemonBase.str_demon_base) }}
+            {{ form_row(formNewDemonBase.end_demon_base) }}
+            {{ form_row(formNewDemonBase.agi_demon_base) }}
+            {{ form_row(formNewDemonBase.int_demon_base) }}
+            {{ form_row(formNewDemonBase.lck_demon_base) }}
+            
+        {{ form_end(formNewDemonBase) }}
+    </div>
+</div>
+{% endblock %}
