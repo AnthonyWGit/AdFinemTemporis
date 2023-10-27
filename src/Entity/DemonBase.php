@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\DemonBaseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DemonBaseRepository::class)]
@@ -47,6 +48,9 @@ class DemonBase
 
     #[ORM\Column]
     private ?int $baseHp = 1;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $lore = null;
 
     public function __construct()
     {
@@ -100,7 +104,7 @@ class DemonBase
         return $this->inte_demon_base;
     }
 
-    public function setInteDemonBase(int $inte_demon_base): static
+    public function setIntDemonBase(int $inte_demon_base): static
     {
         $this->inte_demon_base = $inte_demon_base;
 
@@ -223,6 +227,18 @@ class DemonBase
     public function setBaseHp(int $baseHp): static
     {
         $this->baseHp = $baseHp;
+
+        return $this;
+    }
+
+    public function getLore(): ?string
+    {
+        return $this->lore;
+    }
+
+    public function setLore(?string $lore): static
+    {
+        $this->lore = $lore;
 
         return $this;
     }
