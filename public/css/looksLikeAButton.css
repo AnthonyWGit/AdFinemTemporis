@@ -26,8 +26,7 @@
     color: gold;
 }
 
-.looksLikeAButtonBlack
-{
+.looksLikeAButtonBlack {
     display: flex;
     background-color: var(--blackButton);
     border-radius: 15px;
@@ -40,10 +39,21 @@
     text-align: center;
     color: orange;
     margin: 0.5rem;
+    position: relative;
+
+    /* Add transition for smooth glow effect */
+    transition: all 0.3s ease-in-out; 
 }
 
-.looksLikeAButtonBlue:hover
-{
-    transition: 1s;
-    background-color: var(--blueButtonHover);
+/* Add glow effect on hover */
+.looksLikeAButtonBlack:hover {
+    /* Change color as per your preference */
+    box-shadow: 0 0 10px #fff201, 0 0 15px #ff6700; 
 }
+
+/* .looksLikeAButtonBlack:hover
+{
+    backdrop-filter: saturate(200%), blur(15px);
+    background-color: var(--blackButtonHover);
+    transition: 1s;
+} */
