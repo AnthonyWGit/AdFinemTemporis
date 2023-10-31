@@ -38,7 +38,7 @@
                     <td>{{demon.pantheon}}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('newDemonBase', {'name' : demon.name})}}">Edit</a></i>
+                        <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('editDemonBase', {'name' : demon.name})}}">Edit</a></i>
                     </td>
                 {% endif %}
                 </tr>
@@ -49,10 +49,12 @@
 
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <p>Do you really want to delete this?</p>
-                <button id="yesBtn">Yes</button>
-                <button id="noBtn">No</button>
+                <div class="modal-center">
+                    <span class="close">&times;</span>
+                    <p>Do you really want to delete this?</p>
+                    <button id="yesBtn">Yes</button>
+                    <button id="noBtn">No</button>
+                </div>
             </div>
         </div>
 
@@ -66,7 +68,8 @@
             btns.forEach(function(btn) {
                 btn.onclick = function(event) {
                     event.preventDefault();
-                    modal.style.display = "block";
+                    modal.style.display = "flex";
+                    modal.style.justifyContent = "center"
                     
                     // Get the name of the demon from the parent row
                     var demonName = this.parentElement.parentElement.parentElement.children[1].children[0].innerHTML;
