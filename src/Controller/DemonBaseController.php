@@ -31,7 +31,7 @@ class DemonBaseController extends AbstractController
     }
 
     #[Route('admin/demon/base/new', name: 'newDemonBase')]
-    #[Route('admin/demon/base/{id}/edit', name: 'editDemonBase')]
+    #[Route('admin/demon/base/{name}/edit', name: 'editDemonBase')]
     public function new(DemonBase $demonBase = null, Request $request, EntityManagerInterface $entityManager): Response
     {
         // creates a task object and initializes some data for this example
