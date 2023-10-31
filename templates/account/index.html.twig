@@ -4,6 +4,9 @@
 
 {% block body %}
 <div class="globalDivGap">
+    {% for message in app.flashes('notice') %}
+        <p>{{ message }}</p>
+    {% endfor %}
     <h1 class="centerTitle">Manage your account</h1>
         <h2>Your credentials</h2>
         <div class="globalDiv">
@@ -15,6 +18,9 @@
             <a class="looksLikeAButtonBlue" href="{{path("accountPasswordChange")}}"> Change password</a>
             <a class="looksLikeAButtonBlue" href="{{path("accountEmailChange")}}"> Change email</a>
         </div>  
+        <div class="row">
+            <a class="looksLikeAButtonBlue" href="{{path("resetProgression")}}">Reset Progression</a>
+        </div>
         <p>Delete your account</p>
     </div>
 {% endblock %}
