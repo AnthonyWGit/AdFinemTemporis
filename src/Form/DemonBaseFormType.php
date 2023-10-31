@@ -67,7 +67,7 @@ class DemonBaseFormType extends AbstractType
             'constraints' => [
         new NotBlank()]
             ])
-        ->add('inte_demon_base', NumberType::class,
+        ->add('int_demon_base', NumberType::class,
         [
             'row_attr' => ['class' => 'formRow'],
             'label' => "Base INT *",
