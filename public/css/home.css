@@ -4,11 +4,15 @@
     flex-direction: column;
     width: 30%;
     text-align: justify;
-    padding: 1rem;
+    margin: 0.5rem;
     font-size: 1.5rem;
     gap: 1rem;
 }
 
+.aside >p
+{
+    padding: 0.75rem;
+}
 .twoCards
 {
     display: flex;

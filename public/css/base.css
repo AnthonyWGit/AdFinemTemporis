@@ -9,6 +9,7 @@
     --blueButtonHover : rgba(47, 0, 255,0.75);
     --textBoxColor : rgba(240, 255, 255, 0.45);
     --basicTextColor : #ffd700;
+    --gradient : linear-gradient(45deg, var(--base-color1), var(--base-color2));
 }
 
 *
@@ -136,6 +137,10 @@ input
         height: 25rem;
     }
 
+    .card
+    {
+        width: 100%;
+    }
 }
 
 #menuShowHide + label:before {
@@ -276,6 +281,14 @@ button {
     justify-content: center;
     gap: 2rem;
     padding: 1rem;
+}
+
+@media screen and (max-width:350px) {
+    .rowButtons
+    {
+        flex-direction:column;
+        align-items: center;
+    }
 }
 
 .pex
