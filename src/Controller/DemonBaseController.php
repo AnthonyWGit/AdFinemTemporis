@@ -30,8 +30,8 @@ class DemonBaseController extends AbstractController
         ]);
     }
 
-    #[Route('demon/base/new', name: 'newDemonBase')]
-    #[Route('demon/base/{id}/edit', name: 'editDemonBase')]
+    #[Route('admin/demon/base/new', name: 'newDemonBase')]
+    #[Route('admin/demon/base/{id}/edit', name: 'editDemonBase')]
     public function new(DemonBase $demonBase = null, Request $request, EntityManagerInterface $entityManager): Response
     {
         // creates a task object and initializes some data for this example
@@ -56,5 +56,13 @@ class DemonBaseController extends AbstractController
             }
         
         return $this->render("demon_base/new.html.twig", ['formNewDemonBase' => $form, 'edit' => $demonBase->getId()]);
+    }
+
+    #[Route('admin/demon/base/{name}/delete', name: 'deleteDemonBase')]
+    public function demonBaseDelete(DemonBase $demonBase, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($demonBase);
+        $entityManager->flush();
+        return $this->redirectToRoute('demonsList');
     }
 }
