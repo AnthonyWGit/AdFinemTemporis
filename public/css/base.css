@@ -5,7 +5,8 @@
     --base-color2 : hsl(320, 100%, 12%);
     --postContentColor : rgba(0, 0, 0, 1);
     --blueButton : rgba(47, 0, 255,0.5);
-    --blackButton : rgba(8, 3, 29, 0.992);
+    --blackButton : rgba(8, 3, 29, 1);
+    --blackButtonHover : rgba(8, 3, 29, 0.5);
     --blueButtonHover : rgba(47, 0, 255,0.75);
     --textBoxColor : rgba(240, 255, 255, 0.45);
     --basicTextColor : #ffd700;
