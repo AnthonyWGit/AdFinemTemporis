@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add a Demon Trait">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an existing Demon Trait
+    {% else %}
+        Add a new Demon Trait
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<h1 class="centerTitle">Create a new Demon</h1>
+<div class="formGlobal">
+    <div class="formInside">
+        {{ form_errors(formNewDemonTrait) }}
+
+        {{ form_start(formNewDemonTrait) }}
+            {{ form_row(formNewDemonTrait.name) }}
+            {{ form_row(formNewDemonTrait.strength) }}
+            {{ form_row(formNewDemonTrait.endurance) }}
+            {{ form_row(formNewDemonTrait.agility) }}
+            {{ form_row(formNewDemonTrait.intelligence) }}
+            {{ form_row(formNewDemonTrait.luck) }}
+            
+        {{ form_end(formNewDemonTrait) }}
+    </div>
+</div>
+{% endblock %}
