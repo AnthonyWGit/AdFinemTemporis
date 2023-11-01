@@ -3,13 +3,15 @@
 namespace App\Controller;
 
 use App\Form\EmailChangeFormType;
+use App\Form\PasswordChangeFormType;
+use App\Repository\BattleRepository;
+use App\Repository\DemonBaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Form\PasswordChangeFormType;
 
 class AccountController extends AbstractController
 {
@@ -61,6 +63,48 @@ class AccountController extends AbstractController
         return $this->render('account/passwordChange.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/account/resetProgression', name: 'resetProgression')]
+    public function reset(Request $request, BattleRepository $battleRepository, DemonBaseRepository $demonBaseRepository, EntityManagerInterface $entityManager): Response
+    {
+        $demonsPlayer = $this->getUser()->getDemonPlayer();
+        if ($this->getUser()->getStage() == 0) 
+        {
+            $this->addFlash(
+                'notice',
+                "You are already starting from the beginning."
+            );
+            return $this->redirectToRoute("account");
+        }
+        foreach ($demonsPlayer as $demon)
+        {
+            if (empty($demon->getFighter()))
+            {
+                $this->addFlash(
+                    'notice',
+                    "You can't alter your progress while you're still in combat."
+                );
+                return $this->redirectToRoute('account');
+            }
+            else
+            {
+                $entityManager->remove($demon);
+            }
+        }
+        $itemsPlayers = $this->getUser()->getHaveItem();
+        foreach ($itemsPlayers as $item)
+        {
+            $entityManager->remove($item);
+        }
+        $this->getUser()->setGold(0);
+        $this->getUser()->setStage(0);
+        $this->addFlash(
+            'notice',
+            "You are starting from 0 again."
+        );
+        $entityManager->flush();
+        return $this->redirectToRoute("account");
     }
 
 }
