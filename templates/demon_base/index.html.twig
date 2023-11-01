@@ -17,8 +17,13 @@
 
         <div class="divTable">
             {% if is_granted('ROLE_ADMIN') %}
-            <div class="pex"><a class="looksLikeAButtonBlack" href="{{path('newDemonBase')}}">Add a new one</a></div>
-        {% endif %}
+                <div class="pex">
+                    {% for message in app.flashes('noticeChange') %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                    <a class="looksLikeAButtonBlack" href="{{path('newDemonBase')}}">Add a new one</a>
+                </div>
+            {% endif %}
         <table>
             <thead>
                 <tr>
