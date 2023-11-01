@@ -192,3 +192,11 @@ td, th
         margin: 1rem;
     }
 }
+
+.pex
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
