@@ -41,6 +41,7 @@
                         <div class="row">
                             <p>Title : {{suggestion.title}}</p>
                             <p>Author : {{player.username}}</p>
+                            <p>Status : {{suggestion.status}}</p>
                         </div>
                         <p>Submitted on {{suggestion.postDate|date("Y-m-d")}} at {{suggestion.postDate|date("h:m A ")}}</p>
                         <p>
@@ -54,7 +55,6 @@
                                     </a>
                             {% endif %}
                                 {{suggestion.playersLikesCount}}
-                                {{dump(player)}}
                                 <a class="block" href=" {{ path("detailSuggestion", {'title' : suggestion.title, 'player' : player.id}) }}"></a>
                         </p>
 
