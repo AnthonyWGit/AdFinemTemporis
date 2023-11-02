@@ -37,7 +37,7 @@
                 {% for trait in traits %}
                 <tr>
                     <td>{{trait.id}}</td>
-                    <td>{{trait.name}}</td>
+                    <td><a class="linkNoBase" href="{{ path('traitDetail', {'name' : trait.name}) }}">{{trait.name}}</a></td>
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('editTrait', {'name' : trait.name})}}">Edit</a></i>
