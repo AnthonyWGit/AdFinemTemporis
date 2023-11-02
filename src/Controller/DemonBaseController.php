@@ -48,7 +48,7 @@ class DemonBaseController extends AbstractController
 
                 $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
                 (
-                    'notice',
+                    'noticeChanges',
                     'Your changes were saved!'
                 );
 
@@ -63,6 +63,10 @@ class DemonBaseController extends AbstractController
     {
         $entityManager->remove($demonBase);
         $entityManager->flush();
+        $this->addFlash(
+            'noticeChange',
+            'This entry has been deleted'
+        );
         return $this->redirectToRoute('demonsList');
     }
 }
