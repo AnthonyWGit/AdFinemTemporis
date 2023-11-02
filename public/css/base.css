@@ -292,3 +292,9 @@ button {
     }
 }
 
+.centerWrap
+{
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}

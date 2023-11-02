@@ -105,12 +105,38 @@ td, th
 
 .stat {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto auto 1fr;
     gap: 1rem;
     align-items: center;
     padding: 2rem 0 0 0;
 }
 
+.stat4 
+{
+    display: grid;
+    grid-template-columns: auto auto 1fr 1fr;
+    align-items: center;
+    padding: 2rem 0 0 0;
+}
+
+@media (max-width: 600px) {
+    .stat {
+        grid-template-columns: auto;
+        gap: 1rem;
+        align-items: center;
+        padding: 2rem 0 0 0;
+    }
+
+    .stat4 {
+        grid-template-columns: auto;
+        align-items: center;
+        padding: 2rem 0 0 0;
+    }
+}
+
+.stat4 > .stat-name, .stat4 > .stat-number {
+    margin: 10px; /* Adjust this value to increase or decrease the gap */
+}
 .stat-name {
     /* Style for the stat name (Strength, Endurance, etc.) */
 }
@@ -119,11 +145,21 @@ td, th
     height: 1rem;
 }
 
+.stat-bar-neg {
+    display: flex;
+    justify-content: flex-end;
+    height: 1rem;
+}
+
 .stat-value {
     height: 100%;
     background-color: blue; /* Or any color you prefer */
 }
 
+.stat-value-neg {
+    height: 100%;
+    background-color: rgb(255, 0, 47); /* Or any color you prefer */
+}
 .stat-number {
     /* Style for the stat number */
 }
