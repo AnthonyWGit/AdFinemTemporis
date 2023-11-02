@@ -25,11 +25,7 @@ class TraitController extends AbstractController
     #[Route('/trait/show/{name}', name: 'traitDetail')]
     public function detail(DemonTrait $demonTrait, DemonTraitRepository $demonBaseRepository): Response
     {
-        $this->addFlash(
-            'noticeChange',
-            'A new trait has been added !'
-        );
-        return $this->render('demon_trait/detail.html.twig', [
+        return $this->render('trait/detail.html.twig', [
             'demonTrait' => $demonTrait,
         ]);
     }
