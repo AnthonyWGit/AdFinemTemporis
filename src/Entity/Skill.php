@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SkillRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
@@ -29,6 +30,9 @@ class Skill
 
     #[ORM\ManyToMany(mappedBy: 'skill', targetEntity: DemonPlayer::class)]
     private Collection $demonPlayers;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -166,6 +170,18 @@ class Skill
         // Add a random increase of up to 10% to the damage.
         $randomIncrease = mt_rand(100, 110) / 100;
         return ceil($dmgDone * $randomIncrease);
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
 }
