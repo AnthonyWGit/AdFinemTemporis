@@ -48,7 +48,7 @@
             </tbody>
         </table>
         </div>
-
+    {% if is_granted('ROLE_ADMIN') %}
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <div class="modal-center">
@@ -103,6 +103,6 @@
                 }
             }
         </script>
-
+    {% endif %}
     </div>
 {% endblock %}
