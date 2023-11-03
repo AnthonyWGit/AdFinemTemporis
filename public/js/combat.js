@@ -59,10 +59,14 @@ function playerSkillClicked(event)
             document.querySelector("#currentHpCPU").innerHTML = hpCurrentCPU + " HP"
             if (hpCurrentCPU < 1)
             {
-                playerWon()
+                document.querySelector("#hpFillCPU").style.width = '0%'
+                document.querySelector("#currentHpCPU").innerHTML = "0 HP"
+                setTimeout(playerWon(),10000)
             }
             else
             {
+                document.querySelector("#hpFillCPU").style.width = ((hpCurrentCPU / hpMaxCPU)* 100) + '%'
+                document.querySelector("#currentHpCPU").innerHTML = hpCurrentCPU + " HP"
                 ennemyTurn()                
             }
  
@@ -166,7 +170,6 @@ $.ajax({
     }
         
 });
-
 let ajaxResponse = null;
 let player1Name = ''
 let player2Name = ''
