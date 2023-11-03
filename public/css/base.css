@@ -168,39 +168,6 @@ input
     color: azure;
 }
 
-.formGlobal
-{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0.5rem;
-}
-
-.formInside
-{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 1rem;
-    background-color: rgba(238, 130, 238, 0.493);
-    border-radius: 15px;
-    gap: 1rem;
-}
-
-.formRegister /* this is a a form HTML not div ! */
-{
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-.formRow
-{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 0.5rem;
-}
 .centerTitle
 {
     text-align: center;
