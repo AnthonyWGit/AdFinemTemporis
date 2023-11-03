@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add a skill">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an existing Skill
+    {% else %}
+        Add a new Skill
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<h1 class="centerTitle">Create a new Demon</h1>
+<div class="formGlobal">
+    <div class="formInside">
+        {{ form_errors(formNewSkill) }}
+
+        {{ form_start(formNewSkill) }}
+            {{ form_row(formNewSkill.name) }}
+            {{ form_row(formNewSkill.baseDmg) }}
+            {{ form_row(formNewSkill.dmgType) }}
+            {{ form_row(formNewSkill.description) }}
+            <p class="paraForm">Fields marked with <b>*</b> are mandatory.</p>
+        {{ form_end(formNewSkill) }}
+    </div>
+</div>
+{% endblock %}
