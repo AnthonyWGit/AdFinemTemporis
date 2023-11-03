@@ -95,7 +95,7 @@ if (jsVar == "Horus")
 else if(jsVar == "Chernobog")
 {
     textToDisplay = "And so it goes back where it belongs, to nothing. Each time the clock ticks, we engulf ourself in this place even more. We might meet some "
-    +"more along the way, but we can get back to slain more of those weaklings to grow stronger."
+    +"more along the way, but we can backtrack to slain more of those weaklings to grow stronger."
 }
 else if (jsVar == "Xiuhcoatl")
 {
