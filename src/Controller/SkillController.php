@@ -42,7 +42,7 @@ class SkillController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
-                $demonTrait = $form->getData();
+                $skill = $form->getData();
                 $entityManager->persist($skill); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
 
