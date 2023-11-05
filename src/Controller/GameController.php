@@ -63,7 +63,7 @@ class GameController extends AbstractController
     #[Route('/game', name: 'game')]
     public function index(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository): Response
     {
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
         // if ($this->isGranted("ROLE_IN_COMBAT")) return $this->redirectToRoute("combat");
 
         if ($this->getUser()->getStage() == 0)
@@ -109,7 +109,8 @@ class GameController extends AbstractController
     $playerDemons = $this->getUser()->getDemonPlayer();
     $playerDemon = $playerDemons[0];
     $generatedCpu = $battleContent->getDemonPlayer2();
-
+    $xpEarned = $battleContent->getXpEarned();
+    $goldEarned = $battleContent->getGoldEarned();
     if ($request->request->get("isCombatResolved") == "Yes")
     {
         if ($request->request->get("Winner") == $this->getUser()->getUsername())
@@ -137,6 +138,8 @@ class GameController extends AbstractController
     }
     // Prepare the data to return as JSON
     $data = [
+        'xpEarned' =>$xpEarned,
+        'goldEarned' =>$goldEarned,
         'cpuDemon' => [
             'id' => $generatedCpu->getId(),
             'hpMax' =>$generatedCpu->getMaxHp(),
@@ -226,14 +229,13 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
         $session = $request->getSession();
         
         if ($session->get('isCombatResolved')) 
         {
             if ($session->get('Winner') == $this->getUser()->getUsername())
             {
-                $session->getFlashBag()->clear();
+                // $session->getFlashBag()->clear();
                 $playerDemons = $this->getUser()->getDemonPlayer();
                 $allDemons = $this->getUser()->getDemonPlayer();
                 // Store each demon's level before the XP addition
@@ -290,10 +292,15 @@ class GameController extends AbstractController
                 // Compare each demon's level before and after the XP addition
                 foreach ($levelsBefore as $id => $levelBefore) {
                     if ($levelBefore != $levelsAfter[$id]) {
+                        $demonPlayerRepository->findOneBy(["id" => strval($id)])->addLvlUpPoints($levelsAfter[$id] - $levelBefore); //points gained are difference level after - level be4
+                        $entityManager->flush();
                         $strId = (strval($id));
                         $this->addFlash(
                             'noticeLevel',
-                            $demonPlayerRepository->findOneBy(["id" => strval($id)])->getDemonBase()->getName() .' gained a level !'
+                            $demonPlayerRepository->findOneBy(["id" => strval($id)])->getDemonBase()->getName() .' gained a level !');
+                        $this->addFlash(
+                            'noticeLevel',
+                            $demonPlayerRepository->findOneBy(["id" => strval($id)])->getDemonBase()->getName(). ' gained a lvlUp point !'
                         );
                     }
                 }
@@ -310,7 +317,7 @@ class GameController extends AbstractController
     {
         $starter = $this->getUser()->getDemonPlayer();
         $session = $request->getSession();
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
         if ($this->getUser()->getStage() != 2) 
         {
             return $this->redirectToRoute("app_home");
@@ -326,13 +333,13 @@ class GameController extends AbstractController
     {
         $starter = $this->getUser()->getDemonPlayer();
         $session = $request->getSession();
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $this->redirectToRoute('combat');
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
         if ($this->getUser()->getStage() != 9999) 
         {
             return $this->redirectToRoute("app_home");
         }
         return $this->render('game/hub.html.twig', [
-            'demons' => $starter,
+            'demons' => $demons,
         ]);
     }
 
@@ -523,10 +530,10 @@ class GameController extends AbstractController
     {
         $session = $request->getSession();
         $firstDemonPlayer = $this->getUser()->getDemonPlayer();
-        if ($firstDemonPlayer->isEmpty()) return $this->redirectToRoute("app_home");
+        if ($firstDemonPlayer->isEmpty()) return  $inBattle = false;
         $firstDemonPlayer = $firstDemonPlayer[0]->getId();
         $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
-        return $inBattle;
+        if($inBattle === null) return $inBattle = false;
     }
 
     /**
