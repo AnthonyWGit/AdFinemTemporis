@@ -48,6 +48,8 @@ function playerSkillClicked(event)
             hpCurrentCPU : hpCurrentCPU,
             hpCurrentPlayer : hpCurrentPlayer,
             turn : "Player1",
+            goldEarned : goldEarned,
+            xpEarned : xpEarned,
         }
     }).done(function(response) //The rest of the code is loaded only if ajax request is done 
         {//This means this is cpu turn 
@@ -61,7 +63,8 @@ function playerSkillClicked(event)
             {
                 document.querySelector("#hpFillCPU").style.width = '0%'
                 document.querySelector("#currentHpCPU").innerHTML = "0 HP"
-                setTimeout(playerWon(),10000)
+                textContentCombat.innerHTML = "You win ! </br> Your current Demon gains " + xpEarned + " XP and " + goldEarned + " Gold."
+                setTimeout(playerWon,7000)
             }
             else
             {
@@ -157,6 +160,8 @@ $.ajax({
     hpCurrentCPU = response.cpuDemon.hpMax
     hpMaxPlayer = hpCurrentPlayer
     hpMaxCPU = hpCurrentCPU
+    xpEarned = response.xpEarned
+    goldEarned = response.goldEarned
     if (initiative == player1Name)
     {
         console.log("Player turn")
@@ -184,6 +189,8 @@ let hpCurrentPlayer = ''
 let hpCurrentCPU  =''
 let hpMaxPlayer = ''
 let hpMaxCPU  =''
+let xpEarned = ""
+let goldEarned = ""
 //Query selectors
 let textContentCombat = document.querySelector(".textContentCombat")
 let actions = document.querySelector("#actions")
