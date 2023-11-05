@@ -6,7 +6,7 @@
 
 {% block body %}
 
-<div class="TextDiv gameGlobalDiv toHide">
+<div class="flashes gameGlobalDiv">
     {% for message in app.flashes('notice') %}
         <p>{{ message }}</p>
     {% endfor %}
@@ -15,8 +15,8 @@
     {% endfor %}
 </div>
 
-    <p>This is the hub menu</p>
-    <a href="combat">Combat</a>
+    <p class="toHide">This is the hub menu</p>
+    <a class="toHide" href="{{path('combat')}}">Combat</a>
 {% endblock %}
 
 {% block js %}
