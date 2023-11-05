@@ -141,7 +141,7 @@ class DemonPlayer
 
         return $this;
     }
-
+    
     public function getLvlUpPoints(): ?int
     {
         return $this->LvlUp_Points;
@@ -151,6 +151,13 @@ class DemonPlayer
     {
         $this->LvlUp_Points = $LvlUp_Points;
 
+        return $this;
+    }
+
+    public function addLvlUpPoints(int $LvlUp_Points): static
+    {
+        $initalPts = $this->getLvlUpPoints();
+        $this->LvlUp_Points = $LvlUp_Points + $initalPts;
         return $this;
     }
 
