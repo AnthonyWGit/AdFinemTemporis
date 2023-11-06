@@ -30,20 +30,20 @@ class ItemController extends AbstractController
         ]);
     }
 
-    #[Route('admin/skill/new', name: 'newSkill')]
-    #[Route('admin/skill/{name}/edit', name: 'editSkill')]
+    #[Route('admin/item/new', name: 'newItem')]
+    #[Route('admin/item/{name}/edit', name: 'editItem')]
     public function new(Item $item = null, Request $request, EntityManagerInterface $entityManager): Response
     {
         // creates a task object and initializes some data for this example
         if ($item === null) {
             $item = new Item();
         }
-        $form = $this->createForm(ItemFormType::class, $Item);
+        $form = $this->createForm(ItemFormType::class, $item);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
                 $item = $form->getData();
-                $entityManager->persist($skill); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
+                $entityManager->persist($item); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
 
                 $this->addFlash // need to be logged as user to see the flash messages build-in Symfony

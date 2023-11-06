@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add an item">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an existing Item
+    {% else %}
+        Add a new Item
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if edit %}
+        <h1 class="centerTitle">Edit an existing Item</h1>
+    {% else %}
+        <h1 class="centerTitle">Create a new Item</h1>
+    {% endif %}
+    <div class="formGlobal">
+        <div class="formInside">
+            {{ form_errors(formNewItem) }}
+
+            {{ form_start(formNewItem) }}
+                {{ form_row(formNewItem.name) }}
+                {{ form_row(formNewItem.category) }}
+                {{ form_row(formNewItem.cost) }}
+                {# {{ form_row(formNewItem.description) }} #}
+                <p class="paraForm">Fields marked with <b>*</b> are mandatory.</p>
+            {{ form_end(formNewItem) }}
+        </div>
+    </div>
+{% endblock %}
