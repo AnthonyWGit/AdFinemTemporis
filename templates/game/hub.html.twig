@@ -14,11 +14,37 @@
         <p>{{ message }}</p>
     {% endfor %}
 </div>
+<div class="gameGlobalDivGap toHide">
+    {# <p class="toHide">This is the hub menu</p> #}
+    <a class="linkNoBase" href="{{path('combat')}}">Wander around</a>
+    <a class="linkNoBase">Continue story</a>
+</div>
+<div class="demonsBar toHide">
+    <div class="demonsBarContent">
+        {% for demon in demons %}
+            <div class="demonCol" data-demon-id="{{demon.id}}">
+                {{demon.demonBase.name}}
+                {% if demon.lvlUpPoints > 0 %}
+                <p>!</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
-    <p class="toHide">This is the hub menu</p>
-    <a class="toHide" href="{{path('combat')}}">Combat</a>
+<!-- Modal -->
+<div id="modal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+            <span class="close">&times;</span>
+        <div class="modal-stats"></div>
+        <div class="modal-points"></div>
+    </div>
+</div>
+
+
 {% endblock %}
-
+    
 {% block js %}
     <script src="{{ asset("js/hub.js")}}"></script>
 {% endblock %}
