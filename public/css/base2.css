@@ -7,6 +7,7 @@
     --blueButton : rgba(47, 0, 255,0.5);
     --blueButtonHover : rgba(47, 0, 255,0.75);
     --textBoxColor : rgba(240, 255, 255, 0.45);
+    --basicLinksColor : orange;
 }
 
 *
@@ -272,4 +273,10 @@ button {
 .hidden
 {
     display: none !important;
+}
+
+.linkNoBase
+{
+    text-decoration: none;
+    color: var(--basicLinksColor);
 }
