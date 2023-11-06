@@ -331,7 +331,7 @@ class GameController extends AbstractController
     #[Route('/game/hub', name: 'hub')]
     public function hub(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
     {
-        $starter = $this->getUser()->getDemonPlayer();
+        $demons = $this->getUser()->getDemonPlayer();
         $session = $request->getSession();
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
         if ($this->getUser()->getStage() != 9999) 
@@ -549,5 +549,63 @@ class GameController extends AbstractController
     //     );
     //     $tokenStorage->setToken($token);
     // }
+
+    #[Route('game/ajaxe/demon/{id}/stats', name: 'demonStatsAJAX')]
+    public function statsForModal(string $id , DemonPlayerRepository $demonPlayerRepository, Request $request, EntityManagerInterface $em) 
+    {
+        $demon = $demonPlayerRepository->findOneBy(["id" => $id]);
+        $stats = [
+            "Name" => $demon->getDemonBase()->getName(),
+            "Pantheon" => $demon->getDemonBase()->getPantheon(),
+            "Strength" => $demon->getTotalStr(),
+            "Endurance" =>$demon->getTotalEnd(),
+            "Agility" =>$demon->getTotalAgi(),
+            "Intelligence" =>$demon->getTotalInt(),
+            "Luck" =>$demon->getTotalLck(),
+            "LvlUpPoints" =>$demon->getLvlUpPoints(),
+        ];
+        return new JsonResponse($stats);
+    }
+    
+    #[Route('game/ajaxe/demon/{id}/update', name: 'demonStatsAJAXUpdate')]
+    public function updateStats(string $id , DemonPlayerRepository $demonPlayerRepository, Request $request, EntityManagerInterface $em) 
+    {
+        $demon = $demonPlayerRepository->findOneBy(["id" => $id]);
+
+        // Get the stat and points from the request
+        $stat = $request->request->get('stat');
+        $value = $request->request->get('value');
+        $points = $request->request->get('points');
+
+        // Update the demon's stat and points
+        switch ($stat)
+        {
+            case 'Strength':
+                $demon->addStrPoint(1);
+                break;
+            
+            case 'Endurance':
+                $demon->addEndPoint(1);
+                break;
+
+            case 'Agility':
+                $demon->addAgiPoint(1);
+                break;
+
+            case 'Intelligence':
+                $demon->addIntPoint(1);
+                break;
+
+            case 'Luck':
+                $demon->addLckPoint(1);
+                break;
+        }
+        $demon->addLvlUpPoints(-1);
+        // Save the changes to the database
+        $em->persist($demon);
+        $em->flush();
+        // Return a JSON response
+        return new JsonResponse(['status' => 'success']);
+        }
 
 }
