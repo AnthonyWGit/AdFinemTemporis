@@ -6,11 +6,12 @@ function typeWriter() {
     }
     else
     {   setTimeout(function (){
-        isTypingInProgress = false
         index = 0
         document.querySelector(".TextDiv").innerHTML = ""
         $('.centerTextBox').show();
         speakerBox.innerHTML = jsVar
+        isTypingInProgress = false
+        document.addEventListener("keydown", keyDown)
         typeTextChunk()
     }, 2000) // Do nothing and wait 2 seconds 
 
@@ -29,6 +30,7 @@ function typeWriter2() {
         document.querySelector(".TextDiv").innerHTML = ""
         $('.centerTextBox').show();
         document.querySelector(".textContent").innerHTML = ""
+        document.addEventListener("keydown", keyDown)
         typeTextChunk2()
     }, 2000) // Do nothing and wait 2 seconds 
 
@@ -44,7 +46,6 @@ function typeWriter3() {
     }
     else
     {   setTimeout(function (){
-        isTypingInProgress = false
         index = 0
         document.querySelector(".TextDiv").innerHTML = ""
         document.querySelector(".textContent").innerHTML = ""
@@ -57,13 +58,13 @@ function typeWriter3() {
             },
             success: function(data) {
               console.log("SUCCESS " + data);
+              window.location.replace("/game/combat");
             },
             error: function() {
               console.log("ERROR");
             }
           });
 
-          window.location.replace("/game/combat");
 
     }, 2000) // Do nothing and wait 2 seconds 
 
@@ -146,7 +147,6 @@ function calculateMaxCharacters(textBox) {
 $(document).ready(function() {
     // Hide the centerTextBox when the document is ready because we want to display X has joined your team ! 
     $('.centerTextBox').hide();
-
 });
 
 //Vars initialization
@@ -195,7 +195,7 @@ else if (jsVar == "Xiuhcoatl")
 
 
 let index = 0;
-let isTypingInProgress = false;
+let isTypingInProgress = true;
 let isScrolling = false;
 let currentChunkIndex = 0;
 let currentCharIndex = 0;   
@@ -224,40 +224,55 @@ console.log(textChunks)
 // Function to handle Spacebar key press for scrolling
 //eventListeners
 
-  // Event listener to start typing when spacebar is pressed
-  document.addEventListener('keydown', function (event) 
-  {
-    if (event.key === 'ArrowRight') 
-    {
-        if (currentChunkIndex < textChunks.length - 1) 
-        {
-            currentChunkIndex++;
-            typeTextChunk();
-        }
-        else if (currentChunkIndex == textChunks.length - 1)
-        {
-            if(dialogPassed == 0)
-            {
-                $('.centerTextBox').hide();
-                typeWriter2()                
-            }
-            else if (dialogPassed == 1)
-            {
-                $('.centerTextBox').hide();
-                typeWriter3()
-            }
-        }
-    } 
-    else if (event.key === 'ArrowLeft') 
-    {
-        if (currentChunkIndex > 0) 
-        {
-            currentChunkIndex--;
-            typeTextChunk();
-        }
-    }
-});
+// Event listener to start typing when spacebar is pressed
 
+let debounceTimeout;
+function keyDown(event)
+{
+    event.stopPropagation(); // Prevent the event from bubbling up
+    debounceTimeout = setTimeout(function() { //anti spam filter
+    if (!isTypingInProgress)
+    {
+        if (event.key === 'ArrowRight') 
+        {
+            if (currentChunkIndex < textChunks.length - 1) 
+            {
+                currentChunkIndex++;
+                typeTextChunk();
+            }
+            else if (currentChunkIndex == textChunks.length - 1)
+            {
+                if(dialogPassed == 0)
+                {
+                    $('.centerTextBox').hide();
+                    isTypingInProgress = true
+                    document.removeEventListener("keydown", keyDown)
+                    typeWriter2()                
+                }
+                else if (dialogPassed == 1)
+                {
+                    $('.centerTextBox').hide();
+                    isTypingInProgress = true
+                    document.removeEventListener("keydown", keyDown)
+                    typeWriter3()
+                }
+            }
+        } 
+        else if (event.key === 'ArrowLeft') 
+        {
+            if (currentChunkIndex > 0) 
+            {
+                currentChunkIndex--;
+                typeTextChunk();
+            }
+        }        
+    }
+    else
+    {
+
+    }
+    }, 1000)
+}
 document.querySelector('#mute').addEventListener('click', function() {
     if (audio.muted == false)
     {
