@@ -349,8 +349,7 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle =false;
-
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
@@ -530,10 +529,16 @@ class GameController extends AbstractController
     {
         $session = $request->getSession();
         $firstDemonPlayer = $this->getUser()->getDemonPlayer();
-        if ($firstDemonPlayer->isEmpty()) return  $inBattle = false;
-        $firstDemonPlayer = $firstDemonPlayer[0]->getId();
-        $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
-        if($inBattle === null) return $inBattle = false;
+        if ($firstDemonPlayer->isEmpty()) 
+        {
+            return  $inBattle = false;
+        }
+        else
+        {
+            $firstDemonPlayer = $firstDemonPlayer[0]->getId();
+            $inBattle = $battleRepository->findBy(["demonPlayer1" => $firstDemonPlayer]);
+            if ($inBattle == null) return $inBattle = false; else return $inBattle = true; 
+        }
     }
 
     /**
