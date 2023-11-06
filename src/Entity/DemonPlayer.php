@@ -82,6 +82,14 @@ class DemonPlayer
         return $this;
     }
 
+    public function addStrPoint(int $str_points): static
+    {
+        $currentPts = $this->getStrPoints();
+        $this->str_points = $str_points + $currentPts;
+        return $this;
+    }
+
+
     public function getEndPoints(): ?int
     {
         return $this->end_points;
@@ -91,6 +99,13 @@ class DemonPlayer
     {
         $this->end_points = $end_points;
 
+        return $this;
+    }
+
+    public function addEndPoint(int $end_points): static
+    {
+        $currentPts = $this->getAgiPoints();
+        $this->end_points = $end_points + $currentPts;
         return $this;
     }
 
@@ -106,6 +121,13 @@ class DemonPlayer
         return $this;
     }
 
+    public function addAgiPoint(int $agi_points): static
+    {
+        $currentPts = $this->getAgiPoints();
+        $this->agi_points = $agi_points + $currentPts;
+        return $this;
+    }
+
     public function getIntPoints(): ?int
     {
         return $this->int_points;
@@ -118,6 +140,14 @@ class DemonPlayer
         return $this;
     }
 
+    public function addIntPoint(int $int_points): static
+    {
+        $currentPts = $this->getIntPoints();
+        $this->int_points = $int_points + $currentPts;
+        return $this;
+    }
+
+
     public function getLckPoints(): ?int
     {
         return $this->lck_points;
@@ -129,6 +159,14 @@ class DemonPlayer
 
         return $this;
     }
+
+    public function addLckPoint(int $lck_points): static
+    {
+        $currentPts = $this->getLckPoints();
+        $this->lck_points = $lck_points + $currentPts;
+        return $this;
+    }
+
 
     public function getExperience(): ?int
     {
