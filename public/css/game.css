@@ -10,8 +10,44 @@
     text-align: center;
 }
 
+.gameGlobalDivGap
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    font-size: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+    gap: 2rem;
+}
 
+.demonsBar
+{
+    display: flex;
+    background-color: hsla(180, 100%, 97%, 0.2);    
+    backdrop-filter: blur(15px) saturation(200%);
+    height: 7.5rem;
+    margin: 1rem;
+    border-radius: 3rem;
+    justify-content: center;
+    align-items: center;
+}
 
+.demonCol
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3rem;
+}
+.demonsBarContent
+{
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+}
 .bottomLeft
 {
     display: flex;
@@ -171,4 +207,94 @@
 {
     display: flex;
     justify-content: flex-end;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.modal-content {
+    background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
+    padding: 1rem;
+    margin: 1rem;
+    border: 1px solid #888;
+    width: 75%;
+    height: 75%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-points
+{
+    display: flex;
+    justify-content: center;
+    height: 1rem;
+}
+
+.modal-stats
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-center
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width:500px) {
+    .modal-center{
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width:800px) {
+    .modal-center{
+        margin: 1rem;
+    }
+}
+
+.lvlUpBtn
+{
+    margin: 0;
 }
