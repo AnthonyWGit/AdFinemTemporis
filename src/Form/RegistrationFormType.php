@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -74,6 +75,15 @@ class RegistrationFormType extends AbstractType
             ->add('Validate', SubmitType::class, [
                 'row_attr' => ['class' => 'formRow'],
                 'attr' => ['class' => 'btn-11 custom-btn']
+            ])
+            //Honeypot field 
+            ->add('SurnameField', HiddenType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'class' => 'SurnameField',
+                    'id' => 'surname-field',
+                ]
             ])
             ;
     }
