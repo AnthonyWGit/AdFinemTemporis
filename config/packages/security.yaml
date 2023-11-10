@@ -21,12 +21,15 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: app_home
+            login_throttling: null
 
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
                 always_remember_me: true
+
+            
 
 
             # activate different ways to authenticate
