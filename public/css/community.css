@@ -85,10 +85,9 @@
 .deleteOwn
 {
     position: absolute;
-    top: 15px;
+    top: 5%;
     bottom: 0;
-    right: 0;
-    left: 540px;
+    right:  5%;
     z-index: 100;
 }
 
@@ -103,4 +102,19 @@
     font-size: 1rem;
     color: var(--postContentColor);
     white-space: pre-wrap;
+}
+
+.status {
+    z-index: 2; /* Higher z-index */
+}
+
+select
+{
+    background-color: transparent;
+    color: gold;
+}
+
+option
+{
+    color: black;
 }

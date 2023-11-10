@@ -33,6 +33,12 @@ html
     text-decoration: none;
     color: var(--basicTextColor);
 }
+
+.linkNoBase:hover
+{
+    transition: all 1s;
+    color: orange;
+}
 h1
 {
     padding: 1rem;
