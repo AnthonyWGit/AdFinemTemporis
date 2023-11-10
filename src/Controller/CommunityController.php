@@ -5,14 +5,15 @@ namespace App\Controller;
 use App\Entity\Player;
 use App\Entity\Suggestion;
 use App\Form\SuggestionType;
+use App\Service\FileUploader;
 use App\Repository\PlayerRepository;
 use App\Repository\SuggestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\FileUploader;
 
 class CommunityController extends AbstractController
 {
@@ -74,7 +75,7 @@ class CommunityController extends AbstractController
                 $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
                 (
                     'notice',
-                    'Your changes were saved!'
+                    'Your created a suggestion'
                 );
 
                 return $this->redirectToRoute('community'); //redirect to list stagiaires if everything is ok
@@ -129,4 +130,23 @@ class CommunityController extends AbstractController
             return $this->redirectToRoute("community");
         }
     }
+
+    #[Route('community/ajax/{id}/changeStatus', name: 'changeStatus')]
+    public function changeStatus(Suggestion $suggestion, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        if ($request->isXmlHttpRequest()) { // Check if it's an AJAX request
+            $status = $request->request->get('status'); // Get the new status from the request
+    
+            // Update the status of the suggestion
+            $suggestion->setStatus($status);
+            $entityManager->flush();
+    
+            // Return a JSON response
+            return new JsonResponse(['status' => $status]);
+        }
+    
+        // If it's not an AJAX request, return a 400 Bad Request response
+        return new Response('This is not ajax!', 400);
+    }
+
 }
