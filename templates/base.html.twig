@@ -16,10 +16,9 @@
             <link rel="stylesheet" href="{{ asset('css/base.css') }}">
             <link rel="stylesheet" href="{{ asset('css/account.css') }}">
             <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-
         {% endblock %}
-
         {% block javascripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         {% endblock %}
     </head>
     <body>
@@ -37,8 +36,8 @@
                 {% endif %}
                 {% if app.user and app.user.isverified %}
                     <li><a href=" {{path("app_logout") }}">Logout</a></li>
+                    <li><a class="iconText" href=" {{path("account")}}" ><img class="navSvg" src="{{ asset('img/profile.svg') }}"> Account</a></li>
                 {% endif %}
-                <li><a class="iconText" href=" {{path("account")}}" ><img class="navSvg" src="{{ asset('img/profile.svg') }}"> Account</a></li>
             </ul>
         </nav>
 
