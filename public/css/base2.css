@@ -8,6 +8,7 @@
     --blueButtonHover : rgba(47, 0, 255,0.75);
     --textBoxColor : rgba(240, 255, 255, 0.45);
     --basicLinksColor : orange;
+    --basicTextColor : gold;
 }
 
 *
@@ -278,5 +279,11 @@ button {
 .linkNoBase
 {
     text-decoration: none;
-    color: var(--basicLinksColor);
+    color: var(--basicTextColor);
+}
+
+.linkNoBase:hover
+{
+    transition: all 1s;
+    color: orange;
 }
