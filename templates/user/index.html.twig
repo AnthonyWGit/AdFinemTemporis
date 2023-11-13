@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block body %}
+    <div class="centerWrapNoGrow">
+        <div class="divDemon">
+            <h1 class="centerTitle">User management panel</h1>
+            <p>
+                This page will allow you to manage users. By clicking their name you can manage
+                their demons and their inventory.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td><a href=" {{path('userDetail', {'id' : user.id})}}">{{user.username}}</a></td>
+                            <td>{{user.email}}</td>
+                            {% if 'ROLE_BANNED' in user.roles %}
+                                <td><a href=" {{path('unbanAction', {'id' : user.id})}}">Unban</a></td>
+                            {% else %}
+                                <td><a href=" {{path('banAction', {'id' : user.id})}}">Ban</a></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}
