@@ -7,6 +7,13 @@
     gap: 2em;
 }
 
+.globalDivGapRow
+{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 .row
 {
     flex-direction: row;
@@ -22,4 +29,13 @@
         gap: 1rem;
         align-items: center;
     }   
+}
+
+.adminInput
+{
+    border: transparent solid 0.1px !important;
+    text-align: center;
+    color: var(--basicTextColor );
+    border-radius: 0px !important;
+    width: 75%;
 }
