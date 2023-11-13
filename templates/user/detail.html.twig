@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel for demon{% endblock %}
+
+{% block body %}
+    <div class="centerWrapNoGrow">
+        <div class="divDemon">
+            <form action="/admin/{{ player.id }}/updateDemons" method="post"> 
+            <button type="submit">Validate</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Level</th>
+                        <th>STR pts</th>
+                        <th>END pts</th>
+                        <th>AGI pts</th>
+                        <th>INT pts</th>
+                        <th>LCK pts</th>
+                        <th>LvlUp Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for demon in demons %}
+                        <tr>
+                            <td>{{demon.demonBase.name}}</td>
+                            <td>{{demon.level}}</td>
+                            <td><input type="number" class="adminInput" value="{{demon.strPoints}}"></td>
+                            <td><input type="number" class="adminInput" value="{{demon.endPoints}}"></td>
+                            <td><input type="number" class="adminInput" value="{{demon.agiPoints}}"></td>
+                            <td><input type="number" class="adminInput" value="{{demon.intPoints}}"></td>
+                            <td><input type="number" class="adminInput" value="{{demon.lckPoints}}"></td>
+                            <td><input type="number" class="adminInput" value="{{demon.lvlUpPoints}}"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </form>
+        </div>  
+    </div>
+{% endblock %}
