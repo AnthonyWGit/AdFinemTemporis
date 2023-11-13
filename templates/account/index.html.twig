@@ -3,24 +3,35 @@
 {% block title %}Your account{% endblock %}
 
 {% block body %}
-<div class="globalDivGap">
-    {% for message in app.flashes('notice') %}
-        <p>{{ message }}</p>
-    {% endfor %}
-    <h1 class="centerTitle">Manage your account</h1>
-        <h2>Your credentials</h2>
-        <div class="globalDiv">
-            <p>Username : <b>{{app.user.username}}</b></p>
-            <p>Email : <b>{{app.user.email}}</b></p>
-        </div>
-        <h2 class="centerTitle">Change credentials</h2>
-        <div class="row">
-            <a class="looksLikeAButtonBlue" href="{{path("accountPasswordChange")}}"> Change password</a>
-            <a class="looksLikeAButtonBlue" href="{{path("accountEmailChange")}}"> Change email</a>
-        </div>  
+<div class="globalDivGapRow">
+    <div class="globalDivGap">
+        {% for message in app.flashes('notice') %}
+            <p>{{ message }}</p>
+        {% endfor %}
+        <h1 class="centerTitle">Manage your account</h1>
+            <h2>Your credentials</h2>
+            <div class="globalDiv">
+                <p>Username : <b>{{app.user.username}}</b></p>
+                <p>Email : <b>{{app.user.email}}</b></p>
+            </div>
+            <h2 class="centerTitle">Change credentials</h2>
+            <div class="row">
+                <a class="looksLikeAButtonBlue" href="{{path("accountPasswordChange")}}"> Change password</a>
+                <a class="looksLikeAButtonBlue" href="{{path("accountEmailChange")}}"> Change email</a>
+            </div>
+            <p>Delete your account</p>
+    </div>
+    <div class="globalDivGap">
+        <h1 class="centerTitle">Manage your game progression</h1>
         <div class="row">
             <a class="looksLikeAButtonBlue" href="{{path("resetProgression")}}">Reset Progression</a>
         </div>
-        <p>Delete your account</p>
+        {% if is_granted('ROLE_ADMIN') %}
+            <h1 class="centerTitle">Manage users</h1>
+            <div class="row">
+                <a class="looksLikeAButtonBlue" href="{{path("usersList")}}">Users management</a>
+            </div>
+        {% endif %}
     </div>
+</div>
 {% endblock %}
