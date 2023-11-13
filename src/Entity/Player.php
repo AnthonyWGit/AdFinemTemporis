@@ -131,6 +131,18 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function removeRole(string $role)
+    {
+        $roles = $this->getRoles();
+        if (($key = array_search($role, $roles)) !== false) 
+        {
+            unset($roles[$key]);
+        }
+        $this->setRoles($roles);
+        return $this;
+    }
+
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
