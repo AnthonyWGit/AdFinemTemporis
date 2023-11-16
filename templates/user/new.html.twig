@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add a Demon to a player">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an existing demon 
+    {% else %}
+        Add a new demon
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{% if not edit %}
+    <h1 class="centerTitle">Create a new Demon</h1>
+    {% else %}
+    <h1 class="centerTitle">Edit a Demon</h1>
+{% endif %}
+<div class="formGlobal">
+    <div class="formInside">
+        {{ form_errors(formNewDemonPlayer) }}
+
+        {{ form_start(formNewDemonPlayer) }}
+            {{ form_row(formNewDemonPlayer.str_points) }}
+            {{ form_row(formNewDemonPlayer.end_points) }}
+            {{ form_row(formNewDemonPlayer.agi_points) }}
+            {{ form_row(formNewDemonPlayer.int_points) }}
+            {{ form_row(formNewDemonPlayer.lck_points) }}
+            {{ form_row(formNewDemonPlayer.LvlUp_Points) }}
+            {{ form_row(formNewDemonPlayer.Experience) }}
+            {{ form_row(formNewDemonPlayer.player) }}
+            {{ form_row(formNewDemonPlayer.trait) }}
+            {{ form_row(formNewDemonPlayer.demon_base) }}
+            {{ form_row(formNewDemonPlayer.Validate) }}
+            <p class="paraForm">Fields marked with <b>*</b> are mandatory.</p>
+        {{ form_end(formNewDemonPlayer) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add or edit item in player inventory">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an item in player inventory
+    {% else %}
+        Create an item for a player
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{% if not edit %}
+    <h1 class="centerTitle">Create a new Demon</h1>
+    {% else %}
+    <h1 class="centerTitle">Edit a Demon</h1>
+{% endif %}
+<div class="formGlobal">
+    <div class="formInside">
+        {{ form_errors(formNewHaveItem) }}
+
+        {{ form_start(formNewHaveItem) }}
+            {{ form_row(formNewHaveItem.player) }}
+            {{ form_row(formNewHaveItem.quantity) }}
+            {{ form_row(formNewHaveItem.item) }}
+            {{ form_row(formNewHaveItem.Validate) }}
+            <p class="paraForm">Fields marked with <b>*</b> are mandatory.</p>
+        {{ form_end(formNewHaveItem) }}
+    </div>
+</div>
+{% endblock %}
