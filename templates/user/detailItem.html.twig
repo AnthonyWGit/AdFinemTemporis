@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel for Player's items{% endblock %}
+
+{% block body %}
+    <div class="centerWrapNoGrow">
+        <div class="divDemon">
+            <div class="divMsg">
+                <a class="looksLikeAButtonBlack" href="{{path('playerNewHaveItem', {'player' : player.id})}}">Add a new one</a>
+            </div>
+            <div class="divMsg">
+                {% for message in app.flashes('noticeChange') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+                <form action="/admin/{{ player.id }}/updateDemons" method="post"> 
+            <button type="submit">Validate</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{item.item.name}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>
+                                <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('playerEditHaveItem', {'haveItem' : item.id, 'player' : player.id})}}">Edit</a></i>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token('delete-item') }}">
+            </form>
+        </div>  
+    </div>
+{% endblock %}
