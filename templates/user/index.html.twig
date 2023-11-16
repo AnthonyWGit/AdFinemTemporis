@@ -17,18 +17,21 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Action</th>
+                        <th colspan="2">Management</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                         <tr>
-                            <td><a href=" {{path('userDetail', {'id' : user.id})}}">{{user.username}}</a></td>
+                            <td>{{user.username}}</td>
                             <td>{{user.email}}</td>
                             {% if 'ROLE_BANNED' in user.roles %}
                                 <td><a href=" {{path('unbanAction', {'id' : user.id})}}">Unban</a></td>
                             {% else %}
                                 <td><a href=" {{path('banAction', {'id' : user.id})}}">Ban</a></td>
                             {% endif %}
+                           <td><a href=" {{path('userDetail', {'id' : user.id})}}">Demons</a></td> 
+                           <td><a href=" {{path('userDetailItem', {'id' : user.id})}}">Items</a></td> 
                         </tr>
                     {% endfor %}
                 </tbody>
