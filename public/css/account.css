@@ -39,3 +39,9 @@
     border-radius: 0px !important;
     width: 75%;
 }
+
+.divMsg
+{
+    display: flex;
+    justify-content: center;
+}
