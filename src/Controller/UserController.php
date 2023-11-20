@@ -59,14 +59,10 @@ class UserController extends AbstractController
     }
     
     #[Route('/admin/demon/{player}/new', name: 'playerNewDemon')]
-    #[Route('/admin/demon/{player}/{demonPlayer}/edit', name: 'playerEditDemon')]
-    public function new(Player $player, DemonPlayer $demonPlayer = null, Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Player $player,  Request $request, EntityManagerInterface $entityManager): Response
     {
-        // creates a task object and initializes some data for this example
-        if ($demonPlayer === null) {
-            $demonPlayer = new DemonPlayer();
-        }
-        $form = $this->createForm(DemonPlayerFormType::class, $demonPlayer);
+        $demonPlayer = new DemonPlayer();
+        $form = $this->createForm(DemonPlayerFormType::class, $demonPlayer, ['player' => $player]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
@@ -86,6 +82,41 @@ class UserController extends AbstractController
         return $this->render("user/new.html.twig", ['formNewDemonPlayer' => $form, 'edit' => $demonPlayer->getId()]);
     }
 
+    #[Route('/admin/demon/{dp}/{player}/edit', name: 'playerEditDemon')]
+    public function edit(DemonPlayer $dp, Player $player , Request $request, EntityManagerInterface $entityManager): Response
+    {
+
+        $form = $this->createForm(DemonPlayerFormType::class, $dp, ['player' => $player]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) 
+            {
+                $demonPlayer = $form->getData();
+                $entityManager->persist($dp); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
+                $entityManager->flush();
+
+                $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                (
+                    'noticeChange',
+                    'Your changes were saved!'
+                );
+
+                return $this->redirectToRoute('userDetail', ['id' => $player->getId()]);
+            }
+        
+        return $this->render("user/new.html.twig", ['formNewDemonPlayer' => $form, 'edit' => $dp->getId()]);
+    }
+
+    #[Route('admin/demon/{id}/delete/{demonPlayer}', name: 'deletePlayerDemon')]
+    public function demonPlayerDelete(Player $player,DemonPlayer $demonPlayer, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($demonPlayer);
+        $entityManager->flush();
+        $this->addFlash(
+            'noticeChange',
+            'This entry has been deleted'
+        );
+        return $this->redirectToRoute('userDetail', ['id' => $player->getId()]);
+    }
 
     #[Route('/admin/{id}/updateDemons', name: 'updateDemons')]
     public function updateDemonsAction(Player $player, Request $request, EntityManagerInterface $em) : Response
