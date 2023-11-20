@@ -18,6 +18,7 @@ class DemonPlayerFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $player = $options['player'];
         $builder
             ->add('str_points', NumberType::class,
             [
@@ -73,6 +74,7 @@ class DemonPlayerFormType extends AbstractType
                 'choice_label' => 'username',
                 'row_attr' => ['class' => 'formRow'],
                 'label' => 'Player *',
+                'data' => $player, // Set the default value to the current player
             ])
             ->add('trait', EntityType::class, [
                 'class'  => DemonTrait::class,
@@ -96,6 +98,7 @@ class DemonPlayerFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DemonPlayer::class,
+            'player' => null, // Add this line
         ]);
     }
 }
