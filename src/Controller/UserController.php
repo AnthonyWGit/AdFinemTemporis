@@ -206,14 +206,33 @@ class UserController extends AbstractController
     }
     
     #[Route('/admin/haveItems/{player}/new', name: 'playerNewHaveItem')]
-    #[Route('/admin/haveItems/{player}/{haveItem}/edit', name: 'playerEditHaveItem')]
-    public function newHItem(Player $player, HaveItem $haveItem = null, Request $request, EntityManagerInterface $entityManager): Response
+    public function newHItem(Player $player, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // creates a task object and initializes some data for this example
-        if ($haveItem === null) {
-            $haveItem = new HaveItem();
-        }
-        $form = $this->createForm(HaveItemFormType::class, $haveItem);
+        $newItem = new HaveItem();
+        $form = $this->createForm(HaveItemFormType::class, $newItem, ['player' => $player]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) 
+            {
+                $demonPlayer = $form->getData();
+                $entityManager->persist($newItem); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
+                $entityManager->flush();
+
+                $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                (
+                    'noticeChange',
+                    'Your changes were saved!'
+                );
+
+                return $this->redirectToRoute('userDetailItem', ['id' => $player->getId()]);
+            }
+        
+        return $this->render("user/newItem.html.twig", ['formNewHaveItem' => $form, 'edit' => $newItem->getId()]);
+    }
+
+    #[Route('/admin/haveItems/{player}/{haveItem}/edit', name: 'playerEditHaveItem')]
+    public function editHItem(Player $player, HaveItem $haveItem, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(HaveItemFormType::class, $haveItem, ['player' => $player]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
@@ -232,4 +251,17 @@ class UserController extends AbstractController
         
         return $this->render("user/newItem.html.twig", ['formNewHaveItem' => $form, 'edit' => $haveItem->getId()]);
     }
+
+    #[Route('admin/haveItem/{id}/delete/{haveItem}', name: 'deleteHaveItem')]
+    public function playerHaveItemDelete(Player $player,HaveItem $haveItem, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($haveItem);
+        $entityManager->flush();
+        $this->addFlash(
+            'noticeChange',
+            'This entry has been deleted'
+        );
+        return $this->redirectToRoute('userDetailItem', ['id' => $player->getId()]);
+    }
+
 }
