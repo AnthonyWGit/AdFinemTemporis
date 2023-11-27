@@ -28,7 +28,7 @@
                         <tr>
                             <td>{{item.item.name}}</td>
                             <td>{{item.quantity}}</td>
-                            <td>
+                            <td data-var="{{item.id}}">
                                 <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('playerEditHaveItem', {'haveItem' : item.id, 'player' : player.id})}}">Edit</a></i>
                             </td>
 
@@ -40,4 +40,63 @@
             </form>
         </div>  
     </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-center">
+                <span class="close">&times;</span>
+                <p>Do you really want to delete this?</p>
+                <button id="yesBtn">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btns = document.querySelectorAll(".deleteBtn");
+        var span = document.getElementsByClassName("close")[0];
+        var yesBtn = document.getElementById("yesBtn");
+        var noBtn = document.getElementById("noBtn");
+        
+        btns.forEach(function(btn) {
+            btn.onclick = function(event) {
+                event.preventDefault();
+                modal.style.display = "flex";
+                modal.style.justifyContent = "center"
+
+                // Get the name of the demon from the parent row
+                var playerId = '{{player.id}}'
+                var itemPlayerId = this.parentElement.parentElement.parentElement.children[2].getAttribute('data-var')
+                console.log(itemPlayerId)
+                console.log(playerId)
+                /* admin/demon/{id}/delete/{demonPlayer} */
+                yesBtn.onclick = function() {
+                    // handle the deletion here
+                    window.location.href = "/admin/haveItem/" + playerId + "/delete/" +  encodeURIComponent(itemPlayerId);
+                    modal.style.display = "none";
+                }
+            }
+        });
+        
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        yesBtn.onclick = function() {
+            // handle the deletion here
+            modal.style.display = "none";
+        }
+        
+        noBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
 {% endblock %}
