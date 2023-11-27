@@ -17,6 +17,7 @@ class HaveItemFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $player = $options['player'];
         $builder
             ->add('quantity', NumberType::class,
             [
@@ -30,6 +31,7 @@ class HaveItemFormType extends AbstractType
                 'choice_label' => 'username',
                 'row_attr' => ['class' => 'formRow'],
                 'label' => 'Player *',
+                'data' => $player, // Set the default value to the current player
             ])
             ->add('item' , EntityType::class, [
                 'class'  => Item::class,
@@ -48,6 +50,7 @@ class HaveItemFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => HaveItem::class,
+            'player' => null, // Add this line,
         ]);
     }
 }
