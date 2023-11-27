@@ -41,9 +41,8 @@
                             <td><input type="number" class="adminInput" name="lck-{{demon.id}}" value="{{demon.lckPoints}}"></td>
                             <td><input type="number" class="adminInput" name="pts-{{demon.id}}" value="{{demon.lvlUpPoints}}"></td>
                             <td>
-                                <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('playerEditDemon', {'demonPlayer' : demon.id, 'player' : player.id})}}">Edit</a></i>
+                                <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('playerEditDemon', {'dp' : demon.id, 'player' : player.id})}}">Edit</a></i>
                             </td>
-
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -52,4 +51,64 @@
             </form>
         </div>  
     </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-center">
+                <span class="close">&times;</span>
+                <p>Do you really want to delete this?</p>
+                <button id="yesBtn">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btns = document.querySelectorAll(".deleteBtn");
+        var span = document.getElementsByClassName("close")[0];
+        var yesBtn = document.getElementById("yesBtn");
+        var noBtn = document.getElementById("noBtn");
+        
+        btns.forEach(function(btn) {
+            btn.onclick = function(event) {
+                event.preventDefault();
+                modal.style.display = "flex";
+                modal.style.justifyContent = "center"
+
+                // Get the name of the demon from the parent row
+                var playerId = '{{player.id}}'
+                var demonPlayerId = this.parentElement.parentElement.parentElement.children[2].children[0].name;
+                demonPlayerId = demonPlayerId.split('-')
+                demonPlayerId = demonPlayerId[1]
+                console.log(playerId)
+                console.log(demonPlayerId);
+                /* admin/demon/{id}/delete/{demonPlayer} */
+                yesBtn.onclick = function() {
+                    // handle the deletion here
+                    window.location.href = "/admin/demon/" + playerId + "/delete/" +  encodeURIComponent(demonPlayerId);
+                    modal.style.display = "none";
+                }
+            }
+        });
+        
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        yesBtn.onclick = function() {
+            // handle the deletion here
+            modal.style.display = "none";
+        }
+        
+        noBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 {% endblock %}
