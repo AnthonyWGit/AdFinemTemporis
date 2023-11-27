@@ -237,3 +237,25 @@ td, th
     justify-content: center;
     align-items: center;
 }
+
+.separator
+{
+    display: flex;
+    height: 1rem;
+    background-color: rgb(4, 4, 41);
+    border-radius: 10px;
+    margin: 2rem 0 2rem 0;
+}
+
+.orange
+{
+    color: var(--basicLinksColor);
+}
+
+.specialList
+{
+    list-style: inside !important;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
