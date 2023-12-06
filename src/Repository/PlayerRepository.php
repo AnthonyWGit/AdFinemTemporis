@@ -39,6 +39,16 @@ class PlayerRepository extends ServiceEntityRepository implements PasswordUpgrad
         $this->getEntityManager()->flush();
     }
 
+        public function findNewUsers(): array
+    {
+        $date = (new \DateTime())->modify('-7 day');
+
+        return $this->createQueryBuilder('p')
+            ->where('p.registerDate > :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Player[] Returns an array of Player objects
 //     */

@@ -264,4 +264,11 @@ class UserController extends AbstractController
         return $this->redirectToRoute('userDetailItem', ['id' => $player->getId()]);
     }
 
+    #[Route('admin/test7days', name: 'sevenDays')]
+    public function searchSevenDays(PlayerRepository $playerRepository, EntityManagerInterface $entityManager): Response
+    {
+        $sevenDaysUsers = $playerRepository->findNewUsers();
+        return $this->render('test/template.html.twig', ['users' => $sevenDaysUsers]);
+    }
+
 }
