@@ -11,7 +11,14 @@
 {% endblock %}
 
 {% block body %}
-<h1 class="centerTitle">Create a new Demon</h1>
+<h1 class="centerTitle">
+    {% if edit %}
+        Edit an existing Demon
+    {% else %}
+        Create a new Demon
+    {% endif %}
+</h1>
+
 <div class="formGlobal">
     <div class="formInside">
         {{ form_errors(formNewDemonBase) }}
