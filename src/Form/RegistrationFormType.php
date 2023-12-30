@@ -60,6 +60,7 @@ class RegistrationFormType extends AbstractType
                     'attr' => ['class' => 'password-field'],
                     'row_attr' => ['class' => 'formRow'], //This allows us to have class on our formRow and we don't have to write widget/labels/etc
                 ],
+                'help' => 'Pwd must be at least 12 chars long, you need at least 1 UC, 1 LC, 1 number, 1 special char',
                 'required' => true,
                 'first_options' => ['label' => 'Password'],
                 'second_options' => ["label" => 'Type your password again'],
@@ -68,7 +69,7 @@ class RegistrationFormType extends AbstractType
                     new NotBlank(),
                     new Regex([
                         'pattern' => '~^(?=.{12,}$)(?=.*\p{Lu})(?=.*\p{Ll})(?=.*\d)(?=.*[@#$%^&+=!]).*$~',
-                        'message' => 'Ce MdP ne correspond pas aux consignes'
+                        'message' => 'This password is incorrect'
                     ]),
                 ]
             ])
