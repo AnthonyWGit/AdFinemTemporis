@@ -21,18 +21,21 @@
                 {% for message in app.flashes('noticeChange') %}
                     <p>{{ message }}</p>
                 {% endfor %}
-                {# <a class="looksLikeAButtonBlack" href="{{path('newSkill')}}">Add a new one</a> #}
+                <a class="looksLikeAButtonBlack" href="{{path('newSkillTable')}}">Add a new one</a>
             </div>
             {% endif %}
 
             {% for demonBaseId, skillTables in groupedSkillTables %}
-            <h2>Demon Base ID: {{ demonBaseId }}</h2>
+            <h2 class="centerTitle"> {{ skillTables[0].demonBase.name }} Demon Base ID: {{ demonBaseId }}</h2>
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Level</th>
-                        <th>Skill ID</th>
+                        <th>Skill name</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <th><b>Actions</b></th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -40,16 +43,19 @@
                         <tr>
                             <td>{{ skillTable.id }}</td>
                             <td>{{ skillTable.level }}</td>
-                            <td>{{ skillTable.skill.id }}</td>
+                            <td>{{ skillTable.skill.name }}</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <td>
+                                <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('editSkillTable', {'id' : skillTable.id})}}">Edit</a></i>
+                            </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% endfor %}
         
-        
-
-        <table>
+        <!-- table>
             <thead>
                 <tr>
                     <th><b>ID</b></th>
@@ -72,7 +78,7 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table !-->
         </div>
         {% if is_granted('ROLE_ADMIN') %}
         <div id="myModal" class="modal">
@@ -100,11 +106,11 @@
                     modal.style.justifyContent = "center"
 
                     // Get the name of the demon from the parent row
-                    var traitName = this.parentElement.parentElement.parentElement.children[1].innerHTML;
-                    
+                    var skillTableId = this.parentElement.parentElement.parentElement.children[0].innerHTML;
+                    console.log(skillTableId)
                     yesBtn.onclick = function() {
                         // handle the deletion here
-                        window.location.href = "/admin/skill/" + encodeURIComponent(traitName) + "/delete";
+                        window.location.href = "/admin/skillTable/" + encodeURIComponent(skillTableId) + "/delete";
                         modal.style.display = "none";
                     }
                 }
