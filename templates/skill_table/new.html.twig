@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="Add or edit a skill in leveling table">
+{% endblock %}
+{% block title %}
+    {% if edit %}
+        Edit an existing Skill in leveling table
+    {% else %}
+        Add a new Skill in leveling table
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{% if edit %}
+<h1 class="centerTitle">Create a new leveling skill</h1>
+{% else %}
+<h1 class="centerTitle">Edit a leveling skill</h1>
+{% endif %}
+
+<div class="formGlobal">
+    <div class="formInside">
+        {{ form_errors(formNewSkillTable) }}
+
+        {{ form_start(formNewSkillTable) }}
+            {{ form_row(formNewSkillTable.level) }}
+            {{ form_row(formNewSkillTable.skill) }}
+            {{ form_row(formNewSkillTable.demonBase) }}
+            {{ form_row(formNewSkillTable.Validate) }}
+            <p class="paraForm">Fields marked with <b>*</b> are mandatory.</p>
+        {{ form_end(formNewSkillTable) }}
+    </div>
+</div>
+{% endblock %}
