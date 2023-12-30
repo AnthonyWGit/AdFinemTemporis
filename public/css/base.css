@@ -209,6 +209,12 @@ button {
     outline: none;
   }
 
+  .custom-btn2 {
+    width: 200px !important;
+    height: 60px !important;
+  }
+
+
   .btn-11 {
     border: none;
     background: rgb(251,33,117);
@@ -277,4 +283,13 @@ button {
 {
     display: flex;
     justify-content: center;
+}
+
+.orange
+{
+    color: orange;
+    overflow-wrap: break-word;  
+    word-wrap: break-word; 
+    word-break: break-word;
+    width: 15rem;
 }

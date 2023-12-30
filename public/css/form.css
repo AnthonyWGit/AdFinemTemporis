@@ -45,3 +45,19 @@
 {
     margin: 2rem 0 0 0;
 }
+
+.login
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.resetPwd
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1rem;
+    align-items: center;
+}
