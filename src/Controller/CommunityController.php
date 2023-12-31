@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CommunityController extends AbstractController
 {
@@ -30,6 +31,15 @@ class CommunityController extends AbstractController
     #[Route('community/suggestion/{id}/edit', name: 'editSuggestion')]
     public function new(Suggestion $suggestion = null, FileUploader $fileUploader = null, Request $request, EntityManagerInterface $entityManager): Response
     {
+        //Banned users should not be able to post a suggestion or edit the one they already made 
+        // Get the current user
+        $user = $this->getUser();
+
+        // Check if the user has the "ROLE_BANNED"
+        if ($this->isGranted('ROLE_BANNED', $user)) {
+            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
+            throw new AccessDeniedException('You have been banned. Check your account.');
+        }
 
         foreach ($this->getUser()->getSuggestions() as $suggestion)
         {
@@ -96,6 +106,16 @@ class CommunityController extends AbstractController
     #[Route('community/suggestion/{id}/like/{player}', name: 'addLikeSuggestion')]
     public function addLike(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
     {
+        //Banned users should not be able to like unlike
+        // Get the current user
+        $user = $this->getUser();
+
+        // Check if the user has the "ROLE_BANNED"
+        if ($this->isGranted('ROLE_BANNED', $user)) {
+            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
+            throw new AccessDeniedException('You have been banned. Check your account.');
+        }
+
         $suggestion->addPlayersLike($player);
         $entityManager->flush();
         return $this->redirectToRoute('community');            
@@ -104,7 +124,16 @@ class CommunityController extends AbstractController
     #[Route('community/suggestion/{id}/unlike/{player}', name: 'unlikeSuggestion')]
     public function unLike(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
     {
-        
+        //Banned users should not be able to like unlike
+        // Get the current user
+        $user = $this->getUser();
+
+        // Check if the user has the "ROLE_BANNED"
+        if ($this->isGranted('ROLE_BANNED', $user)) {
+            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
+            throw new AccessDeniedException('You have been banned. Check your account.');
+        }
+
         $suggestion->removePlayersLike($player);
         $entityManager->flush();
         return $this->redirectToRoute('community');
@@ -113,6 +142,16 @@ class CommunityController extends AbstractController
     #[Route('community/suggestion/{id}/delete/{player}', name: 'deleteSuggestion')]
     public function delete(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
     {
+        //Banned users should not be able to delete their post
+        // Get the current user
+        $user = $this->getUser();
+
+        // Check if the user has the "ROLE_BANNED"
+        if ($this->isGranted('ROLE_BANNED', $user)) {
+            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
+            throw new AccessDeniedException('You have been banned. Check your account.');
+        }
+
         if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author
         {
             $suggestion->removePlayersSuggestion($player);
