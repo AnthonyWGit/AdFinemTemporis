@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SkillTableController extends AbstractController
 {
-    #[Route('/admin/skillTable', name: 'skillTablesList')]
+    #[Route('/skillTable', name: 'skillTablesList')]
     public function index(SkillTableRepository $skillTableRepository): Response
     {
         //Difference from other tables : we want to group all the skill that a base demon can learn
