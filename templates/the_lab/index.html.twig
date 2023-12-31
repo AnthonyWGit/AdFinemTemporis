@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="This is lab guidelines">
+{% endblock %}
+{% block title %}
+    The Lab
+{% endblock %}
+
+{% block body %}
+    <h1>What is this page about ?</h1>
+    <p>This page will allow to simulate damage calculations.</p>
+    <h1>How to use</h1>
+    <ul>
+        <li>Select a demon that would be your own</li>
+        <li>Parameter its stats and level</li>
+        <li>Select a demon for the CPU</li>
+        <li>Parameter its stats and level</li>
+        <li>Select the skill you want to use</li>
+        <li>See how much damage you would have done</li>
+    </ul>
+
+<form method="post" name="formSimu">
+    <h2>Choose your demon</h2>
+    <select>
+        {% for demon in demonsBase %}
+            <option>{{ demon.name }}</option>
+        {% endfor %}
+    </select>
+
+    <h2>Enter level</h2>
+    <input type="number" name="level">
+
+    <h2>Enter your stats</h2>
+    <table>
+        <thead>
+            <tr>STR</tr>
+            <tr>END</tr>
+            <tr>AGI</tr>
+            <tr>INT</tr>
+            <tr>LCK</tr>
+        </thead>
+        <tbody>
+            <td><input type="number" name="str"></td>
+            <td><input type="number" name="end"></td>
+            <td><input type="number" name="agi"></td>
+            <td><input type="number" name="int"></td>
+            <td><input type="number" name="lck"></td>
+        </tbody>
+    </table>
+    <select>
+
+    </select>
+
+    <h2>Choose the Trait</h2>
+    <select>
+        {% for trait in traits %}
+            <option>{{ trait.name }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+{% endblock %}
