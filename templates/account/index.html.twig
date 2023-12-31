@@ -3,6 +3,12 @@
 {% block title %}Your account{% endblock %}
 
 {% block body %}
+{% if is_granted('ROLE_BANNED') %}
+    <div class="globalDivGapRow">
+        <p style="color:red;">You have been banned by Admin.</p>
+    </div>
+{% endif %}
+
 <div class="globalDivGapRow">
     <div class="globalDivGap">
         {% for message in app.flashes('notice') %}
