@@ -25,7 +25,7 @@
                 <h3>Demons able to learn this skill by Leveling</h3>
                 <ul>
                     {% for skillTable in skill.skillTable %}
-                        <li>{{skillTable.demonBase.name}}</li>
+                        <li><a class="linkNoBase" href=" {{path('demonDetail', {'name' : skillTable.demonBase.name})}}">{{skillTable.demonBase.name}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
