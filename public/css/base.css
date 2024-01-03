@@ -12,6 +12,7 @@
     --basicTextColor : #ffd700;
     --gradient : linear-gradient(45deg, var(--base-color1), var(--base-color2));
     --basicLinksColor : orange;
+    --formInside : rgba(238, 130, 238, 0.493);
 }
 
 *
