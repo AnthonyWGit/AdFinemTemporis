@@ -21,9 +21,15 @@ class CommunityController extends AbstractController
     #[Route('/community', name: 'community')]
     public function index(SuggestionRepository $suggestionRepository, PlayerRepository $playerRepository): Response
     {
+        $verifiedSuggestions = 0;
         $suggestions = $suggestionRepository->findSuggestionsOrderedByLikes();
+        foreach ($suggestions as $suggestion) 
+        {
+            if ($suggestion->isVerified()) $verifiedSuggestions = $verifiedSuggestions + 1;
+        }
         return $this->render('community/index.html.twig', [
-            'suggestions' => $suggestions
+            'suggestions' => $suggestions,
+            'verifiedSuggestions' => $verifiedSuggestions,
         ]);
     }
 
@@ -37,8 +43,7 @@ class CommunityController extends AbstractController
 
         // Check if the user has the "ROLE_BANNED"
         if ($this->isGranted('ROLE_BANNED', $user)) {
-            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
-            throw new AccessDeniedException('You have been banned. Check your account.');
+            return $this->redirectToRoute('account');
         }
 
         foreach ($this->getUser()->getSuggestions() as $suggestion)
@@ -85,7 +90,7 @@ class CommunityController extends AbstractController
                 $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
                 (
                     'notice',
-                    'Your created a suggestion'
+                    'Your created a suggestion. It has been sent to an admin for review.'
                 );
 
                 return $this->redirectToRoute('community'); //redirect to list stagiaires if everything is ok
@@ -112,8 +117,7 @@ class CommunityController extends AbstractController
 
         // Check if the user has the "ROLE_BANNED"
         if ($this->isGranted('ROLE_BANNED', $user)) {
-            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
-            throw new AccessDeniedException('You have been banned. Check your account.');
+            return $this->redirectToRoute('account');
         }
 
         $suggestion->addPlayersLike($player);
@@ -130,8 +134,7 @@ class CommunityController extends AbstractController
 
         // Check if the user has the "ROLE_BANNED"
         if ($this->isGranted('ROLE_BANNED', $user)) {
-            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
-            throw new AccessDeniedException('You have been banned. Check your account.');
+            return $this->redirectToRoute('account');
         }
 
         $suggestion->removePlayersLike($player);
@@ -148,8 +151,7 @@ class CommunityController extends AbstractController
 
         // Check if the user has the "ROLE_BANNED"
         if ($this->isGranted('ROLE_BANNED', $user)) {
-            // If the user has the "ROLE_BANNED", throw an AccessDeniedException
-            throw new AccessDeniedException('You have been banned. Check your account.');
+            return $this->redirectToRoute('account');
         }
 
         if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author

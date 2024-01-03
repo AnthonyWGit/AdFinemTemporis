@@ -62,3 +62,8 @@
     gap: 1rem;
     align-items: center;
 }
+
+.smallText
+{
+    width: 15rem;
+}

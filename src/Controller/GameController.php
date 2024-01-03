@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -36,6 +37,18 @@ class GameController extends AbstractController
     //     return new JsonResponse($data);
     // }
 
+    // #[Route('/game/')]
+    // public function userIsBanned() : Response
+    // {
+    //     // Get the current user
+    //     $user = $this->getUser();
+
+    //     // Check if the user has the "ROLE_BANNED"
+    //     if ($this->isGranted('ROLE_BANNED', $user)) {
+    //         // If the user has the "ROLE_BANNED", throw an AccessDeniedException
+    //         throw new AccessDeniedException('You have been banned. Check your account.');
+    //     }
+    // }
 
     #[Route('/ajaxe/setStage/{stage}', name: 'setStage')]
     public function setStage(string $stage, Request $request, EntityManagerInterface $em) 

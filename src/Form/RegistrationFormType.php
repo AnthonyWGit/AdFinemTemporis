@@ -24,6 +24,7 @@ class RegistrationFormType extends AbstractType
         $builder
              ->add('username', TextType::class,
                 [
+                    'label'=> 'Username *',
                     'row_attr' => ['class' => 'formRow'],
                     'constraints' => [
                 new NotBlank()]
@@ -46,8 +47,8 @@ class RegistrationFormType extends AbstractType
                     'row_attr' => ['class' => 'formRow'], //This allows us to have class on our formRow and we don't have to write widget/labels/etc
                 ],
                 'required' => true,
-                'first_options' =>['label' => 'Email'],
-                'second_options' => ['label' => 'Confirm your email'],
+                'first_options' =>['label' => 'Email *'],
+                'second_options' => ['label' => 'Confirm your email *'],
                 'mapped' => false,
                 'constraints' => [
             new NotBlank()]
@@ -62,8 +63,8 @@ class RegistrationFormType extends AbstractType
                 ],
                 'help' => 'Pwd must be at least 12 chars long, you need at least 1 UC, 1 LC, 1 number, 1 special char',
                 'required' => true,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ["label" => 'Type your password again'],
+                'first_options' => ['label' => 'Password *'],
+                'second_options' => ["label" => 'Type your password again *'],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank(),

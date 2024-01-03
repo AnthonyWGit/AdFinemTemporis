@@ -42,10 +42,11 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/game, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "not is_granted('ROLE_BANNED')" }
-        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/game, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/community, roles: [ROLE_USER, ROLE_ADMIN] } #visitors can see suggestions but not vote until logged in 
         - { path: account/^, roles: [ROLE_USER, ROLE_ADMIN] } 
+        - { path: ^/review, roles: [ROLE_USER, ROLE_ADMIN] } 
 
 when@test:
     security:

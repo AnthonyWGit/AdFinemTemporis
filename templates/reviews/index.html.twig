@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reviewing pannel{% endblock %}
+
+{% block body %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommunityController!{% endblock %}
+
+{% block body %}
+<div class="globalDiv">
+    {# read and display just one flash message type #}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            <p>{{ message }}</p>
+            <p>It's this one : <b></b></p>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+    <div class="flash-notice">
+        <p>{{ message }}</p>
+    </div>
+{% endfor %}
+
+
+    <div class="div">
+        <a href=" {{ path('newSuggestion')}}" class="looksLikeAButtonGrey">Send an idea</a>
+    </div>
+</div> 
+
+    <div class="cardBoard">
+        {% if not suggestions %}
+            <p>No player has an idea to offer</p>
+        {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Titre</td>
+
+                </tr>
+            </thead>
+        </table>
+            {% for suggestion in suggestions %}
+                {% for player in suggestion.playersSuggestions %}
+
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

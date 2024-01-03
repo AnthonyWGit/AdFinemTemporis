@@ -37,6 +37,9 @@ class Suggestion
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
+    #[ORM\Column(nullable: false)]
+    private ?int $is_verified = 2;
+
     public function __construct()
     {
         $this->PlayersLikes = new ArrayCollection();
@@ -173,5 +176,42 @@ class Suggestion
         return $this;
     }
 
+    public function IsVerified(): ?bool
+    {
+        if ($this->is_verified == 0)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    public function setIsVerified(int $is_verified): static
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
+
+    public function IsNew(): ?bool
+    {
+        if ($this->is_verified == 3)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    public function setIsNew(int $is_verified): static
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
 
 }

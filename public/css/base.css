@@ -13,6 +13,8 @@
     --gradient : linear-gradient(45deg, var(--base-color1), var(--base-color2));
     --basicLinksColor : orange;
     --formInside : rgba(238, 130, 238, 0.493);
+    --navbarText : rgba(255, 255, 255, 0.2);
+    --tableCells : hsla(202, 83%, 9%, 0.336);
 }
 
 *
@@ -79,7 +81,7 @@ input
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--navbarText);
     backdrop-filter: blur(50px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
     height: 3rem;
@@ -292,5 +294,4 @@ button {
     overflow-wrap: break-word;  
     word-wrap: break-word; 
     word-break: break-word;
-    width: 15rem;
 }

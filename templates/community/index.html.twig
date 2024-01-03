@@ -25,62 +25,66 @@
 </div> 
 
     <div class="cardBoard">
-        {% if not suggestions %}
+        {{ dump(verifiedSuggestions)}}
+        {% if not suggestions or verifiedSuggestions == 0 %}
             <p>No player has an idea to offer</p>
         {% else %}
-            {% for suggestion in suggestions %} 
-                {% for player in suggestion.playersSuggestions %}
-                    <div class="cardSuggestion">
-                        {% if app.user in suggestion.playersSuggestions or is_granted('ROLE_ADMIN') %}
-                            <div class="deleteOwn">
-                                <a class="zPos" href="{{ path('deleteSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
-                                    X
-                                </a>
+            {% for suggestion in suggestions %}
+                {% if not suggestion.isverified %}
+                {% else %}
+                    {% for player in suggestion.playersSuggestions %}
+                        <div class="cardSuggestion">
+                            {% if app.user in suggestion.playersSuggestions or is_granted('ROLE_ADMIN') %}
+                                <div class="deleteOwn">
+                                    <a class="zPos" href="{{ path('deleteSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                        X
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="row">
+                                <p>Title : {{suggestion.title}}</p>
+                                <p>Author : {{player.username}}</p>
                             </div>
-                        {% endif %}
-                        <div class="row">
-                            <p>Title : {{suggestion.title}}</p>
-                            <p>Author : {{player.username}}</p>
-                        </div>
-                        <div class="row status">
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <p class="status-text" id="status-{{suggestion.id}}">Status : {{suggestion.status}}</p>
-                            {% else %}
-                                <p class="status-text">Status : {{suggestion.status}}</p>
-                            {% endif %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <select class="status-select" style="display: none;" data-id="{{suggestion.id}}">>
-                                    <option value="pending">Pending</option>
-                                    <option value="closed">Closed</option>
-                                    <option value="accepted">Accepted</option>
-                                </select>
-                            <noscript>
-                                <select class="status-select">
-                                    <option value="pending">Pending</option>
-                                    <option value="closed">Closed</option>
-                                    <option value="accepted">Accepted</option>
-                                </select>
-                                <a>Validate</a>
-                            </noscript>
-                            {% endif %}
-                        </div>
-                        <p>Submitted on {{suggestion.postDate|date("Y-m-d")}} at {{suggestion.postDate|date("h:m A ")}}</p>
-                        <p>
-                                {% if app.user in suggestion.playersLikes %}
-                                    <a class="zPos" href="{{ path('unlikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
-                                        <img class="navSvg" src=" {{asset("img/heart-full.svg") }}">
-                                    </a>
+                            <div class="row status">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <p class="status-text" id="status-{{suggestion.id}}">Status : {{suggestion.status}}</p>
                                 {% else %}
-                                    <a class="zPos" href="{{ path('addLikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
-                                        <img class="navSvg" src=" {{asset("img/heart-empty.svg") }}">
-                                    </a>
-                            {% endif %}
-                                {{suggestion.playersLikesCount}}
-                                <a class="block" href=" {{ path("detailSuggestion", {'title' : suggestion.title, 'player' : player.id}) }}"></a>
-                        </p>
+                                    <p class="status-text">Status : {{suggestion.status}}</p>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <select class="status-select" style="display: none;" data-id="{{suggestion.id}}">>
+                                        <option value="pending">Pending</option>
+                                        <option value="closed">Closed</option>
+                                        <option value="accepted">Accepted</option>
+                                    </select>
+                                <noscript>
+                                    <select class="status-select">
+                                        <option value="pending">Pending</option>
+                                        <option value="closed">Closed</option>
+                                        <option value="accepted">Accepted</option>
+                                    </select>
+                                    <a>Validate</a>
+                                </noscript>
+                                {% endif %}
+                            </div>
+                            <p>Submitted on {{suggestion.postDate|date("Y-m-d")}} at {{suggestion.postDate|date("h:m A ")}}</p>
+                            <p>
+                                    {% if app.user in suggestion.playersLikes %}
+                                        <a class="zPos" href="{{ path('unlikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                            <img class="navSvg" src=" {{asset("img/heart-full.svg") }}">
+                                        </a>
+                                    {% else %}
+                                        <a class="zPos" href="{{ path('addLikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                            <img class="navSvg" src=" {{asset("img/heart-empty.svg") }}">
+                                        </a>
+                                {% endif %}
+                                    {{suggestion.playersLikesCount}}
+                                    <a class="block" href=" {{ path("detailSuggestion", {'title' : suggestion.title, 'player' : player.id}) }}"></a>
+                            </p>
 
-                    </div>
-                {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
         {% endif %}
     </div>
@@ -92,8 +96,11 @@
             $(this).find('.status-select').show();
         },
         function() { // Mouseout
-            $(this).find('.status-select').hide();
-            $(this).find('.status-text').show();
+            setTimeout(() =>
+            {
+                $(this).find('.status-select').hide();
+                $(this).find('.status-text').show();                
+            },5000)
         }
     );
 
