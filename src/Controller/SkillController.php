@@ -6,6 +6,7 @@ use App\Entity\Skill;
 use App\Form\SkillFormType;
 use App\Repository\SkillRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,11 +15,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SkillController extends AbstractController
 {
     #[Route('/skill', name: 'skillsList')]
-    public function index(SkillRepository $skillRepository): Response
+    public function index(SkillRepository $skillRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $skills = $skillRepository->findBy([], ["id" => "ASC"]);
+        $pagination = $paginator->paginate(
+            $skillRepository->findBy([], ["id" => "ASC"]),
+            $request->query->getInt('page',1),
+            5
+        );
         return $this->render('skill/index.html.twig', [
             'skills' => $skills,
+            'pagination' => $pagination
         ]);
     }
 
