@@ -1,7 +1,6 @@
-.looksLikeAButtonGrey
-{
+.looksLikeAButtonGrey {
     display: flex;
-    background-color: grey;
+    background-color: rgba(25, 25, 112, 0.8);
     border-radius: 15px;
     padding: 0.5rem;
     width: 7.5rem;
@@ -9,7 +8,25 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    border: solid 0.5px var(--navbarText);
+    transition: border 1s ease-in-out; /* Add transition for smooth glowing effect */
+    text-decoration: none;
+    color: gold;
 }
+
+.looksLikeAButtonGrey:hover {
+    border: 0.5px solid white; /* Change the color as needed */
+    animation: border_glow 2s ease-in-out infinite;
+}
+
+/* Define the animation */
+@keyframes border_glow {
+    0% { border: solid 0.5px var(--navbarText); } /* Starting color of the glow */
+    50% { border: 0.5px solid white; } /* Color of the glow at the middle of the animation */
+    100% { border: solid 0.5px var(--navbarText); } /* Ending color of the glow */
+}
+
+
 
 .looksLikeAButtonBlue
 {
@@ -78,3 +95,29 @@
     background-color: var(--blackButtonHover);
     transition: 1s;
 } */
+
+.looksLikeAButtonViolet
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: rgba(52, 7, 52,0.80);
+    color: blue;
+    border-radius: 15px;
+    text-decoration: none;
+    color: gold;
+    position: relative;
+    box-shadow: 0 0 0 0 crimson;
+    animation: glow 3s ease-out infinite;
+}
+
+@keyframes glow {
+    0% {
+      box-shadow: 0 0 0 0 crimson;
+    }
+    
+    50% {
+      box-shadow: 0 0 15px 0 crimson;
+    }
+  }

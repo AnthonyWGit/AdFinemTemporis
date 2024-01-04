@@ -2,7 +2,7 @@
 {
     --base-color1 : rgba(25, 25, 112 , 0.804);
     --base-noalpha-color1 :25, 25, 112;
-    --base-color2 : hsl(320, 100%, 12%);
+    --base-color2 : #3d0029;
     --postContentColor : rgba(0, 0, 0, 1);
     --blueButton : rgba(47, 0, 255,0.5);
     --blackButton : rgba(8, 3, 29, 1);
@@ -15,6 +15,7 @@
     --formInside : rgba(238, 130, 238, 0.493);
     --navbarText : rgba(255, 255, 255, 0.2);
     --tableCells : hsla(202, 83%, 9%, 0.336);
+    --menuColor : rgba(25, 25, 112, 0.75);
 }
 
 *
@@ -312,4 +313,9 @@ button {
 {
     color: gold;
     text-decoration: none;
+}
+
+.arrow
+{
+    color: orange;
 }

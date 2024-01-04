@@ -62,7 +62,7 @@ td:first-child, th:first-child
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    background-color: midnightblue;
+    background-color: var(--menuColor);
 }
 
 @media screen and (max-width: 600px) 
