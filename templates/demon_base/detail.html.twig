@@ -10,9 +10,7 @@
                 <li><a href=" {{path('itemsList')}}">Items</a></li>
                 <li><a href=" {{path('skillsList')}}">Skills</a></li>
                 <li><a href=" {{path('traitsList')}}">Traits</a></li>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href=" {{path('skillTablesList')}}">SkillTable</a></li>
-                {% endif %}
+                <li><a href=" {{path('skillTablesList')}}">SkillTable</a></li>
             </ul>
         </div>
         <div class="divDemon">
