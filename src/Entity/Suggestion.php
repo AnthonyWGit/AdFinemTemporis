@@ -176,6 +176,11 @@ class Suggestion
         return $this;
     }
 
+    public function getHiddenStatus(): ?int
+    {
+        return $this->is_verified;
+    }
+
     public function IsVerified(): ?bool
     {
         if ($this->is_verified == 0)
@@ -197,7 +202,7 @@ class Suggestion
 
     public function IsNew(): ?bool
     {
-        if ($this->is_verified == 3)
+        if ($this->is_verified == 2)
         {
             return true;
         }
@@ -206,12 +211,4 @@ class Suggestion
             return false;
         }
     }
-
-    public function setIsNew(int $is_verified): static
-    {
-        $this->is_verified = $is_verified;
-
-        return $this;
-    }
-
 }
