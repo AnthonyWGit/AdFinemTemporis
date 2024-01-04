@@ -27,7 +27,13 @@
                 <tr>
                     <th><b>{{ knp_pagination_sortable(pagination, 'ID', 'id') }}</b></th>
                     <th {% if pagination.isSorted('name') %} class="sorted"{% endif %}><b> 
-                        {{ knp_pagination_sortable(pagination, 'Name', 'name') }}</b></th>
+                        {{ knp_pagination_sortable(pagination, 'Name', 'name') }}
+                        {% if pagination.isSorted('name') and pagination.direction == 'asc' %}
+                         <span class="arrow">↑</span>
+                        {% elseif pagination.isSorted('name') and pagination.direction == 'desc' %}
+                         <span class="arrow">↓</span>
+                        {% endif %}
+                        </b></th>
                     <th><b>{{ knp_pagination_sortable(pagination, 'Base dmg', 'baseDmg') }}</b></th>
                     <th><b>{{ knp_pagination_sortable(pagination, 'Type dmg', 'dmgType') }}</b></th>
                     {% if is_granted('ROLE_ADMIN') %}
@@ -51,7 +57,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="navigation">
         {{ knp_pagination_render(pagination) }}
+        </div>
         </div>
         {% if is_granted('ROLE_ADMIN') %}
         <div id="myModal" class="modal">
