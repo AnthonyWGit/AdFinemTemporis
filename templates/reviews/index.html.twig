@@ -3,17 +3,11 @@
 {% block title %}Reviewing pannel{% endblock %}
 
 {% block body %}
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello CommunityController!{% endblock %}
-
-{% block body %}
 <div class="globalDiv">
     {# read and display just one flash message type #}
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">
             <p>{{ message }}</p>
-            <p>It's this one : <b></b></p>
         </div>
     {% endfor %}
 
@@ -22,11 +16,6 @@
         <p>{{ message }}</p>
     </div>
 {% endfor %}
-
-
-    <div class="div">
-        <a href=" {{ path('newSuggestion')}}" class="looksLikeAButtonGrey">Send an idea</a>
-    </div>
 </div> 
 
     <div class="cardBoard">
@@ -38,9 +27,35 @@
                 <tr>
                     <td>ID</td>
                     <td>Titre</td>
-
+                    <td>Post Date</td>
+                    <td>Hidden status</td>
+                    <td>Actions</td>
                 </tr>
             </thead>
+            <tbody>
+                {% for suggestion in suggestions %}
+                <tr>
+                    <td>{{suggestion.id}}</td>
+                    <td>{{suggestion.title}}</td>
+                    <td>{{suggestion.postDateFormat}}</td>
+                    {% if suggestion.hiddenStatus == 0 %}
+                        <td>Safe</td>
+                    {% elseif suggestion.hiddenStatus == 1 %}
+                        <td>Denied</td>
+                    {% else %}
+                        <td>New</td>
+                    {% endif %}
+                    <td>
+                        <a class="linkNoBase" href="{{path('acceptSuggestion', {'id' : suggestion.id})}}">
+                            Accept
+                        </a> - 
+                        <a class="linkNoBase" href="{{path('denySuggestion', {'id' : suggestion.id})}}">
+                            Deny
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
             {% for suggestion in suggestions %}
                 {% for player in suggestion.playersSuggestions %}
