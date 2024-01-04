@@ -46,6 +46,22 @@ class CommunityController extends AbstractController
             return $this->redirectToRoute('account');
         }
 
+        //Checking if a suggestion has been send and been validated by admin
+        {
+            foreach ($this->getUser()->getSuggestions() as $suggestion)
+            {
+                if (!$suggestion->isVerified())
+                {
+                    $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                    (
+                        'notice',
+                        'You already have made a suggestion ! Wait until an admin reviews it'
+                    );
+                    return $this->redirectToRoute('community');
+                }
+            }
+        }
+        //Checking if a pending suggestion exists
         foreach ($this->getUser()->getSuggestions() as $suggestion)
         {
             if ($suggestion->getStatus("pending"))
@@ -152,6 +168,15 @@ class CommunityController extends AbstractController
         // Check if the user has the "ROLE_BANNED"
         if ($this->isGranted('ROLE_BANNED', $user)) {
             return $this->redirectToRoute('account');
+        }
+
+        if ($suggestion->getStatus() == "accepted" & !$this->is_granted("ROLE_ADMIN", $user))
+        {
+            $this->addFlash(
+                'error',
+                "You can't delete or edit a suggestion that has been accepted"
+            );
+            return $this->redirectToRoute("community");
         }
 
         if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author
