@@ -25,17 +25,18 @@
         <table>
             <thead>
                 <tr>
-                    <th><b>ID</b></th>
-                    <th><b>Name</b></th>
-                    <th><b>Base dmg</b></th>
-                    <th><b>Type dmg</b></th>
+                    <th><b>{{ knp_pagination_sortable(pagination, 'ID', 'id') }}</b></th>
+                    <th {% if pagination.isSorted('name') %} class="sorted"{% endif %}><b> 
+                        {{ knp_pagination_sortable(pagination, 'Name', 'name') }}</b></th>
+                    <th><b>{{ knp_pagination_sortable(pagination, 'Base dmg', 'baseDmg') }}</b></th>
+                    <th><b>{{ knp_pagination_sortable(pagination, 'Type dmg', 'dmgType') }}</b></th>
                     {% if is_granted('ROLE_ADMIN') %}
                         <th><b>Actions</b></th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
-                {% for skill in skills %}
+                {% for skill in pagination %}
                 <tr>
                     <td>{{skill.id}}</td>
                     <td><a class="linkNoBase" href="{{ path('skillDetail', {'name' : skill.name}) }}">{{skill.name}}</a></td>
@@ -50,6 +51,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {{ knp_pagination_render(pagination) }}
         </div>
         {% if is_granted('ROLE_ADMIN') %}
         <div id="myModal" class="modal">

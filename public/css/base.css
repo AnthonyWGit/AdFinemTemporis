@@ -295,3 +295,21 @@ button {
     word-wrap: break-word; 
     word-break: break-word;
 }
+
+.first > *, .previous > *, .page > *, .next > *, .last >*
+{
+    color: black;
+    text-decoration: none;
+}
+
+.asc, .desc
+{
+    text-decoration: none;
+    color: orange;
+}
+
+.sortable
+{
+    color: gold;
+    text-decoration: none;
+}
