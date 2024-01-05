@@ -1,0 +1,25 @@
+.infoText
+{
+    display: flex;
+    align-items: flex-end;
+}
+
+.infoText > small
+{
+    padding-left: 1em;
+}
+
+.center
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin: 1rem;
+}
+
+.gap
+{
+    gap: 1rem;
+}
