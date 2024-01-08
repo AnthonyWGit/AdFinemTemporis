@@ -1,7 +1,7 @@
 :root
 {
-    --base-color1 : rgba(25, 25, 112 , 0.804);
-    --base-noalpha-color1 :25, 25, 112;
+    --base-color1 : #191970cd;
+    --base-noalpha-color1 :#1a1a3f;
     --base-color2 : #3d0029;
     --postContentColor : rgba(0, 0, 0, 1);
     --blueButton : rgba(47, 0, 255,0.5);
@@ -168,9 +168,11 @@ input
 
 .footer
 {
-    height: 10rem;
+    display: flex;
+    /* height: 10rem; */
     margin-top: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    padding: 2rem 0 2rem 0;
 }
 .navbar a
 {
@@ -297,25 +299,57 @@ button {
     word-break: break-word;
 }
 
-.first > *, .previous > *, .page > *, .next > *, .last >*
+.footerRow
 {
-    color: black;
-    text-decoration: none;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
 }
 
-.asc, .desc
+.socialsColumn, .eulaRow
 {
-    text-decoration: none;
-    color: orange;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.sortable
+.socialsColumn
 {
-    color: gold;
-    text-decoration: none;
+    align-items: center;
+    flex-grow: 1;
+}
+.socialsColumn > ul > li
+{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
-.arrow
+.socialsColumn > ul
 {
-    color: orange;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 1rem;
+}
+.contactImg
+{
+    width: 5rem;
+    height: 5rem;
+}
+
+.contactRow
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    margin: 1.5rem;
+}
+
+.eulaRow
+{
+    align-items: center;
+    font-size: 2em;
+    margin: 1.5rem;
 }
