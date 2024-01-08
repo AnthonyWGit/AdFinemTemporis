@@ -1,3 +1,29 @@
+
+.heroBanner
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2.5rem;
+    padding: 1rem 0 5rem 0;
+}
+
+.heroBanner > h1
+{
+    font-family: 'Charm', cursive !important;
+    font-weight: 700;
+
+}
+.heroBanner > p
+{
+    font-family: 'Charm', cursive !important;
+}
+.heroBanner > p, .heroBanner > h1
+{
+    text-align: center;    
+}
+
+
 .aside
 {
     display: flex;
@@ -46,7 +72,7 @@
     display: flex;
     justify-content: space-evenly;
     flex-grow: 1;
-    background-color: rgba(var(--base-noalpha-color1), 0.25);
+    background-color: var(--base-noalpha-color1);
     gap: 1.3rem;
     border-radius: 10px;
 }
@@ -76,7 +102,7 @@
 {
     display: flex;
     flex-direction: column;
-    background-color: rgba(var(--base-noalpha-color1), 0.25);
+    background-color: var(--base-noalpha-color1);
     padding: 2rem;
     gap: 1rem;
     align-items: center;
