@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+<<<<<<< HEAD
 use App\Service\Simulation;
+=======
+>>>>>>> 21aaf4821eae2a241a02fd228b5c9b4c2c5ea081
 use App\Entity\Skill;
 use App\Entity\DemonPlayer;
 use App\Form\TheLabSelfDemonType;
