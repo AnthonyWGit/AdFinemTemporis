@@ -2,13 +2,26 @@
 {% block meta %}
 <meta name="description" content="This is lab guidelines">
 {% endblock %}
+
+{% block stylesheets %}
+    {# import base #}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/the_lab.css') }}">
+{% endblock %}
 {% block title %}
     The Lab
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{asset('js/placeholderUpdate.js')}}"></script>
+{% endblock %}
+
 {% block body %}
+<div class="center">
     <h1>What is this page about ?</h1>
     <p>This page will allow to simulate damage calculations.</p>
+    <p>Do not fill the fields related to the opponent to calculate the damage you would have done without reduction</p>
     <h1>How to use</h1>
     <ul>
         <li>Select a demon that would be your own</li>
@@ -19,44 +32,105 @@
         <li>See how much damage you would have done</li>
     </ul>
 
-<form method="post" name="formSimu">
-    <h2>Choose your demon</h2>
-    <select>
-        {% for demon in demonsBase %}
-            <option>{{ demon.name }}</option>
-        {% endfor %}
-    </select>
+    {{ form_start(form) }}
+        {# __________________________________THE PLAYER__________________________________________ #}
+        {{form_row(form.demonBase)}}
+        {{form_label(form.level)}}
+        <small class="orange">
+            {{form_help(form.level)}}
+        </small>
+        {{form_widget(form.level)}}
+        {{form_row(form.trait)}}
+        <h2>Enter your stats</h2>
+        <small class="orange">
+            Note : placeholders are base stats. You can't put a value below them !
+        </small>
+        <table class="overflow">
+            <thead>
+                <tr>
+                    <td>{{form_label(form.str)}}</td>
+                    <td>{{form_label(form.agi)}}</td>
 
-    <h2>Enter level</h2>
-    <input type="number" name="level">
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{form_widget(form.str)}}</td>
+                    <td>{{form_widget(form.agi)}}</td>
+                </tr>
+                <tr>
+                    <td>{{form_label(form.end)}}</td>
+                    <td>{{form_label(form.int)}}</td>
+                </tr>
 
-    <h2>Enter your stats</h2>
-    <table>
-        <thead>
-            <tr>STR</tr>
-            <tr>END</tr>
-            <tr>AGI</tr>
-            <tr>INT</tr>
-            <tr>LCK</tr>
-        </thead>
-        <tbody>
-            <td><input type="number" name="str"></td>
-            <td><input type="number" name="end"></td>
-            <td><input type="number" name="agi"></td>
-            <td><input type="number" name="int"></td>
-            <td><input type="number" name="lck"></td>
-        </tbody>
-    </table>
-    <select>
+                <tr>
+                    <td>{{form_widget(form.end)}}</td>
+                    <td>{{form_widget(form.int)}}</td>
+                </tr>
+                <tr>
+                    <td>{{form_label(form.lck)}}</td>
+                </tr>
+                <tr>
+                    <td>{{form_widget(form.lck)}}</td>
+                </tr>
+            </tbody>
+        </table>
+        {{form_row(form.skill)}}
+        <small class="orange">
+            Note : Beware that there are different damage types
+        </small>
+        {# _________________________________________________________ #}
 
-    </select>
 
-    <h2>Choose the Trait</h2>
-    <select>
-        {% for trait in traits %}
-            <option>{{ trait.name }}</option>
-        {% endfor %}
-    </select>
-</form>
+        {# ________________________________________THE CPU________________________________________________  #}
 
+        {{form_row(form.demonBaseCPU)}}
+        {{form_label(form.levelCPU)}}
+        <small class="orange">
+            {{form_help(form.levelCPU)}}
+        </small>
+        {{form_widget(form.levelCPU)}}
+        {{form_row(form.traitCPU)}}
+        <h2>Enter the opponent stats</h2>
+        <small class="orange">
+            Note : placeholders are base stats. You can't put a value below them !
+        </small>
+        <table class="overflow">
+            <thead>
+                <tr>
+                    <td>{{form_label(form.strCPU)}}</td>
+                    <td>{{form_label(form.agiCPU)}}</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{form_widget(form.strCPU)}}</td>
+                    <td>{{form_widget(form.agiCPU)}}</td>
+                </tr>
+                <tr>
+                    <td>{{form_label(form.endCPU)}}</td>
+                    <td>{{form_label(form.intCPU)}}</td>
+                </tr>
+
+                <tr>
+                    <td>{{form_widget(form.endCPU)}}</td>
+                    <td>{{form_widget(form.intCPU)}}</td>
+                </tr>
+                <tr>
+                    <td>{{form_label(form.lckCPU)}}</td>
+                </tr>
+                <tr>
+                    <td>{{form_widget(form.lckCPU)}}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        {{form_row(form.validate)}}
+    {{ form_end(form) }}
+</div>
 {% endblock %}
+
+
+
+
