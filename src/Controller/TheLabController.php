@@ -69,6 +69,7 @@ class TheLabController extends AbstractController
     #[Route('/the_lab/calc', name: 'the_labCalc')]
     public function calculator(Request $request, Array $data, EntityManagerInterface $em, DemonBaseRepository $demonBaseRepository, SkillRepository $skillRepository): Response
     {
+
         $demonsArray = Simulation::simulate($request, $data, $em, $demonBaseRepository, $skillRepository);
 
         // dd($skillObject, $skillDmgSimulatedPure, $demonBaseObject->getStrDemonBase(), $calculated["the_lab_self_demon"]["str"], $strLevelUpPoints, $demonBaseObject, $demonPlayerSimulated);
