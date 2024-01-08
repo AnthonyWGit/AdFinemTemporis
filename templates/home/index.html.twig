@@ -6,10 +6,10 @@
 {% block title %}Ad Finem Temporis{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="heroBanner">
+    <h1>Ad Finem Temporis</h1>
+    <p>A mash-up of the Pokemon and some other game series</p>
+</div>
 <main class="forceRow">
     <div class="aside">
     <p>You are lost and you won’t be able to find your way back alone. Make pacts with demons and fight alongside them to 
@@ -18,7 +18,7 @@
         <div class="rowButtons">
             <a class="looksLikeAButtonGrey">Join In</a>
             <a class="looksLikeAButtonGrey">Log In</a>
-            <a href="{{path('game')}}" class="looksLikeAButtonViolet">Play</a>
+            <a href="{{path('game')}}" alt="Play button" class="looksLikeAButtonViolet">Play</a>
         </div>
     </div>
 
@@ -28,17 +28,17 @@
                 <h2>For both newcomers and veterans alike</h2>
             </div>
             <div class="cardContent">
-                <img class="cardSvg" src=" {{asset('img/medal-black.svg')}}">
+                <img class="cardSvg" alt="medal icon" src=" {{asset('img/medal-black.svg')}}">
                 <p>A new player guide in-game will help you to master the game. For players comfortable with the genre, you’ll just feel like home.</p>
             </div>
         </div>
 
         <div class="card">
             <div class="titleOverCard">
-                <h2>Join and participate in the community.</h2>
+                <h2>Join and participate in the game community.</h2>
             </div>
             <div class="cardContent">
-                <img class="cardSvg" src=" {{asset('img/planet-black.svg')}}">
+                <img class="cardSvg" alt="planet icon" src=" {{asset('img/planet-black.svg')}}">
                 <p>Propose your mythological figures or boost already existing suggestions</p>
             </div>
         </div>
@@ -48,15 +48,15 @@
     <div class="longCard">
         <div class="element">
             <p>Turn-based system</p>
-            <img class="elementSvg" src=" {{asset('img/epees.svg')}}">
+            <img class="elementSvg" alt="crossing swords icon" src=" {{asset('img/epees.svg')}}">
         </div>
         <div class="element">
             <p>RPG elements</p>
-            <img class="elementSvg" src=" {{asset('img/dice.svg')}}">
+            <img class="elementSvg" alt="dice icon" src=" {{asset('img/dice.svg')}}">
         </div>
         <div class="element">
             <p>Learn about myths and legends</p>
-            <img class="elementSvg" src=" {{asset('img/dragon.svg')}}">
+            <img class="elementSvg" alt="dragon icon" src=" {{asset('img/dragon.svg')}}">
         </div>
     </div>
 </aside>
