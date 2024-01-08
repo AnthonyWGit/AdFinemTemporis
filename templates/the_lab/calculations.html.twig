@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="This is lab guidelines">
+{% endblock %}
+
+{% block stylesheets %}
+    {# import base #}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/the_lab.css') }}">
+{% endblock %}
+{% block title %}
+    The Lab
+{% endblock %}
+
+{% block body %}
+    Your Demon {{demonPlayer.demonBase.name}} will look like this :
+    <ul>
+        <li>HP max : {{maxHpSimulated}}</li>
+        <li>Theorical damage without reduction : {{skillDmgSimulatedPure}} </li>
+    </ul>
+
+    <p>Note : natural damage range is 10%</p>
+
+    <p>Selected CPU : {{demonBaseCPU.demonBase.name}}</p>
+{% endblock %}
