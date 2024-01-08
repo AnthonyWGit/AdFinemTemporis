@@ -12,7 +12,6 @@
             @import url('https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap');
         </style>            
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
             <link rel="stylesheet" href="{{ asset('css/base.css') }}">
             <link rel="stylesheet" href="{{ asset('css/looksLikeAButton.css') }}">
             <link rel="stylesheet" href="{{ asset('css/home.css') }}">
@@ -20,13 +19,14 @@
             <link rel="stylesheet" href="{{ asset('css/community.css') }}">
             <link rel="stylesheet" href="{{ asset('css/account.css') }}">
             <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/stars.css') }}">
         {% endblock %}
         {% block javascripts %}
-            {{ importmap() }}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         {% endblock %}
     </head>
     <body>
+
         <input type="checkbox" id="menuShowHide">
         <label for="menuShowHide"></label>
         <nav class="navbar" id="mainMenu">
@@ -47,6 +47,10 @@
         </nav>
 
         <div id="container">
+            <div id='stars'></div>
+            <div id='stars2'></div>
+            <div id='stars3'></div>
+
             {% block body %}
 
             {% endblock %}
