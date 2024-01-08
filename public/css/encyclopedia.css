@@ -272,3 +272,26 @@ td:first-child, th:first-child
     flex-direction: column;
     gap: 1rem;
 }
+
+.first > *, .previous > *, .page > *, .next > *, .last >*
+{
+    color: black;
+    text-decoration: none;
+}
+
+.asc, .desc
+{
+    text-decoration: none;
+    color: orange;
+}
+
+.sortable
+{
+    color: gold;
+    text-decoration: none;
+}
+
+.arrow
+{
+    color: orange;
+}
