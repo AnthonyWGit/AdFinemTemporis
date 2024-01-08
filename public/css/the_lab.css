@@ -1,0 +1,31 @@
+.infoText
+{
+    display: flex;
+    align-items: flex-end;
+}
+
+.infoText > small
+{
+    padding-left: 1em;
+}
+
+.center
+{
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    overflow: auto;
+}
+
+.gap
+{
+    gap: 1rem;
+}
+
+.overflow
+{
+    overflow: auto;
+}
