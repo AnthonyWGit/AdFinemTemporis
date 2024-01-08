@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\DemonPlayerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\DemonBase;
 use App\Service\LevelCalculator;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\DemonPlayerRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: DemonPlayerRepository::class)]
 class DemonPlayer
@@ -211,8 +212,6 @@ class DemonPlayer
         return $this;
     }
 
-
-
     public function getTrait(): ?DemonTrait
     {
         return $this->trait;
@@ -263,7 +262,6 @@ class DemonPlayer
                 $fighter->setDemonPlayer1(null);
             }
         }
-
         return $this;
     }
 
@@ -338,6 +336,17 @@ class DemonPlayer
         return LevelCalculator::calcMaxHp($total, $baseHp,$level);
     }
 
+    //Simulation properties
+    public function getMaxHpFictif(int $levelFictif, int $totalEnd, DemonBase $demonBase) : int
+    {
+        $LvlUpPointsNumber = $levelFictif - 1;
+        $bonusLvlUpPointsValue = $LvlUpPointsNumber * 10;
+        $baseEndPts = $totalEnd - $demonBase->getEndDemonBase();
+        $total = $demonBase->getEndDemonBase() + ($baseEndPts * 20) + $bonusLvlUpPointsValue;
+        $baseHp = $demonBase->getBaseHp();
+        return LevelCalculator::calcMaxHp($total, $baseHp,$levelFictif);
+    }
+
     public function getTotalStr(): int
     {
         return $this->getStrPoints() + $this->getDemonBase()->getStrDemonBase();
@@ -362,6 +371,5 @@ class DemonPlayer
     {
         return $this->getLckPoints() + $this->getDemonBase()->getLckDemonBase();
     }
-
 
 }
