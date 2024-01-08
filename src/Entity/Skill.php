@@ -172,6 +172,35 @@ class Skill
         return ceil($dmgDone * $randomIncrease);
     }
 
+    public function dmgCalcSimulatedPure(DemonPlayer $demonPlayer1) : float
+    {
+        $dmgDone = 0;
+        if ($this->getDmgType() == "phys")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalStr()));
+            $dmgDone = $dmgCalcPure;
+        }
+        else if ($this->getDmgType() == "mag")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalInt()));
+            $dmgDone = $dmgCalcPure;
+        }
+        else if ($this->getDmgType() == "str/agi")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + (($demonPlayer1->getTotalStr()) * 0.3) + (($demonPlayer1->getTotalAgi() * 0.7)));
+            $dmgDone = $dmgCalcPure;
+        }
+        else if ($this->getDmgType() == "int pure")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalInt()) * 0.1);
+            $dmgDone = $dmgCalcPure;
+        }
+    
+        // Add a random increase of up to 10% to the damage.
+        $randomIncrease = mt_rand(100, 110) / 100;
+        return ceil($dmgDone * $randomIncrease);
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
