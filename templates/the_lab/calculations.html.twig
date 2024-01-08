@@ -16,8 +16,9 @@
     Your Demon {{demonPlayer.demonBase.name}} will look like this :
     <ul>
         <li>HP max : {{maxHpSimulated}}</li>
-        <li>Theorical damage without reduction : {{skillDmgSimulatedPure}} </li>
+        <li>Theorical damage without reduction : {{skillDmgSimulatedPure.damage}} </li>
     </ul>
+    <p>Your damage range is {{skillDmgSimulatedPure.percentage}} </p>
 
     <p>Note : natural damage range is 10%</p>
 
@@ -27,9 +28,9 @@
     </br>
     <p>Ennemy level : {{levelCPU}}</p>
     </br>
-    <p>After ennemy defenses, you will deal {{trueDmg}} damage points</p>
+
+    <p>After ennemy defenses, you will deal {{trueDmg.fixedIncrease}} damage points</p>
     </br>
 
-    <p>Damage done after defenses reduction : {{trueDmg}} </p>
     {% endif %}
 {% endblock %}
