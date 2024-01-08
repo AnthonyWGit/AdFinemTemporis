@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="This is lab guidelines">
+{% endblock %}
+
+{% block stylesheets %}
+    {# import base #}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/the_lab.css') }}">
+{% endblock %}
+{% block title %}
+    The Lab
+{% endblock %}
+
+{% block body %}
+<div class="center">
+    <h1>What is this page about ?</h1>
+    <p>This page will allow to simulate damage calculations.</p>
+    <h1>How to use</h1>
+    <ul>
+        <li>Select a demon that would be your own</li>
+        <li>Parameter its stats and level</li>
+        <li>Select a demon for the CPU</li>
+        <li>Parameter its stats and level</li>
+        <li>Select the skill you want to use</li>
+        <li>See how much damage you would have done</li>
+    </ul>
+
+    <form method="post" name="formSimu" class="center gap" action="/the_lab/calc">
+        <h2>Choose your demon</h2>
+        <select name="demonPicker">
+            {% for demon in demonsBase %}
+                <option value="{{demon.name}}">{{ demon.name }}</option>
+            {% endfor %}
+        </select>
+
+        <div class="infoText">
+            <h2>Enter level</h2><small>(from 1 to 100)</small>
+        </div>
+        <input type="number" name="level">
+
+        <h2>Enter your stats</h2>
+        <table>
+            <thead>
+                <tr>
+                    <td>STR</td>
+                    <td>AGI</td>
+                    <td>END</td>
+                    <td>INT</td>
+                    <td>LCK</td>
+                </tr>
+            </thead>
+            <tbody>
+                <td><input type="number" name="str"></td>
+                <td><input type="number" name="end"></td>
+                <td><input type="number" name="agi"></td>
+                <td><input type="number" name="int"></td>
+                <td><input type="number" name="lck"></td>
+            </tbody>
+        </table>
+
+
+        <h2>Choose the Trait</h2>
+        <select name="traitPicker">
+            {% for trait in traits %}
+                <option value="{{trait.name}}">{{ trait.name }}</option>
+            {% endfor %}
+        </select>
+
+        <h2>Choose your skill</h2>
+        <select name="skillPicker">
+            {% for skill in skills %}
+                <option value="{{skill.name}}">{{skill.name}}</option>
+            {% endfor %}
+        </select>
+
+        <button>Calculation !</button>
+
+        <input type="hidden" name="token" value="{{ csrf_token('statsCalc') }}">
+    </form>
+</div>
+
+{% endblock %}
