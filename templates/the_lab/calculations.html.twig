@@ -21,5 +21,15 @@
 
     <p>Note : natural damage range is 10%</p>
 
-    <p>Selected CPU : {{demonBaseCPU.demonBase.name}}</p>
+    {% if demonCPU %}
+    <p>Selected CPU : {{demonCPU.demonBase.name}}</p>
+
+    </br>
+    <p>Ennemy level : {{levelCPU}}</p>
+    </br>
+    <p>After ennemy defenses, you will deal {{trueDmg}} damage points</p>
+    </br>
+
+    <p>Damage done after defenses reduction : {{trueDmg}} </p>
+    {% endif %}
 {% endblock %}

@@ -43,12 +43,10 @@ class Simulation
         $demonPlayerSimulated->setIntPoints($intLevelUpPoints);
         $demonPlayerSimulated->setLckPoints($lckLevelUpPoints);
 
-        $skillDmgSimulatedPure = $skillObject->dmgCalcSimulatedPure($demonPlayerSimulated);
-
         // for ennemy
         
         if ($calculated["the_lab_self_demon"]["demonBaseCPU"] && $calculated["the_lab_self_demon"]["traitCPU"] && $calculated["the_lab_self_demon"]["levelCPU"] && 
-        $calculated["the_lab_self_demon"]["strCPU"] && $calculated["the_lab_self_demon"]["endCPU"]  && $calculated["the_lab_self_demon"]["intBaseCPU"] 
+        $calculated["the_lab_self_demon"]["strCPU"] && $calculated["the_lab_self_demon"]["endCPU"]  && $calculated["the_lab_self_demon"]["intCPU"] 
         && $calculated["the_lab_self_demon"]["agiCPU"]  && $calculated["the_lab_self_demon"]["lckCPU"] )
         {
             $demonCPUSimulated = new DemonPlayer();
@@ -78,7 +76,11 @@ class Simulation
             $demonCPUSimulated = null;
             $maxHpSimulatedCPU = null;
             $levelCPUSimulated = null;
+            $dmgDone = null;
         }
+            //calculating realistic damage with builtin theoric
+            $dmgDone = $skillObject->dmgCalcSimulated($demonPlayerSimulated, $demonCPUSimulated, false);
+
 
         return 
         [
@@ -87,7 +89,8 @@ class Simulation
             'maxHp' =>  $maxHpSimulated,
             'demonCPU' => $demonCPUSimulated,
             'maxHpCPU' => $maxHpSimulatedCPU,
-            'levelCPU' => $levelCPUSimulated
+            'levelCPU' => $levelCPUSimulated,
+            'trueDmg' => $dmgDone,
         ];
     }
     

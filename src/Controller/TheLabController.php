@@ -76,9 +76,10 @@ class TheLabController extends AbstractController
             'demonPlayer' => $demonsArray['demonPlayer'],
             'maxHpSimulated' => $demonsArray['maxHp'],
             'skillDmgSimulatedPure' => $demonsArray['dmgPlayer'],
-            'demonBaseCPU' => $demonsArray["demonCPU"],
+            'demonCPU' => $demonsArray["demonCPU"],
             'maxHpSimulatedCPU' => $demonsArray['maxHpCPU'],
-            'levelCPU' => $demonsArray['levelCPU']
+            'levelCPU' => $demonsArray['levelCPU'],
+            'trueDmg' => $demonsArray["trueDmg"],
         ]);            
     }
 

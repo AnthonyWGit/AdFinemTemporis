@@ -172,23 +172,47 @@ class Skill
         return ceil($dmgDone * $randomIncrease);
     }
 
-    public function dmgCalcSimulatedPure(DemonPlayer $demonPlayer1) : float
+    public function dmgCalcSimulated(DemonPlayer $demonPlayer1, DemonPlayer $demonPlayer2 = null, bool $solo) : float
     {
         $dmgDone = 0;
         if ($this->getDmgType() == "phys")
         {
             $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalStr()));
-            $dmgDone = $dmgCalcPure;
+            if ($solo)
+            {
+                $dmgDone = $dmgCalcPure;
+            }
+            else
+            {
+                $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
+                $dmgDone = $dmgCalcPure - $endReduction;                
+            }
         }
         else if ($this->getDmgType() == "mag")
         {
             $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalInt()));
-            $dmgDone = $dmgCalcPure;
+            if ($solo)
+            {
+                $dmgDone = $dmgCalcPure;
+            }
+            else
+            {
+                $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
+                $dmgDone = $dmgCalcPure - $endReduction;                
+            }
         }
         else if ($this->getDmgType() == "str/agi")
         {
             $dmgCalcPure = (($this->getBaseDmg() * 0.1) + (($demonPlayer1->getTotalStr()) * 0.3) + (($demonPlayer1->getTotalAgi() * 0.7)));
-            $dmgDone = $dmgCalcPure;
+            if ($solo)
+            {
+                $dmgDone = $dmgCalcPure;
+            }
+            else
+            {
+                $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
+                $dmgDone = $dmgCalcPure - $endReduction;                
+            }
         }
         else if ($this->getDmgType() == "int pure")
         {
