@@ -106,7 +106,6 @@ class Skill
         if ($this->demonPlayers->removeElement($demonPlayer)) {
             $demonPlayer->removeSkill($this);
         }
-
         return $this;
     }
 
@@ -172,9 +171,10 @@ class Skill
         return ceil($dmgDone * $randomIncrease);
     }
 
-    public function dmgCalcSimulated(DemonPlayer $demonPlayer1, DemonPlayer $demonPlayer2 = null, bool $solo) : float
+    public function dmgCalcSimulated(DemonPlayer $demonPlayer1, DemonPlayer $demonPlayer2 = null, bool $solo, float $percentage = null) : Array
     {
         $dmgDone = 0;
+
         if ($this->getDmgType() == "phys")
         {
             $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalStr()));
@@ -220,9 +220,21 @@ class Skill
             $dmgDone = $dmgCalcPure;
         }
     
+        //If we already have a % dmg then it means previous damage is already calculated so we use the same range
+        if ($percentage)
+        {
+            $fixedIncreased = ceil($dmgDone * $percentage);
+            return ['fixedIncrease' => $fixedIncreased];
+        }
         // Add a random increase of up to 10% to the damage.
-        $randomIncrease = mt_rand(100, 110) / 100;
-        return ceil($dmgDone * $randomIncrease);
+        else
+        {
+                $randomIncrease = mt_rand(100, 110) / 100;
+            return [
+                'damage' => ceil($dmgDone * $randomIncrease),
+                'percentage' => $randomIncrease
+            ];         
+        }
     }
 
     public function getDescription(): ?string
