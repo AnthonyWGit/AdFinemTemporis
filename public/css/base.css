@@ -38,8 +38,7 @@ html
     /* background-attachment: fixed; */
     color: var(--basicTextColor);
     animation: wave 30s ease infinite;
-    background-size: 400% 400%;
-    height: 100%;
+    background-size: 200% 200%;
 }
   
 @keyframes wave
@@ -104,10 +103,7 @@ input
     backdrop-filter: blur(50px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
     height: 3rem;
-    border-radius: 20px;
     align-items: center;
-    padding: 0.2rem;
-    margin: 0.5rem;
     gap: 1rem;
     flex-grow: 1;
 }
@@ -128,7 +124,13 @@ input
     100% { transform: scale(1); }
     }
   
-
+#menuLabel
+{
+    display: flex;
+    justify-content: center;
+    background-color: var(--navbarBg);
+    color: var(--base-color2);
+}
 
 @media screen and (min-width : 801px) and (max-width : 1000px)
 {
@@ -167,22 +169,21 @@ input
         height: 25rem;
     }
 
+    
+    #menuShowHide + label:before {
+        content:"Show menu";
+    }
+    #menuShowHide:checked + label:before {
+        content:"Hide Menu";
+    }
+
     .card
     {
         width: 100%;
     }
 }
 
-#menuShowHide + label:before {
-    content:"Show menu";
-}
-#menuShowHide:checked + label:before {
-    content:"Hide Menu";
-}
 
-#menuShowHide:checked ~ #mainMenu {
-    display:block;
-}
 
 .footer
 {
@@ -384,9 +385,15 @@ button {
     {
         flex-direction: column !important;
     }
+
 }
 
 table input, #the_lab_self_demon_level
 {
     color: var(--navbarBg);
+}
+
+    
+#menuShowHide:checked ~ #mainMenu {
+    display:block;
 }

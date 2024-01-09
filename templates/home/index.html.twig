@@ -21,7 +21,10 @@
         <div class="rowButtons">
             <a class="looksLikeAButtonGrey">Join In</a>
             <a class="looksLikeAButtonGrey">Log In</a>
-            <a href="{{path('game')}}" alt="Play button" class="looksLikeAButtonViolet">Play</a>
+            <div class="specialButton">
+                <a href="{{path('game')}}" alt="Play button" class="looksLikeAButtonViolet pixel-corners">Play</a>
+                <a href="{{path('game')}}" alt="Play button" class="looksLikeAButtonViolet shadow">Play</a>
+            </div>
         </div>
     </div>
 
@@ -30,7 +33,7 @@
             <div class="titleOverCard">
                 <h2>For both newcomers and veterans alike</h2>
             </div>
-            <div class="cardContent">
+            <div class="cardContent pixel-corners">
                 <img class="cardSvg" alt="medal icon" src=" {{asset('img/medal-black.svg')}}">
                 <p>A new player guide in-game will help you to master the game. For players comfortable with the genre, you’ll just feel like home.</p>
             </div>
@@ -40,7 +43,7 @@
             <div class="titleOverCard">
                 <h2>Join and participate in the game community.</h2>
             </div>
-            <div class="cardContent">
+            <div class="cardContent pixel-corners">
                 <img class="cardSvg" alt="planet icon" src=" {{asset('img/planet-black.svg')}}">
                 <p>Propose your mythological figures or boost already existing suggestions</p>
             </div>
