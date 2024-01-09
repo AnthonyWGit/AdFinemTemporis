@@ -54,26 +54,26 @@
             {% block body %}
 
             {% endblock %}
-            {% block footer %}
-                <footer class="footer">
-                    <div class="footerRow">
-                        <div class="eulaRow">
-                            <p>EULA</p>
-                        </div>
-                        <div class="socialsColumn">
-                            <p>Socials</p>
-                            <ul>
-                                <li><img class="contactImg" src="{{ asset('img/x-icon.svg') }}"> X</li>
-                                <li><img class="contactImg" src="{{ asset('img/insta.svg') }}"> Instagram</li>
-                                <li><img class="contactImg" src="{{ asset('img/tiktok.svg') }}"> TikTok</li>
-                            </ul>
-                        </div>
-                        <div class="contactRow">
-                            <img class="contactImg" src="{{ asset('img/contact.svg') }}"> <a href="mailto:admin@atf.com">Contact</a>
-                        </div>
-                    </div>
-                </footer>
-            {% endblock %}
         </div>
+        {% block footer %}
+        <footer class="footer">
+            <div class="footerRow">
+                <div class="eulaRow">
+                    <a class="linkNoBase" href="#">EULA</a>
+                </div>
+                <div class="socialsColumn">
+                    <p>Socials</p>
+                    <ul class="socials">
+                        <li><a class="linkNoBase" href="#"><img class="contactImg" src="{{ asset('img/x-icon-white.svg') }}"> X</a></li>
+                        <li><a class="linkNoBase" href="#"><img class="contactImg" src="{{ asset('img/insta.svg') }}"> Instagram</a></li>
+                        <li><a class="linkNoBase" href="#"><img class="contactImg" src="{{ asset('img/tiktok-white.svg') }}"> TikTok</a></li>
+                    </ul>
+                </div>
+                <div class="contactRow">
+                    <a class="linkNoBase align" href="mailto:admin@atf.com"><img class="contactImg" src="{{ asset('img/contact.svg') }}">Contact</a>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
     </body>
 </html>
