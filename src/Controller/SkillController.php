@@ -21,7 +21,7 @@ class SkillController extends AbstractController
         $pagination = $paginator->paginate(
             $skillRepository->findBy([], ["id" => "ASC"]),
             $request->query->getInt('page',1),
-            5
+            10
         );
         return $this->render('skill/index.html.twig', [
             'skills' => $skills,
