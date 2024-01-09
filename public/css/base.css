@@ -1,7 +1,7 @@
 :root
 {
     --base-color1 : #191970cd;
-    --base-noalpha-color1 :#1a1a3f;
+    --base-noalpha-color1 :#d8b5b8;
     --base-color2 : #3d0029;
     --postContentColor : rgba(0, 0, 0, 1);
     --blueButton : rgba(47, 0, 255,0.5);
@@ -10,12 +10,15 @@
     --blueButtonHover : rgba(47, 0, 255,0.75);
     --textBoxColor : rgba(240, 255, 255, 0.45);
     --basicTextColor : #ffd700;
+    --colorForLightBg : #322a00;
     --gradient : linear-gradient(45deg, var(--base-color1), var(--base-color2));
     --basicLinksColor : orange;
     --formInside : rgba(238, 130, 238, 0.493);
-    --navbarText : rgba(255, 255, 255, 0.2);
+    --navbarBg : #dbdcea;
+    --navbarText:#240528;
     --tableCells : hsla(202, 83%, 9%, 0.336);
-    --menuColor : rgba(25, 25, 112, 0.75);
+    --menuColor : #00001bbf;
+    --footerColor:/*rgb(118, 1, 207)*/var(--menuColor);
 }
 
 *
@@ -30,7 +33,17 @@ html
     background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
     background-attachment: fixed;
     color: var(--basicTextColor);
+    animation: wave 30s ease infinite;
+    background-size: 400% 400%;
+}
 
+@keyframes wave
+{
+    0% {background-position: 0 50%;}
+    50%{background-position: 100% 50%;}
+    100% {
+		background-position: 0% 50%;
+	}
 }
 .linkNoBase
 {
@@ -82,7 +95,7 @@ input
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    background-color: var(--navbarText);
+    background-color: var(--navbarBg);
     backdrop-filter: blur(50px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
     height: 3rem;
@@ -168,17 +181,18 @@ input
 
 .footer
 {
+    border-top: solid 0.25px var(--navbarBg);
     display: flex;
     /* height: 10rem; */
     margin-top: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--footerColor);
     padding: 2rem 0 2rem 0;
 }
 .navbar a
 {
     font-size: 1.5rem;
     text-decoration: none;
-    color: azure;
+    color: var(--navbarText);
 }
 
 .centerTitle
@@ -261,23 +275,6 @@ button {
       100% { -webkit-transform: scale(50) rotate(45deg); opacity: 0; }
   }
 
-.rowButtons
-{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 2rem;
-    padding: 1rem;
-}
-
-@media screen and (max-width:350px) {
-    .rowButtons
-    {
-        flex-direction:column;
-        align-items: center;
-    }
-}
-
 .centerWrap
 {
     display: flex;
@@ -318,7 +315,7 @@ button {
     align-items: center;
     flex-grow: 1;
 }
-.socialsColumn > ul > li
+.socialsColumn > ul > li > a
 {
     align-items: center;
     display: flex;
@@ -352,4 +349,39 @@ button {
     align-items: center;
     font-size: 2em;
     margin: 1.5rem;
+}
+
+.align
+{
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width : 700px) {
+    .footerRow
+    {
+        justify-content: center;
+        gap: 1rem;
+    }
+    .eulaRow
+    {
+        width: 100%;
+    }
+    .socialsColumn
+    {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width : 400px)
+{
+    .socials
+    {
+        flex-direction: column !important;
+    }
+}
+
+table input, #the_lab_self_demon_level
+{
+    color: var(--navbarBg);
 }
