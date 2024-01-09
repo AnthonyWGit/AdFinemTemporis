@@ -1,6 +1,6 @@
 :root
 {
-    --base-color1 : #191970cd;
+    --base-color1 : /* #191971cd */ rgba(2,0,36,1);
     --base-noalpha-color1 :#d8b5b8;
     --base-color2 : #3d0029;
     --postContentColor : rgba(0, 0, 0, 1);
@@ -11,7 +11,7 @@
     --textBoxColor : rgba(240, 255, 255, 0.45);
     --basicTextColor : #ffd700;
     --colorForLightBg : #322a00;
-    --gradient : linear-gradient(45deg, var(--base-color1), var(--base-color2));
+    --gradient : linear-gradient(to top right, var(--base-color1), ease-in-out, (--base-color2));
     --basicLinksColor : orange;
     --formInside : rgba(238, 130, 238, 0.493);
     --navbarBg : #dbdcea;
@@ -30,13 +30,18 @@
 html
 {
 
-    background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
-    background-attachment: fixed;
+    background: rgb(2,0,36);
+    background: -moz-linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(61,0,41,1) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(61,0,41,1) 100%);
+    background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(61,0,41,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#020024",endColorstr="#3d0029",GradientType=1); 
+    /* background-attachment: fixed; */
     color: var(--basicTextColor);
     animation: wave 30s ease infinite;
     background-size: 400% 400%;
+    height: 100%;
 }
-
+  
 @keyframes wave
 {
     0% {background-position: 0 50%;}
