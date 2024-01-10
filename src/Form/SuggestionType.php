@@ -18,9 +18,10 @@ class SuggestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class)
-            ->add('postContent', TextareaType::class)
+            ->add('title', TextType::class, ['row_attr' => ['class' => 'formRow']])
+            ->add('postContent', TextareaType::class, ['row_attr' => ['class' => 'formRow']])
             ->add('img', FileType::class, [
+                'row_attr' => ['class' => 'formRow'],
                 'required' => false,
                 'label' => 'Img (JPEG/JPG/PNG)',
                                 // unmapped fields can't define their validation using annotations
