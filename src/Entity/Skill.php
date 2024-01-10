@@ -154,6 +154,12 @@ class Skill
             $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
             $dmgDone = $dmgCalcPure - $endReduction;
         }
+        else if ($this->getDmgType() == "agi")
+        {
+            $dmgCalcPure = (($this->getBaseDmg() * 0.1) + ($demonPlayer1->getTotalAgi()));
+            $endReduction = ($demonPlayer2->getTotalEnd() * 0.01);
+            $dmgDone = $dmgCalcPure - $endReduction;
+        }
         else if ($this->getDmgType() == "str/agi")
         {
             $dmgCalcPure = (($this->getBaseDmg() * 0.1) + (($demonPlayer1->getTotalStr()) * 0.3) + (($demonPlayer1->getTotalAgi() * 0.7)));
