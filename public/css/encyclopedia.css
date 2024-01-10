@@ -275,7 +275,7 @@ td:first-child, th:first-child
 
 .first > *, .previous > *, .page > *, .next > *, .last >*
 {
-    color: black;
+    color: orange;
     text-decoration: none;
 }
 
@@ -295,3 +295,4 @@ td:first-child, th:first-child
 {
     color: orange;
 }
+
