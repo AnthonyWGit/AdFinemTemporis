@@ -27,6 +27,7 @@
                 <tr>
                     <td>ID</td>
                     <td>Titre</td>
+                    <td>Author</td>
                     <td>Post Date</td>
                     <td>Hidden status</td>
                     <td>Actions</td>
@@ -37,6 +38,7 @@
                 <tr>
                     <td>{{suggestion.id}}</td>
                     <td>{{suggestion.title}}</td>
+                    <td>{{suggestion.playersSuggestions[0].username}}</td>
                     <td>{{suggestion.postDateFormat}}</td>
                     {% if suggestion.hiddenStatus == 0 %}
                         <td>Safe</td>
