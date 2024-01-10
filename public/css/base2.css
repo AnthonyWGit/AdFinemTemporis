@@ -33,7 +33,6 @@ html
     background-size: 400% 400%;
     height: 100%;
     color: var(--basicTextColor);
-<<<<<<< HEAD
 }
 
 @keyframes wave
@@ -43,8 +42,6 @@ html
     100% {
 		background-position: 0% 50%;
 	}
-=======
->>>>>>> 062fff506e314b70799b41025ed038604123db4f
 }
 
 h1
