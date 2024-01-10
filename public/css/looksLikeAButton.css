@@ -1,7 +1,6 @@
 .looksLikeAButtonGrey {
     display: flex;
     background-color: rgba(25, 25, 112, 0.8);
-    border-radius: 15px;
     padding: 1.5rem;
     width: 7.5rem;
     height: 3rem;
@@ -9,24 +8,15 @@
     align-items: center;
     text-align: center;
     border: solid 0.5px var(--navbarText);
-    transition: border 1s ease-in-out; /* Add transition for smooth glowing effect */
+    transition: all 0.3s ease-in-out;
     text-decoration: none;
     color: gold;
+    box-shadow: 0px 0px 0px 0px #FFDB00;
 }
 
 .looksLikeAButtonGrey:hover {
-    border: 0.5px solid white; /* Change the color as needed */
-    animation: border_glow 2s ease-in-out infinite;
+    box-shadow: 7px 7px 0px 3px #FFDB00;
 }
-
-/* Define the animation */
-@keyframes border_glow {
-    0% { border: solid 0.5px var(--navbarText); } /* Starting color of the glow */
-    50% { border: 0.5px solid white; } /* Color of the glow at the middle of the animation */
-    100% { border: solid 0.5px var(--navbarText); } /* Ending color of the glow */
-}
-
-
 
 .looksLikeAButtonBlue
 {
@@ -78,7 +68,6 @@
     color: orange;
     margin: 0.5rem;
     position: relative;
-
     /* Add transition for smooth glow effect */
     transition: all 0.3s ease-in-out; 
 }
@@ -98,26 +87,58 @@
 
 .looksLikeAButtonViolet
 {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3.5rem;
-    background-color: var(--postContentColor);
+    padding: 1.5rem 3.5rem;
+    background-color: var(--basicTextColor);
     color: blue;
-    border-radius: 35%;
     text-decoration: none;
-    color: gold;
     position: relative;
-    box-shadow: 0 0 0 0 crimson;
-    animation: glow 3s ease-out infinite;
+    font-weight: 700;
+    /* box-shadow:rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px; */
+    /* box-shadow:rgba(240, 46, 170, 0.4) 0px 0px 0px 5px, rgba(240, 46, 170, 0.3) 0px 0px 0px 10px, rgba(240, 46, 170, 0.2)  0px 0px 0px 15px, rgba(240, 46, 170, 0.1)  0px 0px 0px 20px, rgba(240, 46, 170, 0.05)  0px 0px 0px 25px; */
+    transition: all 1s;
+    z-index: 2;
+    animation: movingshadow linear 3s infinite;
 }
 
-@keyframes glow {
-    0% {
-      box-shadow: 0 0 0 0 crimson;
-    }
-    
-    50% {
-      box-shadow: 0 0 15px 0 crimson;
-    }
-  }
+@keyframes movingshadow {
+    0%{box-shadow: 0;}
+    50%{box-shadow:rgba(240, 46, 170, 0.4) 0px 0px 0px 5px, rgba(240, 46, 170, 0.3) 0px 0px 0px 10px, rgba(240, 46, 170, 0.2)  0px 0px 0px 15px, rgba(240, 46, 170, 0.1)  0px 0px 0px 20px, rgba(240, 46, 170, 0.05)  0px 0px 0px 25px;}
+    100%{box-shadow: 0;}
+}
+
+@keyframes movingshadow2 {
+    0%{box-shadow: 0;}
+    50%{box-shadow:rgba(240, 46, 170, 0.4) 0px 0px 0px 15px, rgba(240, 46, 170, 0.3) 0px 0px 0px 20px, rgba(240, 46, 170, 0.2)  0px 0px 0px 25px, rgba(240, 46, 170, 0.1)  0px 0px 0px 30px, rgba(240, 46, 170, 0.05)  0px 0px 0px 35px;}
+    100%{box-shadow: 0;}
+}
+
+.shadow{
+    position: absolute;
+    border-radius: 50px;
+    top: 0;
+    z-index: -1;
+    background-color: transparent;
+}
+
+.looksLikeAButtonViolet:hover + .shadow{
+    /* box-shadow:rgba(240, 46, 170, 0.4) 0px 0px 0px 35px, rgba(240, 46, 170, 0.3) 0px 0px 0px 30px, rgba(240, 46, 170, 0.2)  0px 0px 0px 25px, rgba(240, 46, 170, 0.1)  0px 0px 0px 20px, rgba(240, 46, 170, 0.05)  0px 0px 0px 15px; */
+    animation: movingshadow2 linear 3s infinite;
+}
+
+.looksLikeAButtonViolet:hover {
+    scale : 1.2;
+}
+
+.specialButton
+{
+    position: relative;
+}
+
+/* .looksLikeAButtonViolet:hover
+{
+    box-shadow: none;
+} */
