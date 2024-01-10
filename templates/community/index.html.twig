@@ -39,6 +39,9 @@
                                     <a class="zPos" href="{{ path('deleteSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
                                         X
                                     </a>
+                                    <a class="zPos" href="{{ path('editSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                        Edit
+                                    </a>
                                 </div>
                             {% endif %}
                             <div class="row">
