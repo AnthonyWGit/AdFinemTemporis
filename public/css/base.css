@@ -38,8 +38,7 @@ html
     /* background-attachment: fixed; */
     color: var(--basicTextColor);
     animation: wave 30s ease infinite;
-    background-size: 400% 400%;
-    height: 100%;
+    background-size: 200% 200%;
 }
   
 @keyframes wave
@@ -79,6 +78,7 @@ input
     flex-direction: column;
     flex-grow: 1;
     min-height: 100dvh;
+    overflow: auto;
 }
 
 .iconText
@@ -104,10 +104,7 @@ input
     backdrop-filter: blur(50px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%) contrast(45%) brightness(140%);
     height: 3rem;
-    border-radius: 20px;
     align-items: center;
-    padding: 0.2rem;
-    margin: 0.5rem;
     gap: 1rem;
     flex-grow: 1;
 }
@@ -128,7 +125,13 @@ input
     100% { transform: scale(1); }
     }
   
-
+#menuLabel
+{
+    display: flex;
+    justify-content: center;
+    background-color: var(--navbarBg);
+    color: var(--base-color2);
+}
 
 @media screen and (min-width : 801px) and (max-width : 1000px)
 {
@@ -167,22 +170,21 @@ input
         height: 25rem;
     }
 
+    
+    #menuShowHide + label:before {
+        content:"Show menu";
+    }
+    #menuShowHide:checked + label:before {
+        content:"Hide Menu";
+    }
+
     .card
     {
         width: 100%;
     }
 }
 
-#menuShowHide + label:before {
-    content:"Show menu";
-}
-#menuShowHide:checked + label:before {
-    content:"Hide Menu";
-}
 
-#menuShowHide:checked ~ #mainMenu {
-    display:block;
-}
 
 .footer
 {
@@ -192,6 +194,8 @@ input
     margin-top: auto;
     background-color: var(--footerColor);
     padding: 2rem 0 2rem 0;
+    flex-wrap: nowrap;
+    overflow: auto;
 }
 .navbar a
 {
@@ -384,9 +388,51 @@ button {
     {
         flex-direction: column !important;
     }
+
+}
+    
+#menuShowHide:checked ~ #mainMenu {
+    display:block;
 }
 
-table input, #the_lab_self_demon_level
-{
-    color: var(--navbarBg);
-}
+.pixel-corners {
+    position: relative;
+    clip-path: polygon(
+      0px calc(100% - 20px),
+      4px calc(100% - 20px),
+      4px calc(100% - 12px),
+      8px calc(100% - 12px),
+      8px calc(100% - 8px),
+      12px calc(100% - 8px),
+      12px calc(100% - 4px),
+      20px calc(100% - 4px),
+      20px 100%,
+      calc(100% - 20px) 100%,
+      calc(100% - 20px) calc(100% - 4px),
+      calc(100% - 12px) calc(100% - 4px),
+      calc(100% - 12px) calc(100% - 8px),
+      calc(100% - 8px) calc(100% - 8px),
+      calc(100% - 8px) calc(100% - 12px),
+      calc(100% - 4px) calc(100% - 12px),
+      calc(100% - 4px) calc(100% - 20px),
+      100% calc(100% - 20px),
+      100% 20px,
+      calc(100% - 4px) 20px,
+      calc(100% - 4px) 12px,
+      calc(100% - 8px) 12px,
+      calc(100% - 8px) 8px,
+      calc(100% - 12px) 8px,
+      calc(100% - 12px) 4px,
+      calc(100% - 20px) 4px,
+      calc(100% - 20px) 0px,
+      20px 0px,
+      20px 4px,
+      12px 4px,
+      12px 8px,
+      8px 8px,
+      8px 12px,
+      4px 12px,
+      4px 20px,
+      0px 20px
+    );
+  }
