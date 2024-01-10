@@ -13,9 +13,9 @@
 
 {% block body %}
     {% if not edit %}
-        <h1>Create a suggestion</h1>
+        <h1 class="centerTitle">Create a suggestion</h1>
     {% else %}
-        <h1>Edit</h1>
+        <h1 class="centerTitle">Edit a suggestion</h1>
     {% endif %}
     <div class="formGlobal">
         <div class="formInside">
@@ -25,7 +25,7 @@
             {{ form_row(formNewSuggestion.img) }}
             {{ form_row(formNewSuggestion.Validate) }}
         {{ form_end(formNewSuggestion) }}
-        {{dump(formNewSuggestion)}}
+        {# {{dump(formNewSuggestion)}} #}
         </div>
     </div>
 {% endblock %}
