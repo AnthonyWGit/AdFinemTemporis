@@ -45,7 +45,14 @@ class CommunityController extends AbstractController
         if ($this->isGranted('ROLE_BANNED', $user)) {
             return $this->redirectToRoute('account');
         }
-
+        //On editing route we check if user is trying to edit other user posts
+        {
+            // dd(in_array($this->getUser(), $suggestion->getPlayersSuggestions()->toArray()));
+            if ($request->attributes->get('_route') == "editSuggestion" && !in_array($this->getUser(), $suggestion->getPlayersSuggestions()->toArray()))
+            {
+                die('What are you trying to do ?');
+            }
+        }
         //Checking if a suggestion has been send and been validated by admin
         {
             foreach ($this->getUser()->getSuggestions() as $suggestion)
@@ -64,7 +71,7 @@ class CommunityController extends AbstractController
         //Checking if a pending suggestion exists
         foreach ($this->getUser()->getSuggestions() as $suggestion)
         {
-            if ($suggestion->getStatus("pending"))
+            if ($suggestion->getStatus("pending") && $request->attributes->get('_route') == "newSuggestion")
             {
                 $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
                 (
@@ -103,19 +110,31 @@ class CommunityController extends AbstractController
                 $entityManager->persist($suggestion); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
 
-                $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
-                (
-                    'notice',
-                    'Your created a suggestion. It has been sent to an admin for review.'
-                );
-
+                if ($request->attributes->get('_route') == "newSuggestion")
+                {
+                    $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                    (
+                        'notice',
+                        'You created a suggestion. It has been sent to an admin for review.'
+                    );                    
+                }
+                if ($request->attributes->get('_route') == "editSuggestion")
+                {
+                    $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                    (
+                        'notice',
+                        'You modified your suggestion. It has been hidden and sent to an admin for review.'
+                    );
+                    $suggestion->setIsVerified(2);
+                    $entityManager->flush();
+                }
                 return $this->redirectToRoute('community'); //redirect to list stagiaires if everything is ok
             }
         
         return $this->render("community/new.html.twig", ['formNewSuggestion' => $form, 'edit' => $suggestion->getId()]);
     }
 
-    #[Route('community/suggestion/detail/{title}{player}', name: 'detailSuggestion')]
+    #[Route('community/suggestion/detail/{title}/{player}', name: 'detailSuggestion')]
     public function detail(Suggestion $suggestion, Player $player): Response
     {
         return $this->render('community/detail.html.twig', [
@@ -170,7 +189,7 @@ class CommunityController extends AbstractController
             return $this->redirectToRoute('account');
         }
 
-        if ($suggestion->getStatus() == "accepted" & !$this->is_granted("ROLE_ADMIN", $user))
+        if ($suggestion->getStatus() == "accepted" & !$this->isGranted("ROLE_ADMIN", $user))
         {
             $this->addFlash(
                 'error',
