@@ -28,13 +28,13 @@
     <body>
 
         <input type="checkbox" id="menuShowHide">
-        <label for="menuShowHide"></label>
+        <label for="menuShowHide" id="menuLabel"></label>
         <nav class="navbar" id="mainMenu">
             <ul>
-                <li><a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Home.svg') }}"> Home</a></li>
-                <li><a class="iconText" href=" {{path("demonsList")}}" ><img class="navSvg" src="{{ asset('img/Book.svg') }}"> Encyclopedia</a></li>
-                <li><a class="iconText" href=" {{path("the_lab")}}" ><img class="navSvg" src="{{ asset('img/Chem.svg') }}"> The Lab</a></li>
-                <li><a class="iconText" href=" {{path("community")}}" ><img class="navSvg" src="{{ asset('img/Community.svg') }}"> Community</a></li>
+                <li><a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/home-violet.svg') }}"> Home</a></li>
+                <li><a class="iconText" href=" {{path("demonsList")}}" ><img class="navSvg" src="{{ asset('img/book-violet.svg') }}"> Encyclopedia</a></li>
+                <li><a class="iconText" href=" {{path("the_lab")}}" ><img class="navSvg" src="{{ asset('img/chem-violet.svg') }}"> The Lab</a></li>
+                <li><a class="iconText" href=" {{path("community")}}" ><img class="navSvg" src="{{ asset('img/community-violet.svg') }}"> Community</a></li>
                 {% if not app.user %}
                     <a class="iconText" href=" {{path("app_login")}} ">Login</a></li>
                     <a class="iconText" href=" {{path("app_register") }}">Register</a></li>
