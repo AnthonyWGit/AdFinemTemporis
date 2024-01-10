@@ -29,3 +29,9 @@
 {
     overflow: auto;
 }
+
+table input, #the_lab_self_demon_level, #the_lab_self_demon_levelCPU    
+{
+    color: var(--navbarBg);
+}
+
