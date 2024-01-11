@@ -18,7 +18,7 @@ function typeWriter2() {
     if (index < text2.length) {
         document.querySelector(".TextDiv").innerHTML += text2.charAt(index);
         index++;
-        setTimeout(typeWriter2, 50); // Delay between each character
+        setTimeout(typeWriter2, 25); // Delay between each character
     }
     else
     {   setTimeout(function (){
