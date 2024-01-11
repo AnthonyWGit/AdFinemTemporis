@@ -37,6 +37,7 @@ class CommunityController extends AbstractController
     #[Route('community/suggestion/{id}/edit', name: 'editSuggestion')]
     public function new(Suggestion $suggestion = null, FileUploader $fileUploader = null, Request $request, EntityManagerInterface $entityManager): Response
     {
+
         //Banned users should not be able to post a suggestion or edit the one they already made 
         // Get the current user
         $user = $this->getUser();
@@ -52,12 +53,12 @@ class CommunityController extends AbstractController
             {
                 die('What are you trying to do ?');
             }
-        }
+        }        
         //Checking if a suggestion has been send and been validated by admin
         {
-            foreach ($this->getUser()->getSuggestions() as $suggestion)
+            foreach ($this->getUser()->getSuggestions() as $suggestionV)
             {
-                if (!$suggestion->isVerified())
+                if (!$suggestionV->isVerified())
                 {
                     $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
                     (
@@ -68,10 +69,11 @@ class CommunityController extends AbstractController
                 }
             }
         }
+
         //Checking if a pending suggestion exists
-        foreach ($this->getUser()->getSuggestions() as $suggestion)
+        foreach ($this->getUser()->getSuggestions() as $suggestionZ)
         {
-            if ($suggestion->getStatus("pending") && $request->attributes->get('_route') == "newSuggestion")
+            if ($suggestionZ->getStatus() == "pending" && $request->attributes->get('_route') == "newSuggestion")
             {
                 $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
                 (
