@@ -6,6 +6,7 @@ use App\Entity\Suggestion;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -35,7 +36,12 @@ class SuggestionType extends AbstractType
                             'image/png',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid document',
-                    ])
+                    ]),
+                    new Image([
+                        'maxWidth' => 600,
+                        'maxHeight' => 600,
+                        ]
+                    )
                 ],
             ])
             ->add('Validate', SubmitType::class, [
