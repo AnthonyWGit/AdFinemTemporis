@@ -188,7 +188,7 @@ input
 
 .footer
 {
-    border-top: solid 0.25px var(--navbarBg);
+    border-top: solid 2px var(--navbarBg);
     display: flex;
     /* height: 10rem; */
     margin-top: auto;
@@ -338,11 +338,18 @@ button {
     list-style: none;
     gap: 1rem;
 }
-.contactImg
+.contactSocial
 {
     width: 5rem;
     height: 5rem;
 }
+
+.contactImg
+{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
 
 .contactRow
 {
@@ -364,6 +371,7 @@ button {
 {
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
 @media screen and (max-width : 700px) {
