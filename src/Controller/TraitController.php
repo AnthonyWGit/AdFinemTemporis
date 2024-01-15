@@ -52,7 +52,7 @@ class TraitController extends AbstractController
                     'Your changes were saved!'
                 );
 
-                return $this->redirectToRoute('traitsList'); //redirect to list stagiaires if everything is ok
+                return $this->redirectToRoute('traitsList'); //redirect to list traits if everything is ok
             }
         
         return $this->render("trait/new.html.twig", ['formNewDemonTrait' => $form, 'edit' => $demonTrait->getId()]);
@@ -69,5 +69,4 @@ class TraitController extends AbstractController
         );
         return $this->redirectToRoute('traitsList');
     }
-
 }
