@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `battle` (
   KEY `IDX_139917347955D46B` (`demon_player2_id`),
   CONSTRAINT `FK_139917346BE07B85` FOREIGN KEY (`demon_player1_id`) REFERENCES `demon_player` (`id`),
   CONSTRAINT `FK_139917347955D46B` FOREIGN KEY (`demon_player2_id`) REFERENCES `demon_player` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=287 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=292 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.battle : ~0 rows (environ)
 
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `demon_player` (
   CONSTRAINT `FK_EFE69AC61C18632B` FOREIGN KEY (`trait_id`) REFERENCES `demon_trait` (`id`),
   CONSTRAINT `FK_EFE69AC626CFD2F3` FOREIGN KEY (`demon_base_id`) REFERENCES `demon_base` (`id`),
   CONSTRAINT `FK_EFE69AC699E6F5DF` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=488 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=499 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table adfinemtemporis.demon_player : ~9 rows (environ)
 REPLACE INTO `demon_player` (`id`, `player_id`, `trait_id`, `demon_base_id`, `str_points`, `end_points`, `agi_points`, `int_points`, `lck_points`, `experience`, `lvl_up_points`) VALUES
@@ -104,8 +104,7 @@ REPLACE INTO `demon_player` (`id`, `player_id`, `trait_id`, `demon_base_id`, `st
 	(442, 8, 3, 6, 0, 0, 0, 0, 0, 0, 0),
 	(448, 8, 3, 6, 0, 0, 0, 0, 0, 0, 0),
 	(456, 1, 1, 1, 5, 0, 4, 0, 0, 0, 0),
-	(482, 15, 4, 4, 0, 0, 0, 2, 0, 1800, 1),
-	(486, 5, 1, 5, 0, 0, 0, 0, 0, 600, 1);
+	(482, 15, 4, 4, 0, 0, 0, 2, 0, 1800, 1);
 
 -- Listage de la structure de table adfinemtemporis. demon_player_skill
 CREATE TABLE IF NOT EXISTS `demon_player_skill` (
@@ -126,9 +125,7 @@ REPLACE INTO `demon_player_skill` (`demon_player_id`, `skill_id`) VALUES
 	(440, 20),
 	(442, 20),
 	(448, 20),
-	(482, 3),
-	(486, 1),
-	(486, 19);
+	(482, 3);
 
 -- Listage de la structure de table adfinemtemporis. demon_trait
 CREATE TABLE IF NOT EXISTS `demon_trait` (
@@ -217,16 +214,15 @@ CREATE TABLE IF NOT EXISTS `player` (
 
 -- Listage des données de la table adfinemtemporis.player : ~10 rows (environ)
 REPLACE INTO `player` (`id`, `username`, `password`, `gold`, `stage`, `register_date`, `email`, `roles`, `is_verified`) VALUES
-	(1, 'Olalal', '$2y$13$nfKUHgbppLCB74JcIBmYc.ckMIte6jgfzxRir25HtbwTbkcaeazCC', 0, 0, '2023-10-11 10:43:53', 'ola@gmail.com', '[]', 0),
+	(1, 'Olalal', '$2y$13$nfKUHgbppLCB74JcIBmYc.ckMIte6jgfzxRir25HtbwTbkcaeazCC', 0, 0, '2023-10-11 10:43:53', 'ola@gmail.com', '["ROLE_USER"]', 0),
 	(2, 'Olalale', '$2y$13$d4qayu3defJ6iO4Ssr.rbOBxjp1g2HSvNm2YsmgOE1WjEwyIiSHym', 0, 0, '2023-10-11 10:44:47', 'ola@gmail.com', '["ROLE_USER"]', 1),
 	(4, 'User', '$2y$13$Oy57JjphDud1/cbc0MT0M.s/PfKt1UWg/tVLnP9Rqso1YxC0koFM2', 0, 0, '2023-10-11 13:05:13', 'user@gmail.com', '["ROLE_USER"]', 1),
-	(5, 'Admin', '$2y$13$bu3ITkY7nVaBBlBjgxxcxexB7GVdv7XL0xj.LofbBCLRKEU432QDC', 30, 9999, '2023-10-12 11:12:40', 'admin@gmail.com', '["ROLE_ADMIN"]', 1),
+	(5, 'Admin', '$2y$13$bu3ITkY7nVaBBlBjgxxcxexB7GVdv7XL0xj.LofbBCLRKEU432QDC', 0, 0, '2023-10-12 11:12:40', 'admin@gmail.com', '["ROLE_ADMIN"]', 1),
 	(7, 'UserTwo', '$2y$13$CMcsnzGceFX/2YiL1Mpt5.vNLySi035fyLB6yZfjVpqChJLQqVg..', 0, 0, '2023-10-16 09:51:47', 'thisemail@gmail.com', '[]', 1),
 	(8, 'CPU', 'p', 0, 0, '2023-10-17 23:59:07', 'null@null.fr', '["ROLE_CPU"]', 1),
 	(10, 'Usere', '$2y$13$1U187peUsG2Ti6zIjPlBz.9Uu2tVc9q4bdPTGqH0NsDmAualSKj86', 0, 0, '2023-10-28 15:05:56', 'usere@gmail.com', '["ROLE_USER"]', 1),
 	(11, 'KEKX', 'NOTSAFE', 0, 0, '2023-11-27 20:27:00', 'xxx@email.fr', '[]', 1),
 	(12, 'Kekekew', '$2y$13$VaKw9NuQ0VoC2AoSrcCjGOr7pMYQbpKNyAPLD.Gnz9EycSLgfAeQy', 0, 0, '2023-12-30 12:20:01', 'keka@gmail.com', '["ROLE_USER", "ROLE_BANNED"]', 1),
-	(14, 'pute', '$2y$13$MfQCL3uF0a/Jg0RTbM2rgOSKl7AyYT96Ro0oalZwtKwXfZ3xfUA2m', 0, 0, '2024-01-03 20:51:36', 'az@fe.r', '[]', 1),
 	(15, 'Kekleo', '$2y$13$Aq.k8kXm3sgU7ljAGtg7me8kf.OW0dBTymg4KSOG1OzYdtPhwJzlO', 90, 9999, '2024-01-10 18:30:23', 'kekleo@gmail.com', '[]', 1);
 
 -- Listage de la structure de table adfinemtemporis. player_likes
