@@ -54,7 +54,38 @@ function calculateMaxCharacters(textBox) {
 
     return chunks;
 }
-  
+
+function whenArrowPressed(event) 
+{
+    if (event.key === 'ArrowRight') 
+    {
+        if (currentChunkIndex < textChunks.length - 1) 
+        {
+            currentChunkIndex++;
+            typeTextChunk();
+        }
+        else 
+        {
+            document.removeEventListener('keydown', whenArrowPressed)
+            $.ajax({
+                url: "/ajaxe/setStage/9999",
+                method: "GET",
+            }).done(function()
+            {
+                window.location.replace('/game/hub')
+            })
+        }
+    } 
+    else if (event.key === 'ArrowLeft') 
+    {
+        if (currentChunkIndex > 0) 
+        {
+            currentChunkIndex--;
+            typeTextChunk();
+        }
+    }
+}
+
 //jQuery 
 
 $(document).ready(function() {
@@ -114,40 +145,13 @@ console.log(`Maximum characters that can fit: ${maxCharacters}`);
 let textChunks = breakTextIntoChunks(textToDisplay, maxCharacters);
 console.log(`Number of text chunks: ${textChunks.length}`);
 console.log(textChunks)
-
+  // Event listener to start typing when spacebar is pressed
+document.addEventListener('keydown', whenArrowPressed);
 // Function to handle Spacebar key press for scrolling
 //eventListeners
 
-  // Event listener to start typing when spacebar is pressed
-  document.addEventListener('keydown', function (event) 
-  {
-    if (event.key === 'ArrowRight') 
-    {
-        if (currentChunkIndex < textChunks.length - 1) 
-        {
-            currentChunkIndex++;
-            typeTextChunk();
-        }
-        else 
-        {
-            $.ajax({
-                url: "/ajaxe/setStage/9999",
-                method: "GET",
-            }).done(function()
-            {
-                window.location.replace('/game/hub')
-            })
-        }
-    } 
-    else if (event.key === 'ArrowLeft') 
-    {
-        if (currentChunkIndex > 0) 
-        {
-            currentChunkIndex--;
-            typeTextChunk();
-        }
-    }
-});
+
+
 
 document.querySelector('#mute').addEventListener('click', function() {
     if (audio.muted == false)
