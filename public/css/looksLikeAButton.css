@@ -1,6 +1,6 @@
 .looksLikeAButtonGrey {
     display: flex;
-    background-color: rgba(25, 25, 112, 0.8);
+    background-color: var(--midnightButton);
     padding: 1.5rem;
     width: 7.5rem;
     height: 3rem;

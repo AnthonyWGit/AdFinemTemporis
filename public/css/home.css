@@ -3,6 +3,7 @@
 {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
     font-size: 2.5rem;
     padding: 1rem 0 5rem 0;
@@ -39,6 +40,15 @@
     padding: 0 0 3rem 0;
     position: absolute;
 }
+/* under Galaxy S8+ dimensions */
+@media screen and (max-width : 359px)
+{
+    .titleWithSmall
+    {
+        position: inherit;
+    }
+}
+
 .titleWithSmall > h1
 {
     text-align: center;

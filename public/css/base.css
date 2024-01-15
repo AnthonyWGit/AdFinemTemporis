@@ -4,6 +4,7 @@
     --base-noalpha-color1 :#d8b5b8;
     --base-color2 : #3d0029;
     --postContentColor : rgba(0, 0, 0, 1);
+    --midnightButton : rgba(25, 25, 112, 0.8);
     --blueButton : rgba(47, 0, 255,0.5);
     --blackButton : rgba(8, 3, 29, 1);
     --blackButtonHover : rgba(8, 3, 29, 0.5);
@@ -18,7 +19,7 @@
     --navbarText:#240528;
     --tableCells : hsla(202, 83%, 9%, 0.336);
     --menuColor : #00001bbf;
-    --footerColor:/*rgb(118, 1, 207)*/var(--menuColor);
+    --footerColor:/*rgb(118, 1, 207)*/rgba(25, 25, 112, 0.8);
 }
 
 *
@@ -188,7 +189,7 @@ input
 
 .footer
 {
-    border-top: solid 0.25px var(--navbarBg);
+    border-top: solid 2px var(--navbarBg);
     display: flex;
     /* height: 10rem; */
     margin-top: auto;
@@ -338,12 +339,22 @@ button {
     list-style: none;
     gap: 1rem;
 }
-.contactImg
+.contactSocial
 {
     width: 5rem;
     height: 5rem;
 }
 
+.contactImg
+{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.socialsText
+{
+    font-size: 1.5rem;
+}
 .contactRow
 {
     display: flex;
@@ -364,12 +375,14 @@ button {
 {
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
 @media screen and (max-width : 700px) {
     .footerRow
     {
         justify-content: center;
+        align-items: center;
         gap: 1rem;
     }
     .eulaRow
