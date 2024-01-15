@@ -84,16 +84,19 @@ function typeWriter5() {
 
 function choiceHorus()
 {
+    document.RemoveEventListener('keyup', choiceChernobog);
     window.location.replace("/game/choice/Horus");
 }
 
 function choiceXiuhcoatl()
 {
+    document.RemoveEventListener('keyup', choiceChernobog);
     window.location.replace("/game/choice/Xiuhcoatl");
 }
 
 function choiceChernobog()
 {
+    document.RemoveEventListener('keyup', choiceChernobog);
     window.location.replace("/game/choice/Chernobog");
 }
 
