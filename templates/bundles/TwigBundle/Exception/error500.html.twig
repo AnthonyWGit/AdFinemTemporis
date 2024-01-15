@@ -1,0 +1,28 @@
+
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('css/error.css') }}">
+{% endblock %}
+{% block body %}
+    <h1 style="text-align: center;">Action not authorized</h1>
+
+    <p style="text-align: center;">
+        You tried to do something that can do damage to whole game. You might have tried to :
+    </p>
+    <ul style="text-align: center;">
+        <li>
+            - Reset your progression while a combat is still running. Finish it before trying to reset your progression.
+            {% if is_granted("ROLE_ADMIN") %}
+        </li>
+        <li>
+            - Tried to delete or add a demon while a player is in combat. End that combat before proceeding any action.
+            {% endif %}
+        </li>
+    </ul>
+
+    <p>
+        The requested page couldn't be located. Checkout for any URL
+        misspelling or <a href="{{ path('app_home') }}">return to the homepage</a>.
+    </p>
+{% endblock %}
