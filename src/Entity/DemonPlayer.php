@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\DemonBase;
-use App\Service\LevelCalculator;
+use App\Service\Math;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\DemonPlayerRepository;
 use Doctrine\Common\Collections\Collection;
@@ -322,7 +322,7 @@ class DemonPlayer
     public function getLevel() : int
     {
         $experience = $this->getExperience();
-        return LevelCalculator::calculateLevel($experience);
+        return Math::calculateLevel($experience);
     }
 
     public function getMaxHp() : int
@@ -333,7 +333,7 @@ class DemonPlayer
         $level = $this->getLevel();
         $total = $baseEnd + ($bonusEndPoints * 20) + $bonusLvlUpPoints;
         $baseHp = $this->getDemonBase()->getBaseHp();
-        return LevelCalculator::calcMaxHp($total, $baseHp,$level);
+        return Math::calcMaxHp($total, $baseHp,$level);
     }
 
     //Simulation properties
@@ -344,7 +344,7 @@ class DemonPlayer
         $baseEndPts = $totalEnd - $demonBase->getEndDemonBase();
         $total = $demonBase->getEndDemonBase() + ($baseEndPts * 20) + $bonusLvlUpPointsValue;
         $baseHp = $demonBase->getBaseHp();
-        return LevelCalculator::calcMaxHp($total, $baseHp,$levelFictif);
+        return Math::calcMaxHp($total, $baseHp,$levelFictif);
     }
 
     public function getTotalStr(): int
