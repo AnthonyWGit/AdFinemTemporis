@@ -203,6 +203,21 @@
     height: 100%;
     border-radius: 15px;
 }
+
+.xpBar
+{
+    width: 100%;
+    height: 0.5rem;
+}
+
+#xpFillPlayer
+{
+    transition: 1s;
+    background-color: blue;
+    width: 0%;
+    height: 0.5rem;
+}
+
 .putRight
 {
     display: flex;
@@ -297,4 +312,9 @@
 .lvlUpBtn
 {
     margin: 0;
+}
+
+#actions, #Items, #Flee, .skill, .j
+{
+    cursor: pointer;
 }
