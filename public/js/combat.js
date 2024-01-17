@@ -117,21 +117,32 @@ function playerTurn()
 
 }
 
-function playerWon()
-{
+function playerWon() {
     $.ajax({
-        url: '/ajaxe/combatAjax',  // The URL of the route you defined in your Symfony controller
-        method: 'POST',  // Or 'POST', depending on your needs
-        data:
-        {
-            'isCombatResolved' : "Yes",
-            'Winner' : player1Name
+        url: '/ajaxe/combatAjax',
+        method: 'POST',
+        data: {
+            'isCombatResolved': "Yes",
+            'Winner': player1Name
         }
-    }).done(function(response) //The rest of the code is loaded only if ajax request is done 
-        {
-            setTimeout(window.location.replace("/game/combat/resolve"), 3000);
-        })
+    }).done(async function(response) {
+        for (var i = 0; i < response.levelsGained; i++) {
+            console.log(i);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            document.querySelector("#xpFillPlayer").style.width = '100%';
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            document.querySelector("#xpFillPlayer").style.width = '0%';
+            if (i == response.levelsGained - 1) {
+                console.log("i resolve");
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                document.querySelector("#xpFillPlayer").style.width = response.xpPercentage["percentage"] + '%';
+            }
+        }
+        console.log(response);
+        setTimeout(window.location.replace("/game/combat/resolve"), 3000);
+    });
 }
+
 //Sending ajax request to get combat data 
 $.ajax({
     url: '/ajaxe/combatAjax',  // The URL of the route you defined in your Symfony controller
