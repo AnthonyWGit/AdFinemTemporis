@@ -24,6 +24,9 @@
                     <div class="hpFillPlayer" id="hpFillPlayer"></div>
                 </div>
                 <p><span id="currentHpPlayer">{{demon.getMaxHp}} HP</span> / <span id="maxHpPlayer">{{demon.getMaxHp}} HP</span></p>
+                <div class="xpBar" id="xpBarPlayer">
+                    <div class="xpFillPlayer" id="xpFillPlayer" style="width: {{percentage.percentage}}%;"></div>
+                </div>
         {% endfor %}
         </div>
     </div>
