@@ -1,7 +1,7 @@
 <?php
 namespace App\Service;
 
-class LevelCalculator
+class Math
 {
     public static function calculateLevel(int $xp) : int
     {
