@@ -72,7 +72,7 @@ function whenArrowPressed(event)
                 method: "GET",
             }).done(function()
             {
-                window.location.replace('/game/hub')
+                window.location.replace('/game/hub');                
             })
         }
     } 
