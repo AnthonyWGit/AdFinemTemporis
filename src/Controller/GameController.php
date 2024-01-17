@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\Math;
 use App\Entity\Skill;
 use App\Entity\Battle;
 use App\Entity\DemonBase;
@@ -51,11 +52,11 @@ class GameController extends AbstractController
     // }
 
     #[Route('/ajaxe/setStage/{stage}', name: 'setStage')]
-    public function setStage(string $stage, Request $request, EntityManagerInterface $em) 
+    public function setStage(string $stage, Request $request, EntityManagerInterface $em)  : Response
     {
         $this->getUser()->setStage($stage);
         $em->flush();
-        return new Response();
+        return new JsonResponse();
     }
 
     #[Route('/endpoint', name: 'endpoint')]
@@ -106,6 +107,22 @@ class GameController extends AbstractController
         }
     }
 
+    #[Route('/game/hub', name: 'hub', priority: 1, methods: ["GET"])]
+    public function hub(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository) : Response
+    {
+        $demons = $this->getUser()->getDemonPlayer();
+        $session = $request->getSession();
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
+        if ($this->getUser()->getStage() != 9999) 
+        {
+            return $this->redirectToRoute("app_home");
+        }
+        return $this->render('game/hub.html.twig', [
+            'demons' => $demons,
+        ])->setSharedMaxAge(3600);
+    }
+
+
     #[Route('/ajaxe/combatAjax', name: 'combatAjax')]
     public function combatAjax(Request $request, ?Battle $battle, 
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
@@ -124,17 +141,32 @@ class GameController extends AbstractController
     $generatedCpu = $battleContent->getDemonPlayer2();
     $xpEarned = $battleContent->getXpEarned();
     $goldEarned = $battleContent->getGoldEarned();
+
     if ($request->request->get("isCombatResolved") == "Yes")
     {
         if ($request->request->get("Winner") == $this->getUser()->getUsername())
         {
+
+            //For lvlUp bar animation calculate how many levels demon 0 gains 
+            $currentLevel = $idPLayer->getLevel();
+            $currentXp = $idPLayer->getExperience();
+            $xpEarned =  $battleContent->getXpEarned();
+            $totalXp = $xpEarned + $currentXp;
+            $idPLayer->setExperience($totalXp);
+            $newlevel = $idPLayer->getLevel();
+            $levelsGained = $newlevel - $currentLevel;
+            $xpPercentage = Math::calculateLevelPercentage($totalXp);
+
             $request->getSession()->set("isCombatResolved" , 'Yes');
             $request->getSession()->set("Winner" , $this->getUser()->getUsername());
             $data =
                 [
-                    'button' => 'endCombat'
+                    'button' => 'endCombat',
+                    'xpEarned' => $xpEarned,
+                    'levelsGained' => $levelsGained,
+                    'xpPercentage' => $xpPercentage,
                 ];
-            return new JsonResponse;
+            return new JsonResponse($data);
         }
     }
 
@@ -242,8 +274,8 @@ class GameController extends AbstractController
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
+
         $session = $request->getSession();
-        
         if ($session->get('isCombatResolved')) 
         {
             if ($session->get('Winner') == $this->getUser()->getUsername())
@@ -321,10 +353,9 @@ class GameController extends AbstractController
                 return $this->redirectToRoute("stageTwo");
             }  
         }
+        return $this->redirectToRoute("app_home");
     }
           
-        
-
     #[Route('/game/stageTwo', name: 'stageTwo')]
     public function stageTwo(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
     {
@@ -338,21 +369,6 @@ class GameController extends AbstractController
         return $this->render('game/stageTwo.html.twig', [
             'demon' => $starter[0],
             'demons' => $starter,
-        ]);
-    }
-
-    #[Route('/game/hub', name: 'hub')]
-    public function hub(Request $request, PlayerRepository $playerRepository, EntityManagerInterface $em, BattleRepository $battleRepository, SkillTableRepository $skillTableRepository)
-    {
-        $demons = $this->getUser()->getDemonPlayer();
-        $session = $request->getSession();
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
-        if ($this->getUser()->getStage() != 9999) 
-        {
-            return $this->redirectToRoute("app_home");
-        }
-        return $this->render('game/hub.html.twig', [
-            'demons' => $demons,
         ]);
     }
 
@@ -384,6 +400,10 @@ class GameController extends AbstractController
             // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
+            $levelDemon = $playerDemon->getLevel();
+            $xpDemon = $playerDemon->getExperience();
+            $percentage = Math::calculateLevelPercentage($xpDemon);
+            
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
                 $initiative = $this->getUser()->getUsername();
@@ -400,17 +420,20 @@ class GameController extends AbstractController
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
-                'intiative' => $initiative
+                'intiative' => $initiative,
+                'percentage' => $percentage
             ]);    
         }
         else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $inBattle) //combat is still in progress so the user is put in it 
         {
-            $idPLayer = $this->getUser()->getDemonPlayer();
-            $idPLayer = $idPLayer[0];
-            $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
             $playerDemons = $this->getUser()->getDemonPlayer();
             $playerDemon = $playerDemons[0];
+            $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $playerDemon]);
             $generatedCpu = $battleContent->getDemonPlayer2();
+            //current xp values for xp bar 
+            $levelDemon = $playerDemon->getLevel();
+            $xpDemon = $playerDemon->getExperience();
+            $percentage = Math::calculateLevelPercentage($xpDemon);
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
                 $initiative = $this->getUser()->getUsername();
@@ -425,7 +448,8 @@ class GameController extends AbstractController
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
-                'initiative' => $initiative
+                'initiative' => $initiative,
+                'percentage' => $percentage
             ]);    
         }
         else if ($this->getUser()->getStage() == 2)
@@ -512,12 +536,14 @@ class GameController extends AbstractController
     }
 
     
-    public function cpuDemonGen(string $string, ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepo ,?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
+    public function cpuDemonGen(?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepo ,
+    ?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
     {
         $trait = $this->traitGen($demonTraitRepository);
         $imp = $this->pickDemonBase($demonBaseRepository, 'imp');
         $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
         $skillsTable = $this->pickAllLearnableSkills($skillRepo, $imp->getId());
+        //Pick 6 skills from all the skills the Demon can gain from leveling
         if (count($skillsTable) > 6)
         {
             $randSetOfSkills = array_rand($skills, 6);
