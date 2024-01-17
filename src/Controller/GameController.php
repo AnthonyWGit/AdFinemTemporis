@@ -536,7 +536,7 @@ class GameController extends AbstractController
     }
 
     
-    public function cpuDemonGen(?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepo ,
+    public function cpuDemonGen(string $string, ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepo ,
     ?DemonTraitRepository $demonTraitRepository, ?PlayerRepository $playerRepository, ?EntityManagerInterface $entityManager) : DemonPlayer
     {
         $trait = $this->traitGen($demonTraitRepository);
