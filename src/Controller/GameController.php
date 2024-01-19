@@ -141,7 +141,6 @@ class GameController extends AbstractController
     $generatedCpu = $battleContent->getDemonPlayer2();
     $xpEarned = $battleContent->getXpEarned();
     $goldEarned = $battleContent->getGoldEarned();
-
     if ($request->request->get("isCombatResolved") == "Yes")
     {
         if ($request->request->get("Winner") == $this->getUser()->getUsername())
@@ -165,6 +164,7 @@ class GameController extends AbstractController
                     'xpEarned' => $xpEarned,
                     'levelsGained' => $levelsGained,
                     'xpPercentage' => $xpPercentage,
+                    'currentLevel' => $currentLevel
                 ];
             return new JsonResponse($data);
         }
@@ -231,16 +231,17 @@ class GameController extends AbstractController
             $skillUsed = $request->request->get('skill');
             $demonPlayerId = $request->request->get('demonPlayer1Id');
             $cpuDemonId = $request->request->get('demonPlayer2Id');
-            // $demonPlayerId = 118;
-            // $cpuDemonId = 119;
             $skillObj = $skillRepository->findOneBy(["name" => $skillUsed]);
             $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
             $demonCPUObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
             $dmgDone = $skillObj->dmgCalc($demonPlayerObj, $demonCPUObj);
+            // $xpDemonUsingSkill = $demonPlayerObj->getExperience();
+            // $playerLevel = Math::calculateLevel($xpDemonUsingSkill);
             // $dmgDone = 1;
             $data = 
             [
                 'dmg' => $dmgDone,
+                // 'demonLevel' => $playerLevel,
             ];
             return new JsonResponse($data);
         }
@@ -449,7 +450,7 @@ class GameController extends AbstractController
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
                 'initiative' => $initiative,
-                'percentage' => $percentage
+                'percentage' => $percentage,
             ]);    
         }
         else if ($this->getUser()->getStage() == 2)
