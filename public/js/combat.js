@@ -127,15 +127,27 @@ function playerWon() {
         }
     }).done(async function(response) {
         for (var i = 0; i < response.levelsGained; i++) {
-            console.log(i);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            document.querySelector("#xpFillPlayer").style.width = '100%';
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            document.querySelector("#xpFillPlayer").style.width = '0%';
-            if (i == response.levelsGained - 1) {
-                console.log("i resolve");
+            //converting the string to number
+            console.log(response)
+            if (response.currentLevel == 100)
+            {
+
+            }
+            else
+            {
+                let currentPlayerLevel = parseFloat(playerLevel.innerHTML)
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                document.querySelector("#xpFillPlayer").style.width = response.xpPercentage["percentage"] + '%';
+                document.querySelector("#xpFillPlayer").style.width = '100%';
+                currentPlayerLevel += 1;
+                //Kinda clunky need delete transition propoerties from CSS and use JQuery animation to controll it 
+                playerLevel.innerHTML = currentPlayerLevel;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                document.querySelector("#xpFillPlayer").style.width = '0%';
+                if (i == response.levelsGained - 1) {
+                    console.log("i resolve");
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    document.querySelector("#xpFillPlayer").style.width = response.xpPercentage["percentage"] + '%';
+                }                
             }
         }
         console.log(response);
@@ -186,6 +198,26 @@ $.ajax({
     }
         
 });
+
+//Query selectors
+let textContentCombat = document.querySelector(".textContentCombat")
+let actions = document.querySelector("#actions")
+let strongS = document.querySelector("#strong")
+let spaceActions = document.querySelector('.spaceActions')
+//Create elements & classlists
+let createDiv = document.createElement("div");
+let playerLevel = document.querySelector('#playerLevel');
+createDiv.classList = "spaceActions"
+createDiv.classList.add("new")
+
+let createPara = document.createElement("p")
+createPara.innerHTML = "back"
+createPara.classList = "j"
+
+let textEnnemy = document.createElement("p")
+createDiv.appendChild(createPara)
+let createParaSkills = document.createElement("p")
+
 let ajaxResponse = null;
 let player1Name = ''
 let player2Name = ''
@@ -202,22 +234,6 @@ let hpMaxPlayer = ''
 let hpMaxCPU  =''
 let xpEarned = ""
 let goldEarned = ""
-//Query selectors
-let textContentCombat = document.querySelector(".textContentCombat")
-let actions = document.querySelector("#actions")
-let strongS = document.querySelector("#strong")
-let spaceActions = document.querySelector('.spaceActions')
-//Create elements & classlists
-let createDiv = document.createElement("div");
-createDiv.classList = "spaceActions"
-createDiv.classList.add("new")
 
-let createPara = document.createElement("p")
-createPara.innerHTML = "back"
-createPara.classList = "j"
-
-let textEnnemy = document.createElement("p")
-createDiv.appendChild(createPara)
-let createParaSkills = document.createElement("p")
 //event listeners
 // document.addEventListener("keydown", ennemyTurn)
