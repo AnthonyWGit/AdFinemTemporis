@@ -29,15 +29,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class GameController extends AbstractController
 {
-
-    // #[Route('/get-mp3-data', name: 'get_mp3_data')]
-    // public function getMp3Data(): Response
-    // {
-    //     $mp3FilePath = realpath($this->getParameter('kernel.project_dir') . '/public/sfx/typewriter.mp3');
-    //     $data = ['mp3FilePath' => $mp3FilePath];
-    //     return new JsonResponse($data);
-    // }
-
     // #[Route('/game/')]
     // public function userIsBanned() : Response
     // {
@@ -132,7 +123,7 @@ class GameController extends AbstractController
 
     // This is an AJAX request
     // Prepare your data here. This could be an object, an array, etc.
-    // For example, let's use the same data you were passing to the Twig template:
+    // This were the data is dancing to adjust HP values of fighters and decide how and when the combat will end
     $idPLayer = $this->getUser()->getDemonPlayer();
     $idPLayer = $idPLayer[0];
     $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $idPLayer]);
@@ -237,7 +228,6 @@ class GameController extends AbstractController
             $dmgDone = $skillObj->dmgCalc($demonPlayerObj, $demonCPUObj);
             // $xpDemonUsingSkill = $demonPlayerObj->getExperience();
             // $playerLevel = Math::calculateLevel($xpDemonUsingSkill);
-            // $dmgDone = 1;
             $data = 
             [
                 'dmg' => $dmgDone,
@@ -251,14 +241,10 @@ class GameController extends AbstractController
             $skillUsed = $request->request->get('skill');
             $demonPlayerId = $request->request->get('demonPlayer1Id');
             $cpuDemonId = $request->request->get('demonPlayer2Id');
-            // $demonPlayerId = 118;
-            // $cpuDemonId = 119;
             $skillObj = $skillRepository->findOneBy(["name" => $skillUsed]);
             $demonPlayerObj = $demonPlayerRepository->findOneBy(["id" => $demonPlayerId]);
             $demonCPUObj = $demonPlayerRepository->findOneBy(["id" => $cpuDemonId]);
             $dmgDone = $skillObj->dmgCalc($demonCPUObj, $demonPlayerObj);
-
-            // $dmgDone = 1;
             $data = 
             [
                 'dmg' => $dmgDone,

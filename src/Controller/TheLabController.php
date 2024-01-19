@@ -18,24 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TheLabController extends AbstractController
-{
-    // #[Route('/the_lab', name: 'the_lab')]
-    // public function index(SkillRepository $skillRepository, DemonTraitRepository $traitRepository, 
-    // DemonBaseRepository $demonBaseRepository, SkillTableRepository $skillTableRepository): Response
-    // {
-    //     $skills = $skillRepository->findBy([], ["name" => "ASC"]);
-    //     $traits = $traitRepository->findBy([], ["name" => "ASC"]);
-    //     $demonsBase = $demonBaseRepository->findBy([], ["name" => "ASC"]);
-    //     $skillsTable = $skillTableRepository->findBy([], ["id" => "ASC"]);
-    //     return $this->render('the_lab/index.html.twig', [
-    //         'controller_name' => 'TheLabController',
-    //         'skills' => $skills,
-    //         'traits' => $traits,
-    //         'demonsBase' => $demonsBase,
-    //         'skillsTable' => $skillsTable,
-    //     ]);
-    // }
-    
+{    
     #[Route('/the_lab', name: 'the_lab')]
     public function index(SkillRepository $skillRepository, DemonTraitRepository $traitRepository, 
     DemonBaseRepository $demonBaseRepository, SkillTableRepository $skillTableRepository, Request $request): Response
@@ -119,5 +102,4 @@ class TheLabController extends AbstractController
         ]; 
         return new JsonResponse($outcomingData2);
     }
-
 }

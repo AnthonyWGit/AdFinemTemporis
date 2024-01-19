@@ -52,7 +52,7 @@ class ItemController extends AbstractController
                     'Your changes were saved!'
                 );
 
-                return $this->redirectToRoute('itemsList'); //redirect to list stagiaires if everything is ok
+                return $this->redirectToRoute('itemsList'); //redirect to list items if everything is ok
             }
         
         return $this->render("item/new.html.twig", ['formNewItem' => $form, 'edit' => $item->getId()]);

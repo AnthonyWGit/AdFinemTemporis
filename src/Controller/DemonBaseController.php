@@ -52,7 +52,7 @@ class DemonBaseController extends AbstractController
                     'Your changes were saved!'
                 );
 
-                return $this->redirectToRoute('demonsList'); //redirect to list stagiaires if everything is ok
+                return $this->redirectToRoute('demonsList'); //redirect to list demon if everything is ok
             }
         
         return $this->render("demon_base/new.html.twig", ['formNewDemonBase' => $form, 'edit' => $demonBase->getId()]);

@@ -14,6 +14,7 @@ function actionsClick(event) {
     }
 }
 
+//Retreive demon data and create a paragraph for each 
 function createSkills(playerDemons) {
     playerDemons.forEach(demon => {
         demonPlayer1Id
