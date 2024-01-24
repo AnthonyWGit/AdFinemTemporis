@@ -17,7 +17,7 @@
         {% else %}
         <img src="{{path}}" alt="Illustration image">
         {% endif %}
-            <p><b>{{suggestion.title}} | {{player.username}}</b></p>
+            <p><b>{{suggestion.title}} | {{player.displayUsername}}</b></p>
             <p>Creation date : <b>{{suggestion.postDate|date("Y-m-d H : m A")}}</b></p>
             <p class="content">{{suggestion.postContent}}</p>
             <p>{{suggestion.status}}</p>
