@@ -71,8 +71,6 @@ function typeWriter5() {
     else
     {   setTimeout(function (){
         isTypingInProgress = false
-        audio.pause()
-        audio.currentTime = 0; //stopping audio
         document.querySelector("#part2").appendChild(createButtonHorus)
         document.querySelector("#part3").appendChild(createButtonXiuhcoatl)
         document.querySelector("#part4").appendChild(createButtonChernobog)
@@ -85,18 +83,22 @@ function typeWriter5() {
 function choiceHorus()
 {
     document.removeEventListener('keyup', choiceChernobog);
-    window.location.replace("/game/choice/Horus");
+    //saving audio current time
+    localStorage.setItem('currentTime', audio.currentTime);
+    window.location = "/game/choice/Horus";
 }
 
 function choiceXiuhcoatl()
 {
     document.removeEventListener('keyup', choiceChernobog);
+    localStorage.setItem('currentTime', audio.currentTime);
     window.location.replace("/game/choice/Xiuhcoatl");
 }
 
 function choiceChernobog()
 {
     document.removeEventListener('keyup', choiceChernobog);
+    localStorage.setItem('currentTime', audio.currentTime);
     window.location.replace("/game/choice/Chernobog");
 }
 
@@ -112,8 +114,6 @@ let text5 = "The third is barely visible. It is shrouded in darkness, blending i
 
 let index = 0;
 let isTypingInProgress = false
-const mp3FilePath = '/sfx/typewriter.mp3';
-var audio = new Audio(mp3FilePath);
 
 //query selectors
 let range = document.querySelector("#volume")
@@ -136,10 +136,17 @@ createButtonChernobog.textContent = "Select"
 createButtonChernobog.setAttribute('id','choiceChernobog')
 createButtonChernobog.addEventListener("click", choiceChernobog)
 //eventListeners
+//Audio management
+const mp3FilePath = '/sfx/celticMusic.mp3';
+var audio = new Audio(mp3FilePath);
+
 document.getElementById('yesButton').addEventListener('click', function() {
     audio.muted = false; // Unmute the audio
     audio.volume = 0.3;
+    localStorage.setItem('volume', audio.volume)
+    localStorage.setItem('muted', "1")
     audio.play();
+    console.log(localStorage)
     ephemeral.forEach(function (element) {
         element.remove()
     }); 
@@ -148,6 +155,10 @@ document.getElementById('yesButton').addEventListener('click', function() {
 
 document.getElementById('noButton').addEventListener('click', function() {
     audio.pause(); // Pause the audio
+    audio.volume = 0
+    audio.muted = true
+    localStorage.setItem('volume', audio.volume)
+    localStorage.setItem('muted', "0")
     audio.currentTime = 0; // Reset audio to the beginning
     ephemeral.forEach(function (element) {
         element.remove()
@@ -160,16 +171,20 @@ document.querySelector('#mute').addEventListener('click', function() {
     {
         audio.muted = true; // Unmute the audio
         audio.play();
+        localStorage.setItem('volume', audio.volume)
+        localStorage.setItem('muted', "1")
     }
     else
     {
-        audio.muted = false; // Unmute the audio            
+        audio.muted = false; // Unmute the audio       
+        localStorage.setItem('muted', "0")     
     }
 });
 
 volume.addEventListener('input', function() {
     rangeValue = document.querySelector("#volume").value
     audio.volume = (rangeValue / 100)
+    localStorage.setItem('volume', audio.volume)
     console.log(rangeValue);
 });
 
