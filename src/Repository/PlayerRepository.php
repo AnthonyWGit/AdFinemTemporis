@@ -49,6 +49,29 @@ class PlayerRepository extends ServiceEntityRepository implements PasswordUpgrad
             ->getQuery()
             ->getResult();
     }
+
+    public function excludeSoftDeleted()
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.deletedAt = :deletedAt')
+            ->setParameter('deletedAt', !null)
+            ->andWhere('p.username != :deletedUsername')
+            ->setParameter('deletedUsername', 'Deleted User')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function excludeSoftDeleted2()
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.deletedAt = :deletedAt')
+            ->setParameter('deletedAt', !null)
+            ->andWhere('p.email != :deletedEmail')
+            ->setParameter('deletedEmail', 'Deleted email')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Player[] Returns an array of Player objects
 //     */
