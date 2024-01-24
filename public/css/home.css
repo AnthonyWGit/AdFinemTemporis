@@ -98,14 +98,14 @@
     display: flex;
     gap: 5rem;
     padding: 1rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .forceRow
 {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -201,6 +201,16 @@
     .aside
     {
         width: 100%;
+    }
+
+    .forceRow
+    {
+        flex-wrap: wrap;
+    }
+
+    .twoCards
+    {
+        flex-wrap: wrap;
     }
 }
 
