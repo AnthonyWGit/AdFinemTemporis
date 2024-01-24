@@ -25,7 +25,6 @@
 </div> 
 
     <div class="cardBoard">
-        {{ dump(verifiedSuggestions)}}
         {% if not suggestions or verifiedSuggestions == 0 %}
             <p>No player has an idea to offer</p>
         {% else %}
@@ -46,7 +45,7 @@
                             {% endif %}
                             <div class="row">
                                 <p>Title : {{suggestion.title}}</p>
-                                <p>Author : {{player.username}}</p>
+                                <p>Author : {{player.displayUsername}}</p>
                             </div>
                             <div class="row status">
                                 {% if is_granted('ROLE_ADMIN') %}
