@@ -19,7 +19,7 @@ class Game2Controller extends AbstractController
     {
         $starter = $this->getUser()->getDemonPlayer();
         if ($checker->inBattleCheck()) return $this->redirectToRoute('combat');
-        if ($this->getUser()->getStage() != (9999||3)) 
+        if ($this->getUser()->getStage() != 9999|| $this->getUser()->getStage() != 3) 
         {
             return $this->redirectToRoute("app_home");
         }
