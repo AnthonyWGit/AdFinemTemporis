@@ -1,0 +1,37 @@
+.accountDeleteDiv
+{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 1rem;
+}
+
+.deleteAccount
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--basicTextColor);
+    padding: 1rem;
+    margin: 1rem;
+    border: 2px solid var(--navbarBg);
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 0px 0px 0px var(--midnightButton);
+}
+
+.deleteAccount:hover
+{
+    box-shadow: 0px 7px 7px 7px var(--midnightButton);
+}
+
+.middle
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
