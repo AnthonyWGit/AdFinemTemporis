@@ -52,7 +52,7 @@ class Simulation
         {
             $demonCPUSimulated = new DemonPlayer();
             $levelCPUSimulated = $calculated["the_lab_self_demon"]['level']; 
-            $demonCPUBaseObject = $demonBaseRepository->findOneBy(['id' => $calculated["the_lab_self_demon"]["demonBase"]]);
+            $demonCPUBaseObject = $demonBaseRepository->findOneBy(['id' => $calculated["the_lab_self_demon"]["demonBaseCPU"]]);
             // $skillDmg = $skillObject->
             $totalEndCPU = $calculated["the_lab_self_demon"]["endCPU"];
 
@@ -65,7 +65,7 @@ class Simulation
             $intLevelUpPointsCPU = $calculated["the_lab_self_demon"]["agiCPU"] - $demonCPUBaseObject->getAgiDemonBase();
             $lckLevelUpPointsCPU = $calculated["the_lab_self_demon"]["lckCPU"] - $demonCPUBaseObject->getLckDemonBase();
 
-            $demonCPUSimulated->setDemonBase($demonBaseObject);
+            $demonCPUSimulated->setDemonBase($demonCPUBaseObject);
             $demonCPUSimulated->setStrPoints($strLevelUpPointsCPU);
             $demonCPUSimulated->setEndPoints($endLevelUpPointsCPU);
             $demonCPUSimulated->setAgiPoints($agiLevelUpPointsCPU);
