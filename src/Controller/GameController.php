@@ -92,7 +92,11 @@ class GameController extends AbstractController
         {
             return $this->redirectToRoute("hub");
         }
-        else
+        else if ($this->getUser()->getStage() == 3)
+        {
+            return $this->redirectToRoute("stageThree");
+        }
+        else 
         {
             return $this->redirectToRoute("app_home");
         }
