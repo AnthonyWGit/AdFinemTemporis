@@ -22,11 +22,8 @@
     </head>
     <body>
         <div id="container">
-            <div id='stars'></div>
-            <div id='stars2'></div>
-            <div id='stars3'></div>
             <input type="checkbox" id="menuShowHide">
-            <label for="menuShowHide"></label>
+            <label for="menuShowHide" id="menuLabel"></label>
             <nav class="navbar" id="mainMenu">
                 <ul>
                     <li><a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/Home.svg') }}"> Home</a></li>
@@ -43,11 +40,11 @@
                     <li><a class="iconText" href=" {{path("account")}}" ><img class="navSvg" src="{{ asset('img/profile.svg') }}"> Account</a></li>
                 </ul>
             </nav>
+        <div id='stars'></div>
+        <div id='stars2'></div>
+        <div id='stars3'></div>
 
             {% block body %}
-            {% endblock %}
-            {% block footer %}
-                <footer class="footer"> Contact </footer>
             {% endblock %}
 
 
