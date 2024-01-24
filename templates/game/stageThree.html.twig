@@ -1,0 +1,31 @@
+{% extends 'game.html.twig' %}
+
+{% block title %}Walking{% endblock %}
+
+{% block body %}
+    <div lang="en-GB" class="TextDiv gameGlobalDiv" id='data' data-var="{{ demon.demonBase.name }}">
+        
+    </div>
+    <div class="centerTextBox">
+        <div class="speakerBox">
+            
+        </div>
+        <div class="textBox">
+            <div class="textContent">
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bottomLeft">
+        <p id="mute">Mute/unmute</p>
+        <input type="range" id="volume" name="volume" min="0" value="25" max="100" step="1"/>
+        <label for="volume">Volume</label>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset("js/stageThree.js")}}"></script>
+{% endblock %}
