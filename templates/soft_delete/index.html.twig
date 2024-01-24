@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="description" content="This the warning for user account deletion">
+{% endblock %}
+{%block stylesheets%}
+<link rel="stylesheet" href="{{ asset('css/base.css') }}">
+<link rel="stylesheet" href="{{ asset('css/stars.css') }}">
+<link rel="stylesheet" href="{{ asset('css/accDelete.css') }}">
+{%endblock%}
+{% block title %}
+    The Lab
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
+
+{% block body %}
+   <div class="accountDeleteDiv"> 
+    <h1>Please confirm that you want to delete your account</h1>
+    <p>Please be aware that there is <span style="colore:red;">no turning back</span> after clicking the validation button</p>
+    <p>By clicking the button below you acknowledge that 
+        your account will be deleted and your username will change to an anonymous state</p>
+    </div>
+    <div class="middle">
+        <a href="{{path('app_soft_delete')}}" class="deleteAccount">Delete my account</a>
+    </div>
+{% endblock %}
+
+
+
+
