@@ -1,6 +1,4 @@
-
-.heroBanner
-{
+.heroBanner {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -11,19 +9,16 @@
     overflow: auto;
 }
 
-@media screen and (max-width:200px){
-    .heroBanner
-    {
+@media screen and (max-width:200px) {
+    .heroBanner {
         /* font-size: 1rem; */
     }
-    .titleWithSmall
-    {
+    .titleWithSmall {
         position: unset !important;
     }
-
 }
-.bannerImg
-{
+
+.bannerImg {
     width: 150px;
     height: 150px;
     position: relative;
@@ -31,8 +26,8 @@
     left: 10rem;
     opacity: 75%;
 }
-.titleWithSmall
-{
+
+.titleWithSmall {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -40,33 +35,31 @@
     padding: 0 0 3rem 0;
     position: absolute;
 }
+
+
 /* under Galaxy S8+ dimensions */
-@media screen and (max-width : 359px)
-{
-    .titleWithSmall
-    {
+
+@media screen and (max-width: 359px) {
+    .titleWithSmall {
         position: inherit;
     }
 }
 
-.titleWithSmall > h1
-{
+.titleWithSmall>h1 {
     text-align: center;
 }
 
-
-.titleWithSmall > h1 > i
-{
+.titleWithSmall>h1>i {
     font-family: 'Charm', cursive !important;
     font-weight: 700;
-
 }
-.heroBanner > p , .titleWithSmall > small
-{
+
+.heroBanner>p,
+.titleWithSmall>small {
     font-family: 'Charm', cursive !important;
 }
-.titleWithSmall > small
-{
+
+.titleWithSmall>small {
     opacity: 100%;
     color: var(--navbarBg);
     position: relative;
@@ -74,13 +67,12 @@
     left: 0;
 }
 
-.heroBanner > p
-{
+.heroBanner>p {
     padding: 15rem 0 0 0;
     text-align: center;
 }
-.aside
-{
+
+.ouverture {
     display: flex;
     flex-direction: column;
     width: 40%;
@@ -89,20 +81,18 @@
     gap: 1rem;
 }
 
-.aside >p
-{
+.ouverture>p {
     padding: 0.75rem;
 }
-.twoCards
-{
+
+.twoCards {
     display: flex;
     gap: 5rem;
     padding: 1rem;
     flex-wrap: nowrap;
 }
 
-.forceRow
-{
+.forceRow {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -110,16 +100,14 @@
     align-items: center;
 }
 
-.secondRow
-{
+.secondRow {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
 
-.longCard
-{
+.longCard {
     flex-wrap: wrap;
     margin: 5rem 0;
     padding: 1rem;
@@ -130,8 +118,7 @@
     gap: 1.3rem;
 }
 
-.element
-{
+.element {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -142,8 +129,7 @@
     color: var(--colorForLightBg)
 }
 
-.card
-{
+.card {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -152,8 +138,7 @@
     align-items: center;
 }
 
-.cardContent
-{
+.cardContent {
     display: flex;
     flex-direction: column;
     background-color: var(--basicTextColor);
@@ -165,102 +150,76 @@
     color: var(--base-color2);
     font-weight: 500;
 }
-.titleOverCard
-{
+
+.titleOverCard {
     text-align: center;
     display: flex;
 }
 
-.twoCards p 
-{
-
-}
-
-.cardSvg
-{
+.cardSvg {
     height: 100px;
     width: 100px;
 }
 
-.elementSvg
-{
+.elementSvg {
     height: 100px;
     width: 100px;
 }
 
-@media screen and (max-width : 1340px) and (min-width :1070px) 
-{
-    .aside
-    {
+@media screen and (max-width: 1340px) and (min-width :1070px) {
+    .ouverture {
         width: 25%;
     }
 }
 
-@media screen  and (max-width : 1069px) 
-{
-    .aside
-    {
+@media screen and (max-width: 1069px) {
+    .ouverture {
         width: 100%;
     }
-
-    .forceRow
-    {
+    .forceRow {
         flex-wrap: wrap;
     }
-
-    .twoCards
-    {
+    .twoCards {
         flex-wrap: wrap;
     }
 }
 
-@media screen  and (max-width : 700px) 
-{
-
-    .titleWithSmall
-    {
+@media screen and (max-width: 700px) {
+    .titleWithSmall {
         align-items: center;
     }
-
-    .titleWithSmall > h1
-    {
+    .titleWithSmall>h1 {
         align-items: center;
         padding: 1rem 0 5rem 0;
     }
-
-    .titleWithSmall > small
-    {
-        top:-6.5rem;
+    .titleWithSmall>small {
+        top: -6.5rem;
         margin: 0 0.5rem 0 0.5rem;
     }
 }
 
-@media screen  and (max-width : 400px) 
-{
-    .card
-    {
+@media screen and (max-width: 400px) {
+    .card {
         width: auto;
     }
-
 }
-@media screen  and (min-width : 400px) and (max-width : 700px)
-{
-    .heroBanner > p
-    {
+
+@media screen and (min-width: 400px) and (max-width: 700px) {
+    .heroBanner>p {
         padding: 20rem 0 0 0;
     }
 }
-@media screen  and (max-width : 399px) /* Iphone SE */
+
+@media screen and (max-width: 399px)
+/* Iphone SE */
+
 {
-    .heroBanner > p
-    {
+    .heroBanner>p {
         padding: 30rem 0 0 0;
     }
 }
 
-
-.rowButtons
-{
+.rowButtons {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -271,10 +230,8 @@
 }
 
 @media screen and (max-width:350px) {
-    .rowButtons
-    {
-        flex-direction:column;
+    .rowButtons {
+        flex-direction: column;
         align-items: center;
     }
 }
-
