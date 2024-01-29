@@ -45,6 +45,10 @@ class GameController extends AbstractController
     #[Route('/ajaxe/setStage/{stage}', name: 'setStage')]
     public function setStage(string $stage, Request $request, EntityManagerInterface $em)  : Response
     {
+        if(!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException("Page not found");
+        }
+        
         $this->getUser()->setStage($stage);
         $em->flush();
         return new JsonResponse();
@@ -68,9 +72,10 @@ class GameController extends AbstractController
     #[Route('/game', name: 'game')]
     public function index(Request $request, PlayerRepository $playerRepository, BattleRepository $battleRepository): Response
     {
-        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
-        // if ($this->isGranted("ROLE_IN_COMBAT")) return $this->redirectToRoute("combat");
-
+        if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) 
+        {
+            return $this->redirectToRoute('combat');
+        }
         if ($this->getUser()->getStage() == 0)
         {
             return $this->render('game/index.html.twig', [
@@ -100,6 +105,22 @@ class GameController extends AbstractController
         {
             return $this->redirectToRoute("stageThree");
         }
+        else if ($this->getUser()->getStage() == 4)
+        {
+            return $this->redirectToRoute("stageFour");
+        }
+        else if ($this->getUser()->getStage() == 10000)
+        {
+            return $this->redirectToRoute("secondHub");
+        }
+        else if ($this->getUser()->getStage() == 5)
+        {
+            return $this->redirectToRoute("stageFive");
+        }
+        else if ($this->getUser()->getStage() == 6 )
+        {
+            return $this->redirectToRoute("stageSix");
+        }
         else 
         {
             return $this->redirectToRoute("app_home");
@@ -120,7 +141,6 @@ class GameController extends AbstractController
             'demons' => $demons,
         ])->setSharedMaxAge(3600);
     }
-
 
     #[Route('/ajaxe/combatAjax', name: 'combatAjax')]
     public function combatAjax(Request $request, ?Battle $battle, 
@@ -144,7 +164,6 @@ class GameController extends AbstractController
     {
         if ($request->request->get("Winner") == $this->getUser()->getUsername())
         {
-
             //For lvlUp bar animation calculate how many levels demon 0 gains 
             $currentLevel = $idPLayer->getLevel();
             $currentXp = $idPLayer->getExperience();
@@ -179,6 +198,15 @@ class GameController extends AbstractController
     }
     else
     {
+        $number = rand(0,1);
+        if ($number == 0)
+        {
+            $initiative = $this->getUser()->getUsername();
+        }
+        else
+        {
+            $initiative = "CPU";
+        }
     }
     // Prepare the data to return as JSON
     $data = [
@@ -214,10 +242,8 @@ class GameController extends AbstractController
             'player2' => 'CPU'
         ]
     ];
-    
     // Return the data as a JSON response
     return new JsonResponse($data);
-    
 }
 
     #[Route('/game/ajaxe/SkillUsed', name: 'SkillUsedAjax')]
@@ -374,6 +400,8 @@ class GameController extends AbstractController
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
+        if ($inBattle && $this->getUser()->getStage() == 3) return $this->redirectToRoute('combat2');
+        if ($inBattle && $this->getUser()->getStage() == 10000) return $this->redirectToRoute('combat2');
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
@@ -409,7 +437,15 @@ class GameController extends AbstractController
             }
             else
             {
-                $initiative = rand($initiative = $this->getUser()->getUsername() , 'CPU');
+                $number = rand(0,1);
+                if ($number == 0)
+                {
+                    $initiative = $this->getUser()->getUsername();
+                }
+                else
+                {
+                    $initiative = "CPU";
+                }
             }
             $session->set('playerDemonLevel', $playerDemon->getLevel());
             return $this->render('game/combat.html.twig', [
@@ -439,6 +475,15 @@ class GameController extends AbstractController
             }
             else
             {
+                $number = rand(0,1);
+                if ($number == 0)
+                {
+                    $initiative = $this->getUser()->getUsername();
+                }
+                else
+                {
+                    $initiative = "CPU";
+                }
             }
             return $this->render('game/combat.html.twig', [
                 'cpuDemon' => $generatedCpu,
@@ -451,9 +496,16 @@ class GameController extends AbstractController
         {
             return $this->redirectToRoute("stageTwo");
         }
+        else if ($this->getUser()->getStage() == 3)
+        {
+            return $this->redirectToRoute("stageThree");
+        }
+        else if ($this->getUser()->getStage() == 4)
+        {
+            return $this->redirectToRoute("stageFour");
+        }
         return $this->redirectToRoute("app_home");
     }
-
 
     #[Route('/game/choice/{name}', name: 'choice', requirements : ['name' =>  '\w+'])]
     public function choiceHorus(string $name, SkillRepository $skillRepository, SkillTableRepository $skillTableRepository,
@@ -589,7 +641,7 @@ class GameController extends AbstractController
     //     $tokenStorage->setToken($token);
     // }
 
-    #[Route('game/ajaxe/demon/{id}/stats', name: 'demonStatsAJAX')]
+    #[Route('/game/ajaxe/demon/{id}/stats', name: 'demonStatsAJAX')]
     public function statsForModal(string $id , DemonPlayerRepository $demonPlayerRepository, Request $request, EntityManagerInterface $em) 
     {
         $demon = $demonPlayerRepository->findOneBy(["id" => $id]);
@@ -606,7 +658,7 @@ class GameController extends AbstractController
         return new JsonResponse($stats);
     }
     
-    #[Route('game/ajaxe/demon/{id}/update', name: 'demonStatsAJAXUpdate')]
+    #[Route('/game/ajaxe/demon/{id}/update', name: 'demonStatsAJAXUpdate')]
     public function updateStats(string $id , DemonPlayerRepository $demonPlayerRepository, Request $request, EntityManagerInterface $em) 
     {
         $demon = $demonPlayerRepository->findOneBy(["id" => $id]);
@@ -646,5 +698,4 @@ class GameController extends AbstractController
         // Return a JSON response
         return new JsonResponse(['status' => 'success']);
         }
-
 }
