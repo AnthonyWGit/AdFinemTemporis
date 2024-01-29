@@ -1,0 +1,58 @@
+{% extends 'game.html.twig' %}
+
+{% block title %}Combat{% endblock %}
+
+{% block body %}
+<div class="sun">
+</div>
+    <div class="TextDiv gameGlobalDivCombat">
+        <div class="putRight">
+            <div class="infosCPU">
+                <p>{{cpuDemon.demonBase.name}}</p>
+                <p><b>Level</b> : <span id="cpuLevel">{{cpuDemon.getLevel}}</span></p>
+                <div class="hpBar" id="hpBarCPU">
+                    <div class="hpFillCPU" id="hpFillCPU"></div>
+                </div>
+                <p><span id="currentHpCPU">{{cpuDemon.getMaxHp}} HP</span> / <span id="maxHpCPU">{{cpuDemon.getMaxHp}} HP</span></p>
+                
+            </div>
+    </div>
+
+        <div class="infosSelf">
+            {% for demon in playerDemons %}
+                <p>{{demon.demonBase.name}}</p>
+                <p><b>Level</b> : <span id="playerLevel">{{demon.getLevel}}</span></p>
+                <div class="hpBar" id="hpBarPlayer">
+                    <div class="hpFillPlayer" id="hpFillPlayer"></div>
+                </div>
+                <p><span id="currentHpPlayer">{{demon.getMaxHp}} HP</span> / <span id="maxHpPlayer">{{demon.getMaxHp}} HP</span></p>
+                <div class="xpBar" id="xpBarPlayer">
+                    <div class="xpFillPlayer" id="xpFillPlayer" style="width: {{percentage.percentage}}%;"></div>
+                </div>
+        {% endfor %}
+        </div>
+    </div>
+
+    <div class="centerTextBox">
+        <div class="textBoxCombat">
+            <div class="textContentCombat">
+                <p id="strong"><strong>What do you want to do ? </strong></p>
+                <div class="spaceActions">
+                    <p id="actions"><i>Actions</i></p>
+                    <p id="Items"><i>Items</i></p>
+                    <p id="Flee"><i>Flee</i></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottomLeft">
+        <p id="mute">Mute/unmute</p>
+        <input type="range" id="volume" name="volume" min="0" value="25" max="100" step="1"/>
+        <label for="volume">Volume</label>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset("js/combatCopy.js")}}"></script>
+{% endblock %}
