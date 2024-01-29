@@ -1,0 +1,94 @@
+{% extends 'game.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/gameHub.css') }}">
+{% endblock %}
+
+{% block title %}Game Hub{% endblock %}
+
+{% block body %}
+<div class="sun">
+</div>
+<div class="flashes gameGlobalDiv">
+    {% for message in app.flashes('notice') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    {% for message in app.flashes('noticeLevel') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+</div>
+<div class="gameGlobalDivGap toHide">
+    {# <p class="toHide">This is the hub menu</p> #}
+    <a class="linkNoBase" href="{{path('combat2')}}">Wander around</a>
+    <a class="linkNoBase" href="{{path('stageFive')}}">Continue story</a>
+    <p id='open-shop'>Open shop</p>
+</div>
+<div class="demonsBar toHide">
+    <div class="demonsBarContent">
+        {% for demon in demons %}
+            <div class="demonCol" data-demon-id="{{demon.id}}">
+                {{demon.demonBase.name}}
+                {% if demon.lvlUpPoints > 0 %}
+                <p>!</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="bottomLeft">
+    <p id="mute">Mute/unmute</p>
+    <input type="range" id="volume" name="volume" min="0" value="25" max="100" step="1"/>
+    <label for="volume">Volume</label>
+</div>
+
+
+<!-- Modal -->
+<div id="modal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+            <span class="close" id="close">&times;</span>
+        <div class="modal-stats"></div>
+        <div class="modal-points"></div>
+    </div>
+</div>
+
+<!-- Modal Merchant-->
+<div id="modal-merchant" class="modal-merchant">
+    <!-- Modal content -->
+    <div class="modal-content-merchant">
+        <span class="close" id="close-merchant">&times;</span>
+        <p id='error-msg'></p>
+        <form method="POST" action="/game/merchant" id="form-merchant">
+        {% for item in items%}
+        <p id="item-name">{{item.name}} : {{item.cost}} G</p>
+        <input type="number" name ="input-number-merchant-{{item.id}}" id="input-number-merchant-{{item.id}}" class="input-number-merchant" name="input-number-merchant" min="1" max="99" />
+        <button id="button-merchant-{{item.id}}">+</button>
+        {% endfor %}
+        <input type="hidden" name="token" value="{{ csrf_token('modal-merchant') }}">
+        </form>
+    </div>
+</div>
+
+<!-- Modal Inventory-->
+<div id="modal-inventory" class="modal-inventory">
+    <!-- Modal content -->
+    <div class="modal-content-inventory">
+            <span class="close" id="close-inventory">&times;</span>
+            <p id="current-gold-p">Current Gold : <span id="gold-number">{{app.user.gold}}</span> </p>  
+        <div class="modal-inventory">
+            <ul id="items-list">
+            {% for item in itemsPlayer%}
+                    <li><span>{{item.item.name}}<span> <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+    
+{% block js %}
+    <script src="{{ asset("js/hubTwo.js")}}"></script>
+{% endblock %}
