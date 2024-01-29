@@ -1,0 +1,43 @@
+{% extends 'game.html.twig' %}
+
+{% block title %}Walking{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/credits.css') }}">
+{% endblock %}
+{% block body %}
+<div class="sun">
+</div>
+    <div lang="en-GB" class="TextDiv gameGlobalDivCredits" id='data'>
+        <p><strong>Game Director</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Game Executor</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Game Producer</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Lead Game Designer</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Combat designer</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Sound designer</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Storyboard</strong></p>
+        <p class="charm">WETZSTEIN Anthony</p>
+        <p><strong>Special thanks</strong></p>
+        <p class="charm">My Familly <3</p>
+        <p class="charm">Elan Instructors</p>
+        <p class="charm">Colleagues, old and new</p>
+        <p class="charm">F,D, and G, you'll recognize yourselves</p>
+        <p class="charm">And so many other<p>
+    </div>
+    <div class="bottomLeft">
+        <p id="mute">Mute/unmute</p>
+        <input type="range" id="volume" name="volume" min="0" value="25" max="100" step="1"/>
+        <label for="volume">Volume</label>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset("js/credits.js")}}"></script> 
+{% endblock %}
