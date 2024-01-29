@@ -72,6 +72,4 @@ class SkillTable
 
         return $this;
     }
-
-
 }
