@@ -1,15 +1,14 @@
-$(document).ready(function() {
-
-        //________________________________________AUDIO_______________________________________
+$(document).ready(function()
+{
+                //________________________________________AUDIO_______________________________________
     //trying to load audio as soon as possible 
-    const mp3FilePath ='/sfx/chil-adventure.mp3';
+    const mp3FilePath ='/sfx/firedance.mp3';
     var audio = new Audio(mp3FilePath);
     audio.preload = 'auto';
     audio.volume = localStorage.getItem('volume');
     localStorage.setItem('currentTime', audio.currentTime);
     if (!audio.muted)
     {
-        audio.currentTime = 0;
         audio.play()
     }
     console.log(audio.volume, audio.muted);
@@ -36,9 +35,11 @@ $(document).ready(function() {
     });
 //________________________________________ENDAUDIO____________________________________
 
-    $('.sun').hide()
-    $(".centerTextBox").hide();
-
+    $('.centerTextBox').hide()
+    function moveToHub()
+    {
+        window.location.replace("/game/finalBattle")
+    }
     function typeWriter() {
         if (index < walkingText.length) {
             $(".texting").append(walkingText.charAt(index))
@@ -64,7 +65,6 @@ $(document).ready(function() {
                     $(".texting").text("")
                     typeWriter3()
                 }, 2000) // Do nothing and wait 3 seconds 
-
         }
     }
 
@@ -76,10 +76,10 @@ $(document).ready(function() {
         } else {
             setTimeout(function() {
                     index = 0
-                    $('.sun').show()
+                    isTypingInProgress = false;
                     $(".texting").text("")
                     $(".centerTextBox").show()
-                    dialog()
+                    typeTextChunk()
                 }, 2000) // Do nothing and wait 3 seconds 
         }
     }
@@ -95,42 +95,20 @@ $(document).ready(function() {
                     $(".texting").text("")
                     $(".textContent").text("")
                     isTypingInProgress = false
-                    $('.centerTextBox').show();
-                    typeTextChunk2();
+                    moveToHub()
                 }, 2000) // Do nothing and wait 3 seconds 
         }
     }
 
-
-    function dialog() {
-        console.log($(".TextDiv").attr('data-var'))
-        speakerBox.append($(".TextDiv").attr('data-var'))
-        maxCharacters = calculateMaxCharacters(textBox)
-        textChunks = breakTextIntoChunks(companionText, maxCharacters);
-        isTypingInProgress = false;
-        typeTextChunk()
-    }
-
     // Function to type a specific chunk of text
     function typeTextChunk() {
+        speakerBox.append($(".TextDiv").attr('data-var'))
+        maxCharacters = calculateMaxCharacters(textBox)
+        console.log(maxCharacters)
+        textChunks = breakTextIntoChunks(companionText, maxCharacters);
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
             textContent.innerHTML = currentChunk; // Set the whole chunk at once
-        }
-    }
-
-    function typeTextChunk2() {
-        console.log("next")
-        currentCharIndex = 0;
-        currentChunkIndex = 0;
-        currentIndex = 0
-        maxCharacters = calculateMaxCharacters(textBox);
-        textChunks = breakTextIntoChunks(warningText, maxCharacters)
-        if (currentChunkIndex < textChunks.length) {
-            var currentChunk = textChunks[currentChunkIndex];
-            textContent.innerHTML = currentChunk; // Set the whole chunk at once
-            console.log(currentChunkIndex, 'replace next')
-            isTypingInProgress = false
         }
     }
 
@@ -154,7 +132,6 @@ $(document).ready(function() {
         let chunks = [];
         while (currentIndex < companionText.length) {
             let chunk = companionText.substring(currentIndex, currentIndex + chunkSize);
-
             if (currentIndex + chunkSize < companionText.length) {
                 const lastSpaceIndex = chunk.lastIndexOf(' ');
                 if (lastSpaceIndex !== -1) {
@@ -181,31 +158,28 @@ $(document).ready(function() {
     var textBox = document.querySelector('.textBox');
     var textContent = document.querySelector('.textContent')
     var speakerBox = $(".speakerBox")
-    walkingText = "You follow the path ahead."
-    walkingText2 = "The road is quite long. In a weird sense, you don't feel tired though. As if it was all a dream."
-    walkingText3 = "The opaque curtain envelopping you is peirced sparsely as you walk by, letting small" +
-        " fragments of orange light shine the way ahead."
-    walkingText4 = 'You wander through this new place. The place opens of a bit, the the corridor morphing into a' +
-        ' large field.'
+    let walkingText = "The prairie ends narrowing a bit, branching paths beeing blocked by mountains and rocks."
+    + " You find a way leading to a dense forest."
+    let walkingText2 = "Going forward becomes more and more painfull. Vines and branches thick as great trees" + 
+    " slowing you. But suddenly, you feel fresh air, making you fast and slick as the wind."
+    let walkingText3 = "You see an exit. An unreal scene lies upon you, a cosmic horror devouring a beach."
+    let walkingText4 = 'You rush to battle, envigorated with courage !'
     $('.TextDiv').append('<p class="texting"> </p>')
-    companionText = ""
+    let companionText = ""
+    let companionText2 = ""
     if ($(".TextDiv").attr('data-var') == "Chernobog") {
-        companionText = "This is weird. Only a few of my nature have seen it. The appeareance of those orange lights. We dwell in the dark, nurtured by Human thoughts." +
-            " By the way, i'm Chernobog. People in your world revered me as their Death God. But someone else took its place..."
+        companionText = "The End of the road. The final Obstacle. One final step before going where you came from."
+        + " Don't hold back."
     } else if ($(".TextDiv").attr('data-var') == "Horus") {
-        companionText = "Rejoice ! This is a sign that the world is moving ! We usually don't see those... We are darkness dwellers." +
-            ' Even those who are made of light. But the balance is shifting, it seems. By the way, i\'m Horus ! Nice to' +
-            " meet you ! "
+        companionText = "I'm going to miss you. That was surprisingly fun... This thing is going to eat your world."
+        + "let's end it, here and now !"
     } else if ($(".TextDiv").attr('data-var') == "Xiuhcoatl") {
-        companionText = "Unusual. The sky is burning, as if the impostor somehow woke up. I didn't say before, but i'm" +
-            " Xiuhcotal, if you're wondering. There was a change in our world, some ages ago, or whatever time you count in." +
-            "a new One, bringing light. Claiming to be all of us in One. A beeing encompassing all..."
+        companionText = "And so we nearly reach the end. Just one last challenge. After that, well, sadly we would have"
+        " to say our farewells. For now, let's get it together, one last time."
     }
-    warningText = "There ! Something is comming."
 
     let maxCharacters
     let textChunks
-    console.log(textChunks)
     document.addEventListener("keydown", keyDown)
     let debounceTimeout;
     function keyDown(event) {
@@ -218,14 +192,11 @@ $(document).ready(function() {
                         typeTextChunk();
                     } else if (currentChunkIndex == textChunks.length - 1) {
                         if (dialogPassed == 0) {
-                            $('.centerTextBox').hide();
                             isTypingInProgress = true;
                             dialogPassed = 1;
+                            $('.centerTextBox').hide()
                             typeWriter4();
-                        } else if (dialogPassed == 1) {
-                            localStorage.setItem('currentTime', audio.currentTime);
-                            window.location.replace("/game/secondCombat");
-                        } 
+                        }
                     }
                 } else if (event.key === 'ArrowLeft') {
                     if (currentChunkIndex > 0) {

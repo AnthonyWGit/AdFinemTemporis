@@ -1,15 +1,13 @@
-$(document).ready(function() {
-
-        //________________________________________AUDIO_______________________________________
+$(document).ready(function()
+{
+    
+    //________________________________________AUDIO_______________________________________
     //trying to load audio as soon as possible 
-    const mp3FilePath ='/sfx/chil-adventure.mp3';
+    const mp3FilePath ='/sfx/stage6.mp3';
     var audio = new Audio(mp3FilePath);
-    audio.preload = 'auto';
     audio.volume = localStorage.getItem('volume');
-    localStorage.setItem('currentTime', audio.currentTime);
     if (!audio.muted)
     {
-        audio.currentTime = 0;
         audio.play()
     }
     console.log(audio.volume, audio.muted);
@@ -36,9 +34,12 @@ $(document).ready(function() {
     });
 //________________________________________ENDAUDIO____________________________________
 
-    $('.sun').hide()
-    $(".centerTextBox").hide();
-
+    $('.centerTextBox').hide()
+    function moveToCredits()
+    {
+        $('#data-2').append('<a href="/game/credits" class="endButton">The End</a> ')
+        $('#data-2').removeClass('hidden')
+    }
     function typeWriter() {
         if (index < walkingText.length) {
             $(".texting").append(walkingText.charAt(index))
@@ -47,8 +48,10 @@ $(document).ready(function() {
         } else {
             setTimeout(function() {
                     index = 0
+                    isTypingInProgress = false
                     $(".texting").text("")
-                    typeWriter2()
+                    $(".centerTextBox").show()
+                    typeTextChunk()
                 }, 2000) // Do nothing and wait 3 seconds 
         }
     }
@@ -64,7 +67,6 @@ $(document).ready(function() {
                     $(".texting").text("")
                     typeWriter3()
                 }, 2000) // Do nothing and wait 3 seconds 
-
         }
     }
 
@@ -76,61 +78,21 @@ $(document).ready(function() {
         } else {
             setTimeout(function() {
                     index = 0
-                    $('.sun').show()
-                    $(".texting").text("")
-                    $(".centerTextBox").show()
-                    dialog()
+                    isTypingInProgress = false;
+                    moveToCredits()
                 }, 2000) // Do nothing and wait 3 seconds 
         }
-    }
-
-    function typeWriter4() {
-        if (index < walkingText4.length) {
-            $(".texting").append(walkingText4.charAt(index))
-            index++
-            setTimeout(typeWriter4, 25) // Delay between each character
-        } else {
-            setTimeout(function() {
-                    index = 0
-                    $(".texting").text("")
-                    $(".textContent").text("")
-                    isTypingInProgress = false
-                    $('.centerTextBox').show();
-                    typeTextChunk2();
-                }, 2000) // Do nothing and wait 3 seconds 
-        }
-    }
-
-
-    function dialog() {
-        console.log($(".TextDiv").attr('data-var'))
-        speakerBox.append($(".TextDiv").attr('data-var'))
-        maxCharacters = calculateMaxCharacters(textBox)
-        textChunks = breakTextIntoChunks(companionText, maxCharacters);
-        isTypingInProgress = false;
-        typeTextChunk()
     }
 
     // Function to type a specific chunk of text
     function typeTextChunk() {
+        speakerBox.append($(".TextDiv").attr('data-var'))
+        maxCharacters = calculateMaxCharacters(textBox)
+        console.log(maxCharacters)
+        textChunks = breakTextIntoChunks(companionText, maxCharacters);
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
             textContent.innerHTML = currentChunk; // Set the whole chunk at once
-        }
-    }
-
-    function typeTextChunk2() {
-        console.log("next")
-        currentCharIndex = 0;
-        currentChunkIndex = 0;
-        currentIndex = 0
-        maxCharacters = calculateMaxCharacters(textBox);
-        textChunks = breakTextIntoChunks(warningText, maxCharacters)
-        if (currentChunkIndex < textChunks.length) {
-            var currentChunk = textChunks[currentChunkIndex];
-            textContent.innerHTML = currentChunk; // Set the whole chunk at once
-            console.log(currentChunkIndex, 'replace next')
-            isTypingInProgress = false
         }
     }
 
@@ -154,7 +116,6 @@ $(document).ready(function() {
         let chunks = [];
         while (currentIndex < companionText.length) {
             let chunk = companionText.substring(currentIndex, currentIndex + chunkSize);
-
             if (currentIndex + chunkSize < companionText.length) {
                 const lastSpaceIndex = chunk.lastIndexOf(' ');
                 if (lastSpaceIndex !== -1) {
@@ -181,31 +142,29 @@ $(document).ready(function() {
     var textBox = document.querySelector('.textBox');
     var textContent = document.querySelector('.textContent')
     var speakerBox = $(".speakerBox")
-    walkingText = "You follow the path ahead."
-    walkingText2 = "The road is quite long. In a weird sense, you don't feel tired though. As if it was all a dream."
-    walkingText3 = "The opaque curtain envelopping you is peirced sparsely as you walk by, letting small" +
-        " fragments of orange light shine the way ahead."
-    walkingText4 = 'You wander through this new place. The place opens of a bit, the the corridor morphing into a' +
-        ' large field.'
-    $('.TextDiv').append('<p class="texting"> </p>')
-    companionText = ""
+    let walkingText = "Dust settles. You take your time to breath. This sea of ink around you... It faints..."
+    let walkingText2 = "You wave at the one who stand with you."
+    let walkingText3 = "You look at the horizon. Waves come and crash on the shore with violence. But you see a door"
+    + " in the distance. You run on a ray of light."
+    $('#data').append('<p class="texting"> </p>')
+    let companionText = ""
+    let companionText2 = ""
     if ($(".TextDiv").attr('data-var') == "Chernobog") {
-        companionText = "This is weird. Only a few of my nature have seen it. The appeareance of those orange lights. We dwell in the dark, nurtured by Human thoughts." +
-            " By the way, i'm Chernobog. People in your world revered me as their Death God. But someone else took its place..."
+        companionText = "This is it. Pleasure to have met you, but i shall no stray much longer. I'm not supposed"
+        + " to roam in this part of Humans hidden mind. I have a feeling we will again in the future." +
+        " Until then, good bye."
     } else if ($(".TextDiv").attr('data-var') == "Horus") {
-        companionText = "Rejoice ! This is a sign that the world is moving ! We usually don't see those... We are darkness dwellers." +
-            ' Even those who are made of light. But the balance is shifting, it seems. By the way, i\'m Horus ! Nice to' +
-            " meet you ! "
+        companionText = "This area this is bright. Suits me better, you see. I was going to get blind swimming in"
+        + "this black abyss, i swear ! I wish we could take a walk together here, but i feel we've got little time..."
+        + "Go on. I'll have you in my mind, 'till we meet again."
     } else if ($(".TextDiv").attr('data-var') == "Xiuhcoatl") {
-        companionText = "Unusual. The sky is burning, as if the impostor somehow woke up. I didn't say before, but i'm" +
-            " Xiuhcotal, if you're wondering. There was a change in our world, some ages ago, or whatever time you count in." +
-            "a new One, bringing light. Claiming to be all of us in One. A beeing encompassing all..."
+        companionText = "We turned this thing into ashes. Nicely done ! If only we had a little bit of time to" +
+        " rejoice or reminisce when we met. Time flew, huh. Well, i'm not that sad, something tells me we are" +
+        "going to meet once again, some time. Now, rush, this place is not stable and it's gonna crash in a minute !"
     }
-    warningText = "There ! Something is comming."
 
     let maxCharacters
     let textChunks
-    console.log(textChunks)
     document.addEventListener("keydown", keyDown)
     let debounceTimeout;
     function keyDown(event) {
@@ -218,14 +177,11 @@ $(document).ready(function() {
                         typeTextChunk();
                     } else if (currentChunkIndex == textChunks.length - 1) {
                         if (dialogPassed == 0) {
-                            $('.centerTextBox').hide();
                             isTypingInProgress = true;
-                            dialogPassed = 1;
-                            typeWriter4();
-                        } else if (dialogPassed == 1) {
-                            localStorage.setItem('currentTime', audio.currentTime);
-                            window.location.replace("/game/secondCombat");
-                        } 
+                            dialogPassed = 1
+                            $('.centerTextBox').hide()
+                            typeWriter2()
+                        }
                     }
                 } else if (event.key === 'ArrowLeft') {
                     if (currentChunkIndex > 0) {

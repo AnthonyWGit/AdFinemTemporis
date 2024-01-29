@@ -2,7 +2,6 @@
 const mp3FilePath = '/sfx/celticMusic.mp3';
 var audio = new Audio(mp3FilePath);
 audio.preload = 'auto';
-
 audio.volume = localStorage.getItem('volume');
 if (!audio.muted)
 {
@@ -10,8 +9,6 @@ if (!audio.muted)
     audio.play()
 }
 console.log(audio.volume, audio.muted);
-
-
 
 function typeWriter() {
     if (index < text.length) {
@@ -115,8 +112,6 @@ function typeTextChunk() {
         dialogPassed = 1
     }
   }
-  
-
 
 //estimate the number of chars you can put in the box
 function calculateMaxCharacters(textBox) {
@@ -217,7 +212,6 @@ console.log(`Maximum characters that can fit: ${maxCharacters}`);
 let textChunks = breakTextIntoChunks(textToDisplay, maxCharacters);
 console.log(`Number of text chunks: ${textChunks.length}`);
 console.log(textChunks)
-
 
 // test with long text
 // let textToDisplay = "I didn't think you would be a birdie person. Expect the others to be pretty much mad. We don't have much time, let's press forward." +

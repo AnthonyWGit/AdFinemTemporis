@@ -1,3 +1,36 @@
+    //________________________________________AUDIO_______________________________________
+    //trying to load audio as soon as possible 
+    const mp3FilePath ='/sfx/chil-adventure.mp3';
+    var audio = new Audio(mp3FilePath);
+    audio.preload = 'auto';
+    audio.volume = localStorage.getItem('volume');
+    if (!audio.muted)
+    {
+        audio.play()
+    }
+    console.log(audio.volume, audio.muted);
+    document.querySelector('#mute').addEventListener('click', function() {
+        if (audio.muted == false)
+        {
+            audio.muted = true; // Unmute the audio
+            audio.play();
+            localStorage.setItem('volume', audio.volume)
+            localStorage.setItem('muted', "1")
+        }
+        else
+        {
+            audio.muted = false; // Unmute the audio       
+            localStorage.setItem('muted', "0")     
+        }
+    });
+
+    volume.addEventListener('input', function() {
+        rangeValue = document.querySelector("#volume").value
+        audio.volume = (rangeValue / 100)
+        localStorage.setItem('volume', audio.volume)
+        console.log(rangeValue);
+    });
+//________________________________________ENDAUDIO____________________________________
 
 function typeWriter() {
         setTimeout(function ()
@@ -72,6 +105,7 @@ function whenArrowPressed(event)
                 method: "GET",
             }).done(function()
             {
+                localStorage.setItem('currentTime', audio.currentTime);
                 window.location.replace('/game/hub');                
             })
         }
@@ -96,11 +130,6 @@ $(document).ready(function() {
     }, 5000); // moved the closing parenthesis here
     typeWriter();
 });
-
-//Vars initialization
-// Other : soound 
-const mp3FilePath = '/sfx/typewriter.mp3';
-var audio = new Audio(mp3FilePath);
 
 //query selectors
 let range = document.querySelector("#volume")
@@ -149,27 +178,4 @@ console.log(textChunks)
 document.addEventListener('keydown', whenArrowPressed);
 // Function to handle Spacebar key press for scrolling
 //eventListeners
-
-
-
-
-document.querySelector('#mute').addEventListener('click', function() {
-    if (audio.muted == false)
-    {
-        audio.muted = true; // Unmute the audio
-        audio.play();
-    }
-    else
-    {
-        audio.muted = false; // Unmute the audio            
-    }
-});
-
-volume.addEventListener('input', function() {
-    rangeValue = document.querySelector("#volume").value
-    audio.volume = (rangeValue / 100)
-    console.log(rangeValue);
-});
-
-
 

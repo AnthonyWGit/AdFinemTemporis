@@ -1,10 +1,7 @@
 
-$(document).ready(function ()
-{
-
-        //________________________________________AUDIO_______________________________________
+    //________________________________________AUDIO_______________________________________
     //trying to load audio as soon as possible 
-    const mp3FilePath ='/sfx/chill-piano.mp3';
+    const mp3FilePath ='/sfx/storm.mp3';
     var audio = new Audio(mp3FilePath);
     audio.volume = localStorage.getItem('volume');
     if (!audio.muted)
@@ -35,7 +32,8 @@ $(document).ready(function ()
     });
 //________________________________________ENDAUDIO____________________________________
 
-
+$(document).ready(function()
+{
     function actionsClick(event) {
         spaceActions.classList.toggle("hidden"); 
         strongS.classList.toggle('hidden'); 
@@ -116,7 +114,6 @@ $(document).ready(function ()
     }
     function ennemyTurn(event)
     {
-        
         let randomSkill = ajaxResponse.cpuDemon.skills[Math.floor(Math.random() * ajaxResponse.cpuDemon.skills.length)];
         console.log(randomSkill)
         $.ajax({
@@ -188,7 +185,7 @@ $(document).ready(function ()
                 }
             }
             console.log(response);
-            setTimeout(window.location.replace("/game/combat/resolve"), 3000);
+            setTimeout(window.location.replace("/game/combat/resolveBis"), 3000);
         });
     }
     
@@ -274,4 +271,4 @@ $(document).ready(function ()
     //event listeners
     // document.addEventListener("keydown", ennemyTurn)
     
-}) 
+})

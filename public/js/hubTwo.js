@@ -6,13 +6,12 @@ $(document).ready(function()
     var audio = new Audio(mp3FilePath);
     audio.preload = 'auto';
     audio.volume = localStorage.getItem('volume');
-    localStorage.setItem('currentTime', audio.currentTime);
+    
     if (!audio.muted)
     {
         audio.currentTime = parseFloat(localStorage.getItem('currentTime'));
         audio.play()
     }
-    
     console.log(audio.volume, audio.muted);
     document.querySelector('#mute').addEventListener('click', function() {
         if (audio.muted == false)
@@ -53,9 +52,10 @@ $(document).ready(function()
         $('.toHide').show();
     }, 5000); // moved the closing parenthesis here
 
-    $('.demonCol').on('click', function() {
+    $('.demonCol').on('click', function() 
+    {
 
-        $('.close').on('click', function() {
+        $('#close').on('click', function() {
             $('#modal').hide();
         });
 
@@ -126,4 +126,53 @@ $(document).ready(function()
             });
         });
     });
-});
+
+    $('#open-shop').on('click', function()
+    {
+        $('#modal-inventory').show()
+        $('#modal-merchant').show()
+
+        $('#close-inventory').on('click', function() {
+            $('#modal-inventory').hide();
+        });
+
+        $('#close-merchant').on('click', function() {
+            $('#modal-merchant').hide();
+        });
+
+        $("[id^=button-merchant-]").click(function(event) 
+        {
+            event.preventDefault();
+            var itemId = $(this).attr('id');
+            //break the string into two parts and pick the number
+            var inputFieldId = "#input-number-merchant-" + itemId.split('-')[2];
+            var formData = $(inputFieldId).val();
+            console.log(formData)
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "/game/merchant",
+                    data: 
+                    {
+                        number: formData,
+                        itemId : itemId.split('-')[2]
+                    }
+                }).done(function(response)
+                {
+                    console.log(response)
+                    if (response.newItem == null)
+                    {
+                        $('#inventory-number-'+ response.target).text(response.quantity)
+                        $('#gold-number').text('Changed');
+                    } 
+                    else
+                    {
+                        var newItem = $('<li>').text(response.newItem + '('+ response.quantity + ')');
+                        $('#items-list').append(newItem);
+                    }
+                })
+        });
+    });
+//end of document ready
+})
+
