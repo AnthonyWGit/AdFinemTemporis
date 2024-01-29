@@ -21,6 +21,19 @@ class SkillTableRepository extends ServiceEntityRepository
         parent::__construct($registry, SkillTable::class);
     }
 
+    public function findSkillsBelowOrEqualToLevel(?int $level, int $idDemon)
+    {
+        return $this->createQueryBuilder('st')
+        ->andWhere('st.level <= :level')
+        ->andWhere('st.demonBase = :idDemon')
+        ->setParameters([
+            'level' => $level,
+            'idDemon' => $idDemon
+        ])
+        ->getQuery()
+        ->getResult();
+    }
+
 //    /**
 //     * @return SkillTable[] Returns an array of SkillTable objects
 //     */
