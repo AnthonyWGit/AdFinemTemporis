@@ -16,6 +16,7 @@ use App\Repository\DemonTraitRepository;
 use App\Repository\SkillTableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DemonPlayerRepository;
+use App\Repository\HaveItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -394,7 +395,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/game/combat', name: 'combat')]
-    public function combat(Request $request, ?Battle $battle, 
+    public function combat(Request $request, ?Battle $battle, HaveItemRepository $haveItemRepository,
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
@@ -406,7 +407,6 @@ class GameController extends AbstractController
         if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
             $session->remove('placeholder');
-            $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
             $battle = new Battle;
             $battle->setXpEarned(600);
             $battle->setGoldEarned(30);
@@ -423,10 +423,9 @@ class GameController extends AbstractController
             // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
-            $levelDemon = $playerDemon->getLevel();
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
-            
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]);
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
                 $initiative = $this->getUser()->getUsername();
@@ -452,7 +451,8 @@ class GameController extends AbstractController
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
                 'intiative' => $initiative,
-                'percentage' => $percentage
+                'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer
             ]);    
         }
         else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $inBattle) //combat is still in progress so the user is put in it 
@@ -462,7 +462,7 @@ class GameController extends AbstractController
             $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $playerDemon]);
             $generatedCpu = $battleContent->getDemonPlayer2();
             //current xp values for xp bar 
-            $levelDemon = $playerDemon->getLevel();
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]);
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
@@ -490,6 +490,7 @@ class GameController extends AbstractController
                 'playerDemons' => $playerDemons,
                 'initiative' => $initiative,
                 'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer,
             ]);    
         }
         else if ($this->getUser()->getStage() == 2)

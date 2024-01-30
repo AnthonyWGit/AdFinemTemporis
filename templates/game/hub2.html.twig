@@ -10,7 +10,7 @@
 {% block body %}
 <div class="sun">
 </div>
-<div class="flashes gameGlobalDiv">
+<div class="flashes gameGlobalDiv align-center">
     {% for message in app.flashes('notice') %}
         <p>{{ message }}</p>
     {% endfor %}
@@ -18,7 +18,7 @@
         <p>{{ message }}</p>
     {% endfor %}
 </div>
-<div class="gameGlobalDivGap toHide">
+<div class="gameGlobalDivGap toHide align-center">
     {# <p class="toHide">This is the hub menu</p> #}
     <a class="linkNoBase" href="{{path('combat2')}}">Wander around</a>
     <a class="linkNoBase" href="{{path('stageFive')}}">Continue story</a>

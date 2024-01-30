@@ -34,7 +34,7 @@ function typeWriter3() {
     if (index < text3.length) {
         document.querySelector("#part2").innerHTML += text3.charAt(index);
         index++;
-        setTimeout(typeWriter3, 50); // Delay between each character
+        setTimeout(typeWriter3, 25); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -50,7 +50,7 @@ function typeWriter4() {
     if (index < text4.length) {
         document.querySelector("#part3").innerHTML += text4.charAt(index);
         index++;
-        setTimeout(typeWriter4, 50); // Delay between each character
+        setTimeout(typeWriter4, 25); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -66,7 +66,7 @@ function typeWriter5() {
     if (index < text5.length) {
         document.querySelector("#part4").innerHTML += text5.charAt(index);
         index++;
-        setTimeout(typeWriter5, 50); // Delay between each character
+        setTimeout(typeWriter5, 25); // Delay between each character
     }
     else
     {   setTimeout(function (){
@@ -74,6 +74,7 @@ function typeWriter5() {
         document.querySelector("#part2").appendChild(createButtonHorus)
         document.querySelector("#part3").appendChild(createButtonXiuhcoatl)
         document.querySelector("#part4").appendChild(createButtonChernobog)
+        $('.gameGlobalDiv').addClass('align-center')
 
     }, 2000) // Do nothing and wait 3 seconds 
         
@@ -141,6 +142,7 @@ const mp3FilePath = '/sfx/celticMusic.mp3';
 var audio = new Audio(mp3FilePath);
 
 document.getElementById('yesButton').addEventListener('click', function() {
+    $('gameGlobalDiv').removeClass('align-center')
     audio.muted = false; // Unmute the audio
     audio.volume = 0.3;
     localStorage.setItem('volume', audio.volume)
@@ -154,6 +156,7 @@ document.getElementById('yesButton').addEventListener('click', function() {
 });
 
 document.getElementById('noButton').addEventListener('click', function() {
+    $('.gameGlobalDiv').removeClass('align-center')
     audio.pause(); // Pause the audio
     audio.volume = 0
     audio.muted = true

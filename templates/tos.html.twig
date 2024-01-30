@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en-GB en-US">
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        {% block meta %}{% endblock %}
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">          
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/looksLikeAButton.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/stars.css') }}">
+        {% endblock %}
+    </head>
+    <body>
+        <input type="checkbox" id="menuShowHide">
+        <label for="menuLabel" id="menuLabel"></label>
+        <nav class="navbar" id="mainMenu">
+            <ul>
+                <li><a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/home-violet.svg') }}"> Home</a></li>
+                <li><a class="iconText" href=" {{path("demonsList")}}" ><img class="navSvg" src="{{ asset('img/book-violet.svg') }}"> Encyclopedia</a></li>
+                <li><a class="iconText" href=" {{path("the_lab")}}" ><img class="navSvg" src="{{ asset('img/chem-violet.svg') }}"> The Lab</a></li>
+                <li><a class="iconText" href=" {{path("community")}}" ><img class="navSvg" src="{{ asset('img/community-violet.svg') }}"> Community</a></li>
+                {% if not app.user %}
+                    <a class="iconText" href=" {{path("app_login")}} ">Login</a></li>
+                    <a class="iconText" href=" {{path("app_register") }}">Register</a></li>
+                {% endif %}
+                {% if app.user and app.user.isverified %}
+                    <li><a href=" {{path("app_logout") }}">Logout</a></li>
+                    <li><a class="iconText" href=" {{path("account")}}" ><img class="navSvg" src="{{ asset('img/profile.svg') }}"> Account</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div id="container">
+            <div id='stars'></div>
+            <div id='stars2'></div>
+            <div id='stars3'></div>
+
+            {% block body %}
+
+            {% endblock %}
+        </div>
+        {% block footer %}
+        <footer class="footer">
+            <div class="footerRow">
+                <div class="eulaRow">
+                    <a class="linkNoBase" href="{{path("app_tos")}}">ToS</a>
+                </div>
+                <div class="socialsColumn">
+                    <p class="socialsText">Socials</p>
+                    <ul class="socials">
+                        <li><a class="linkNoBase" href="#"><img class="contactSocial" alt="Picture for the social network X" src="{{ asset('img/x-icon-white.svg') }}"> X</a></li>
+                        <li><a class="linkNoBase" href="#"><img class="contactSocial" alt="Picture for Instagram" src="{{ asset('img/insta.svg') }}"> Instagram</a></li>
+                        <li><a class="linkNoBase" href="#"><img class="contactSocial" alt="Picture for Tiktok" src="{{ asset('img/tiktok-white.svg') }}"> TikTok</a></li>
+                    </ul>
+                </div>
+                <div class="contactRow">
+                    <a class="linkNoBase align" href="mailto:admin@atf.com"><img class="contactImg" alt="Picture of a letter" src="{{ asset('img/contact-white.svg') }}">Contact</a>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
+    </body>
+</html>

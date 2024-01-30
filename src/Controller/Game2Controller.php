@@ -21,6 +21,7 @@ use App\Repository\SkillTableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DemonPlayerRepository;
 use App\Service\BattleLauncher;
+use App\Service\ItemUsed;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -126,6 +127,16 @@ class Game2Controller extends AbstractController
         return new JsonResponse(['status' => 'success', 'errors' => $errors,'data' => $data]);
     }
 
+    #[Route('/game/ajaxe/itemUsed', name: 'itemUsed')]
+    public function itemUsed(Request $request, ItemUsed $itemUsed)
+    {
+        if(!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException("Page not found");
+        }
+        $data = $request->request->all();
+        return $itemUsed->itemUsed($data);
+    }
+
     #[Route('/game/stageThree', name: 'stageThree')]
     public function stageThree(BattleChecker $checker, EntityManagerInterface $em)
     {
@@ -163,6 +174,7 @@ class Game2Controller extends AbstractController
             $combatResolution->combatResolve(6);
             return $this->redirectToRoute('credits');                     
         }
+        return $this->redirectToRoute('app_home');
     }
 
     #[Route('/game/stageFour', name: 'stageFour')]

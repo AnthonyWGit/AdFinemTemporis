@@ -267,8 +267,80 @@ $(document).ready(function()
     let hpMaxCPU  =''
     let xpEarned = ""
     let goldEarned = ""
-    
     //event listeners
     // document.addEventListener("keydown", ennemyTurn)
-    
+
+    let itemUsage = true
+    //___________________________INVENTORY______________________________
+    if (itemUsage)
+    {
+        $('#Items').on('click', function()
+        {
+            $('#modal-inventory').show()
+
+            $('#close-inventory').on('click', function() {
+                $('#modal-inventory').hide();
+            });
+
+            $("[id^=using-item-]").click(function(event) 
+            {
+                event.preventDefault();
+                var itemId = $(this).attr('id');
+                //break the string into two parts and pick the number
+                var itemWhole = "#using-item" + itemId.split('-')[2]
+                console.log(itemId.split('-')[2])
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/game/ajaxe/itemUsed",
+                        data: 
+                        {
+                            itemId : itemId.split('-')[2],
+                            currentHpPlayer : hpCurrentPlayer,
+                            maxHpPlayer : hpMaxPlayer
+                        }
+                    }).done(function(response)
+                    {
+                        hpCurrentPlayer = hpCurrentPlayer + response.hpHealed
+                        console.log(hpMaxPlayer, hpCurrentPlayer)
+                        var imDone = hpCurrentPlayer
+                        var uuu = hpMaxPlayer
+                        if (imDone >= uuu) hpCurrentPlayer = hpMaxPlayer
+                        //select child with matched id 
+                        console.log(hpMaxPlayer, hpCurrentPlayer)
+                        var num = $("#" + itemId).find("span[id^='inventory-number-']");
+                        if(hpCurrentCPU == hpMaxCPU)
+                        {
+                            $(".textContentCombat").hide()
+                            setTimeout(function()
+                            {
+                                $('.textBoxCombat').append('<p id="gonnaRemove">You are already full HP !</p>')
+                            },1500)
+                            setTimeout(function()
+                            {
+                                $('#gonnaRemove').remove()
+                                $('.textContentCombat').show()
+                            },3000)
+                            // console.log($("#inventory-number-" + $(event.target).attr('id').split('-')[2]))
+                        }
+                        else
+                        {
+                            if (hpCurrentPlayer == maxHpPlayer)
+                            {
+                                document.querySelector("#hpFillPlayer").style.width = '100%'
+                                $('#currentHpPlayer').text(hpMaxPlayer)
+                            }
+                            else
+                            {
+                                document.querySelector("#hpFillPlayer").style.width = ((hpCurrentPlayer / hpMaxPlayer)*100) + '%' 
+                                num.text('('+ response.remains +')')              
+                                $('#currentHpPlayer').text(hpCurrentPlayer)             
+                            }
+                            console.log(hpMaxPlayer, hpCurrentPlayer)
+                            itemUsage = false
+                        }
+                    })
+            });
+        });        
+    }
 })

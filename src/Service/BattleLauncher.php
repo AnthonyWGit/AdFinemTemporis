@@ -17,6 +17,7 @@ class BattleLauncher extends AbstractController
     private DemonGenerator $demonGenerator;
     private BattleChecker $battleChecker;
     private BattleRepository $battleRepository;
+    
     public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager,
     DemonGenerator $demonGenerator, BattleChecker $battleChecker, BattleRepository $battleRepository)
     {

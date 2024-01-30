@@ -253,6 +253,7 @@ function keyDown(event)
                     $('.centerTextBox').hide();
                     isTypingInProgress = true
                     document.removeEventListener("keydown", keyDown)
+                    $('.TextDiv').removeClass('align-center')
                     typeWriter2()                
                 }
                 else if (dialogPassed == 1)
