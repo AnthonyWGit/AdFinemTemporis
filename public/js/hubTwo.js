@@ -163,12 +163,13 @@ $(document).ready(function()
                     if (response.newItem == null)
                     {
                         $('#inventory-number-'+ response.target).text(response.quantity)
-                        $('#gold-number').text('Changed');
+                        $('#gold-number').text(response.gold);
                     } 
                     else
                     {
                         var newItem = $('<li>').text(response.newItem + '('+ response.quantity + ')');
                         $('#items-list').append(newItem);
+                        $('#gold-number').text(response.gold);
                     }
                 })
         });
