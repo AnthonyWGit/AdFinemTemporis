@@ -111,7 +111,7 @@ class Game2Controller extends AbstractController
                 $qt = $number;
                 $ifNewItem = $newPair->getItem()->getName();
                 $target = $newPair->getItem()->getId();
-
+                $gold = $this->getUser()->getGold();
             }
             return new JsonResponse(
                 [
@@ -120,7 +120,8 @@ class Game2Controller extends AbstractController
                     'data' => $data,
                     'quantity' => $qt,
                     'newItem' => $ifNewItem,
-                    'target' => $target
+                    'target' => $target,
+                    'gold' => $gold
                     ]
                 );
         }
@@ -141,10 +142,10 @@ class Game2Controller extends AbstractController
     public function stageThree(BattleChecker $checker, EntityManagerInterface $em)
     {
         $starter = $this->getUser()->getDemonPlayer();
-        if ($checker->inBattleCheck()) return $this->redirectToRoute('app_home');
+        if ($checker->inBattleCheck()) return $this->redirectToRoute('cheating');
         if ($this->getUser()->getStage() !== 3 && $this->getUser()->getStage() !== 9999)
         {
-            return $this->redirectToRoute("app_home");
+            return $this->redirectToRoute("cheating");
         }
         $this->getUser()->setStage(3);
         $em->flush();
@@ -179,8 +180,8 @@ class Game2Controller extends AbstractController
 
     #[Route('/game/stageFour', name: 'stageFour')]
     public function stageFour(BattleChecker $checker): Response
-    {   if ($checker->inBattleCheck()) return $this->redirectToRoute("app_home");
-        if ($this->getUser()->getStage() != 4) return $this->redirectToRoute("app_home");
+    {   if ($checker->inBattleCheck()) return $this->redirectToRoute("cheating");
+        if ($this->getUser()->getStage() != 4) return $this->redirectToRoute("cheating");
         $this->getUser()->setStage(10000);
         $demons=$this->getUser()->getDemonPlayer();
         return $this->render('game/stageFourr.html.twig', [
@@ -191,7 +192,7 @@ class Game2Controller extends AbstractController
 
     #[Route('/game/stageFive', name: 'stageFive')]
     public function stageFive(BattleChecker $checker, EntityManagerInterface $em): Response
-    {   if ($checker->inBattleCheck()) return $this->redirectToRoute("app_home");
+    {   if ($checker->inBattleCheck()) return $this->redirectToRoute("cheating");
         if ($this->getUser()->getStage() !== 10000 && $this->getUser()->getStage() !== 5) return $this->redirectToRoute("app_home");
         $this->getUser()->setStage(5);
         $em->flush();
@@ -204,8 +205,8 @@ class Game2Controller extends AbstractController
 
     #[Route('/game/stageSix', name: 'stageSix')]
     public function stageSix(BattleChecker $checker, EntityManagerInterface $em): Response
-    {   if ($checker->inBattleCheck()) return $this->redirectToRoute("app_home");
-        if ($this->getUser()->getStage() !==6) return $this->redirectToRoute("app_home");
+    {   if ($checker->inBattleCheck()) return $this->redirectToRoute("cheating");
+        if ($this->getUser()->getStage() !==6) return $this->redirectToRoute("cheating");
         $demons=$this->getUser()->getDemonPlayer();
         return $this->render('game/stageSix.html.twig', [
             'demon' => $demons[0],
@@ -335,9 +336,9 @@ class Game2Controller extends AbstractController
     }
 
     #[Route('/game/credits', name: 'credits')]
-    public function credits(BattleLauncher $battleLauncher, BattleChecker $battleChecker) : Response
+    public function credits(BattleChecker $battleChecker) : Response
     {
-        if ($battleChecker->inBattleCheck() && $this->getUser()->getStage() != 6) $this->redirectToRoute('app_home');
+        if ($battleChecker->inBattleCheck() && $this->getUser()->getStage() != 6) $this->redirectToRoute('cheating');
         return $this->render('game/credits.html.twig');
     }
 }
