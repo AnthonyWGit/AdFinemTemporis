@@ -101,7 +101,7 @@ $(document).ready(function()
                     document.querySelector("#hpFillCPU").style.width = '0%'
                     document.querySelector("#currentHpCPU").innerHTML = "0 HP"
                     textContentCombat.innerHTML = "You win ! </br> Your current Demon gains " + xpEarned + " XP and " + goldEarned + " Gold."
-                    setTimeout(playerWon,7000)
+                    setTimeout(playerWon,3000)
                 }
                 else
                 {
