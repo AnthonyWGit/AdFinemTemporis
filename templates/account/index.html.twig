@@ -25,10 +25,12 @@
                 <a class="looksLikeAButtonBlue" href="{{path("accountPasswordChange")}}"> Change password</a>
                 <a class="looksLikeAButtonBlue" href="{{path("accountEmailChange")}}"> Change email</a>
             </div>
-            <a href="{{path('softDeleteWarning')}}">Delete your account</a>
-            <div class="row">
-                <a class="looksLikeAButtonBlue" href="{{path("sevenDays")}}"> See Recent users</a>
-            </div>
+            <a class="looksLikeAButtonAzure" href="{{path('softDeleteWarning')}}">Delete your account</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="row">
+                    <a class="looksLikeAButtonBlue" href="{{path("sevenDays")}}">See Recent users</a>
+                </div>
+            {% endif %}
     </div>
     <div class="globalDivGap">
         <h1 class="centerTitle">Manage your game progression</h1>

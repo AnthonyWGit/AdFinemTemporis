@@ -18,6 +18,26 @@
     box-shadow: 7px 7px 0px 3px #FFDB00;
 }
 
+.looksLikeAButtonAzure {
+    display: flex;
+    background-color: var(--base-noalpha-color1);
+    padding: 1.5rem;
+    width: 7rem;
+    height: 1rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: solid 0.5px var(--navbarText);
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    color: var(--colorForLightBg);
+    box-shadow: 0px 0px 0px 0px var(--formInside);
+}
+
+.looksLikeAButtonAzure:hover {
+    box-shadow: 7px 7px 0px 3px var(--formInside);
+}
+
 .looksLikeAButtonBlue
 {
     border: 0.25px solid black;
