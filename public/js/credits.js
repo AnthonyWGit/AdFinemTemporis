@@ -40,9 +40,9 @@ $(document).ready(function()
         // Create a new div with the text "The End"
         setTimeout(function()
         {
-            var newElement = $('<div class="gameGlobalDiv charm theEnd center-align">The End (For Real)</div>');
+            var newElement = $('<div class="gameGlobalDiv charm theEnd align-center">The End (For Real)</div>');
             $('#container').append(newElement);
-            var homeLink = $('<div class="gameGlobalDiv front center-align"><a href="/home" class="endButton">Homepage</a></div>');
+            var homeLink = $('<div class="gameGlobalDiv front align-center"><a href="/home" class="endButton">Homepage</a></div>');
             $('#container').append(homeLink);
         },3000)
     });
