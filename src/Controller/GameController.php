@@ -144,7 +144,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/ajaxe/combatAjax', name: 'combatAjax')]
-    public function combatAjax(Request $request, ?Battle $battle, 
+    public function combatAjax(Request $request, ?Battle $battle, SkillTableRepository $skillTableRepository,
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
@@ -224,14 +224,16 @@ class GameController extends AbstractController
             
             // add other fields as needed
         ],
-        'playerDemons' => array_map(function($demon) {
+        'playerDemons' => array_map(function($demon) use ($skillTableRepository){
+            $level = $demon->getLevel();
+            $idDemon = $demon->getDemonBase()->getId();
             return [
                 'id' => $demon->getId(),
                 'hpMax' =>$demon->getMaxHp(),
                 'name' => $demon->getDemonBase()->getName(),
-                'skills' => array_map(function ($skill) {
-                    return $skill->getName(); // adjust this based on your Skill entity structure
-                }, $demon->getSkills()->toArray())
+                'skills' => array_map(function ($skill) use ($skillTableRepository, $level, $idDemon){
+                    return $skill->getSkill()->getName(); // adjust this based on your Skill entity structure
+                }, $demon->getDemonBase()->getSkillsBelow($skillTableRepository, $level, $idDemon))
                 // add other fields as needed
             ];
         }, $playerDemons->toArray()),
@@ -391,6 +393,7 @@ class GameController extends AbstractController
         return $this->render('game/stageTwo.html.twig', [
             'demon' => $starter[0],
             'demons' => $starter,
+
         ]);
     }
 
@@ -398,35 +401,30 @@ class GameController extends AbstractController
     public function combat(Request $request, ?Battle $battle, HaveItemRepository $haveItemRepository,
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
-    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
         if ($inBattle && $this->getUser()->getStage() == 3) return $this->redirectToRoute('combat2');
         if ($inBattle && $this->getUser()->getStage() == 10000) return $this->redirectToRoute('combat2');
         $session = $request->getSession();
-        if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
+        if ($session->get('placeholder') == 'a' && !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
-            $session->remove('placeholder');
-            $battle = new Battle;
+            $session->remove('placeholder'); //remove value of placeholder key
+            $battle = new Battle; //Starting Battle
             $battle->setXpEarned(600);
             $battle->setGoldEarned(30);
-            $playerDemons = $this->getUser()->getDemonPlayer();
+            $playerDemons = $this->getUser()->getDemonPlayer(); //Retrieve player team - Below generate computer demon
             $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $skillRepository , $demonTraitRepository,$playerRepository, $entityManager);
-            // $playerDemons[0]->addFighter($battle);
-            // $generatedCpu->addFighter2($battle);
-            $playerDemon = $playerDemons[0];
-            $playerDemon->addFighter($battle);
+            $playerDemon = $playerDemons[0]; //$playerDemons is collection of array : here pick the object at index 0
+            $playerDemon->addFighter($battle); //setting figthers
             $generatedCpu->addFighter2($battle);
             $entityManager->persist($battle);
-            // $this->getUser()->addRole("ROLE_IN_COMBAT");
-            // $token = new UsernamePasswordToken($this->getUser(), null, 'main', $this->getUser()->getRoles());
-            // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
-            $xpDemon = $playerDemon->getExperience();
+            $xpDemon = $playerDemon->getExperience(); //For level calculation
             $percentage = Math::calculateLevelPercentage($xpDemon);
-            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]);
-            if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]); //get items
+            if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi()) //get Agi to calc who goes first
             {
                 $initiative = $this->getUser()->getUsername();
             }
@@ -455,7 +453,7 @@ class GameController extends AbstractController
                 'itemsPlayer' => $itemsPlayer
             ]);    
         }
-        else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $inBattle) //combat is still in progress so the user is put in it 
+        else if ($inBattle) //combat is still in progress so the user is put in it 
         {
             $playerDemons = $this->getUser()->getDemonPlayer();
             $playerDemon = $playerDemons[0];

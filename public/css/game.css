@@ -372,3 +372,35 @@ button
 .endButton:hover {
     box-shadow: -5px -5px black, 5px 5px white;
 }
+
+#modal-inventory
+{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    right: 0;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    overflow: auto;
+}
+
+.modal-content-inventory
+{
+    background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
+    width: 99%;
+    height: 99%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    gap: 0.5rem;
+    border: solid white 1px;
+}
+#current-gold-p
+{
+    position: absolute;
+    top: 0;
+    left: 25%;
+}

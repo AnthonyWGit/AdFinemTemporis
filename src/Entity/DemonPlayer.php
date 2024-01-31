@@ -41,8 +41,6 @@ class DemonPlayer
     #[ORM\ManyToOne(inversedBy: 'Demon_Player')]
     private ?Player $player = null;
 
-
-
     #[ORM\ManyToOne(inversedBy: 'demon_player')]
     #[ORM\JoinColumn(nullable: false)]
     private ?DemonTrait $trait = null;

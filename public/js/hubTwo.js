@@ -132,6 +132,7 @@ $(document).ready(function()
         $('#modal-inventory').show()
         $('#modal-merchant').show()
 
+
         $('#close-inventory').on('click', function() {
             $('#modal-inventory').hide();
         });
