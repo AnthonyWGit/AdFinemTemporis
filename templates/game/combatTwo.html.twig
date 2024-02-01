@@ -53,6 +53,27 @@
     </div>
 {% endblock %}
 
+
+    <!-- Modal Inventory-->
+    <div id="modal-inventory" class="modal-inventory">
+        <!-- Modal content -->
+        <div class="modal-content-inventory">
+                <span class="close" id="close-inventory">&times;</span>
+                <p id="current-gold-p">Current Gold : <span id="gold-number">{{app.user.gold}}</span> </p>  
+            <div class="modal-inventory">
+                <ul id="items-list">
+                {% for item in itemsPlayer %}
+                        <li id="all-item-{{item.id}}">
+                            <span id='using-item-{{item.id}}'>
+                            {{item.item.name}}</span>
+                            <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span>
+                        </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
 {% block js %}
     <script src="{{ asset("js/combatCopy.js")}}"></script>
 {% endblock %}
