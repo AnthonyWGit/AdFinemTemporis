@@ -5,6 +5,7 @@ use App\Service\Math;
 use App\Entity\Battle;
 use App\Repository\BattleRepository;
 use App\Repository\PlayerRepository;
+use App\Repository\HaveItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,22 +18,25 @@ class BattleLauncher extends AbstractController
     private DemonGenerator $demonGenerator;
     private BattleChecker $battleChecker;
     private BattleRepository $battleRepository;
+    private HaveItemRepository $haveItemRepository;
     
     public function __construct(RequestStack $requestStack, EntityManagerInterface $entityManager,
-    DemonGenerator $demonGenerator, BattleChecker $battleChecker, BattleRepository $battleRepository)
+    DemonGenerator $demonGenerator, BattleChecker $battleChecker, BattleRepository $battleRepository,
+    HaveItemRepository $haveItemRepository)
     {
         $this->requestStack = $requestStack;
         $this->entityManager = $entityManager;
         $this->demonGenerator = $demonGenerator;
         $this->battleChecker = $battleChecker;
         $this->battleRepository = $battleRepository;
+        $this->haveItemRepository = $haveItemRepository;
     }
 
     public function finalCombat(): Response
     {
         if ($this->getUser()->getStage() !== 5) return $this->redirectToRoute('app_home');
         $session = $this->requestStack->getCurrentRequest()->getSession();
-        if (/* $session->get('placeholder') == 'a' && */ !$this->battleChecker->inBattleCheck())
+        if (!$this->battleChecker->inBattleCheck())
         {
             $session->remove('placeholder');
             $battle = new Battle;
@@ -48,6 +52,7 @@ class BattleLauncher extends AbstractController
             $this->entityManager->flush();
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
+            $itemsPlayer = $this->haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]); //get items
             
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
@@ -74,10 +79,11 @@ class BattleLauncher extends AbstractController
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
                 'intiative' => $initiative,
-                'percentage' => $percentage
+                'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer,
             ]);    
         }
-        else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $this->battleChecker->inBattleCheck()) //combat is still in progress so the user is put in it 
+        else if ($this->battleChecker->inBattleCheck()) //combat is still in progress so the user is put in it 
         {
             $playerDemons = $this->getUser()->getDemonPlayer();
             $playerDemon = $playerDemons[0];
@@ -86,6 +92,7 @@ class BattleLauncher extends AbstractController
             //current xp values for xp bar 
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
+            $itemsPlayer = $this->haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]); //get items
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
                 $initiative = $this->getUser()->getUsername();
@@ -111,6 +118,7 @@ class BattleLauncher extends AbstractController
                 'playerDemons' => $playerDemons,
                 'initiative' => $initiative,
                 'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer,
             ]);    
         }
         else if ($this->getUser()->getStage() == 2)
