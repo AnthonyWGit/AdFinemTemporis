@@ -44,7 +44,7 @@
                             <td>{{ skillTable.skill.name }}</td>
                             {% if is_granted('ROLE_ADMIN') %}
                             <td>
-                                <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('editSkillTable', {'id' : skillTable.id})}}">Edit</a></i>
+                                <i><a class="deleteBtn adminAction" href='#'>X</a><a class="adminAction" href=" {{path('editSkillTable', {'id' : skillTable.id})}}">Edit</a></i>
                             </td>
                             {% endif %}
                         </tr>
