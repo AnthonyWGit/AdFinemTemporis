@@ -33,7 +33,10 @@ class ItemUsed extends AbstractController
         $errors = null;
 
         //pick the selected item, fetch cost, fetch player gold stack, calculate if he can afford 
-        $selectedHaveItem = $this->haveItemRepository->findOneBy(["id"=>$itemId]);
+        $selectedHaveItem = $this->haveItemRepository->findOneBy([
+            "id"=>$itemId, 
+            "player" => $this->getUser()->getId()
+        ]);
         $selectedItem = $selectedHaveItem->getItem();
         if ($selectedHaveItem->getQuantity() == 1) //using healing item
         {
@@ -105,5 +108,6 @@ class ItemUsed extends AbstractController
                     );
             }
         }
+        return 0;
     }
 }
