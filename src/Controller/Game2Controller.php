@@ -230,16 +230,15 @@ class Game2Controller extends AbstractController
 
    #[Route('/game/secondCombat', name: 'combat2')]
     public function combat(Request $request, ?Battle $battle, 
-     PlayerRepository $playerRepository, 
+    HaveItemRepository $haveItemRepository,
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, BattleChecker $checker ,
     DemonGenerator $demonGenerator): Response
     {
         if ($this->getUser()->getStage() !== 3 && $this->getUser()->getStage() !== 10000) return $this->redirectToRoute('app_home');
         $session = $request->getSession();
-        if (/* $session->get('placeholder') == 'a' && */ !$checker->inBattleCheck())
+        if (!$checker->inBattleCheck())
         {
             $session->remove('placeholder');
-            $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
             $battle = new Battle;
             $battle->setXpEarned(750);
             $battle->setGoldEarned(80);
@@ -253,7 +252,7 @@ class Game2Controller extends AbstractController
             $entityManager->flush();
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
-            
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]); //get items
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
                 $initiative = $this->getUser()->getUsername();
@@ -279,10 +278,11 @@ class Game2Controller extends AbstractController
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
                 'intiative' => $initiative,
-                'percentage' => $percentage
+                'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer
             ]);    
         }
-        else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $checker->inBattleCheck()) //combat is still in progress so the user is put in it 
+        else if ($checker->inBattleCheck()) //combat is still in progress so the user is put in it 
         {
             $playerDemons = $this->getUser()->getDemonPlayer();
             $playerDemon = $playerDemons[0];
@@ -291,6 +291,7 @@ class Game2Controller extends AbstractController
             //current xp values for xp bar 
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]); //get items
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
             {
                 $initiative = $this->getUser()->getUsername();
@@ -316,6 +317,7 @@ class Game2Controller extends AbstractController
                 'playerDemons' => $playerDemons,
                 'initiative' => $initiative,
                 'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer
             ]);    
         }
         else if ($this->getUser()->getStage() == 2)
