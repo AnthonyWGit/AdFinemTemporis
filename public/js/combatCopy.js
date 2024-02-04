@@ -75,6 +75,7 @@ $(document).ready(function()
         event.target.removeEventListener('click', playerSkillClicked)
         let skillUsed = event.target.skillUsed;
         document.querySelector(".new").classList.toggle('hidden')
+        console.log(hpCurrentPlayer)
         $.ajax({
             url: '/game/ajaxe/SkillUsed',  // The URL of the route you defined in your Symfony controller
             method: 'POST',  // Or 'POST', depending on your needs
@@ -285,6 +286,7 @@ $(document).ready(function()
                 itemUsage = "none" //Disallow clicking again
                 var itemId = $(this).attr('id')
                 var itemWhole = "#using-item" + itemId.split('-')[2]
+                console.log(itemId, itemId.split('-')[2])
                 $.ajax({
                     type: "POST",
                     url: "/game/ajaxe/itemUsed",
@@ -308,7 +310,7 @@ $(document).ready(function()
                         hpCurrentPlayer = parseInt(response.data.currentHpPlayer) + parseInt(response.hpHealed)
                         console.log(response.data.currentHpPlayer)
                         console.log(response.hpHealed)
-                        if (hpCurrentPlayer > parseInt(response.data.maxHpPlayer)) hpCurrentPlayer = maxHpPlayer
+                        if (hpCurrentPlayer > parseInt(response.data.maxHpPlayer)) hpCurrentPlayer = response.data.maxHpPlayer
                         var itemIdNumberNew = itemId.split('-')[2]
                         var num = $("#using-item-" + itemIdNumberNew).siblings("span[id^='inventory-number-']")
                         console.log(itemIdNumberNew)

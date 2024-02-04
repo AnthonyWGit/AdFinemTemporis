@@ -285,6 +285,7 @@ $(document).ready(function ()
                 itemUsage = "none" //Disallow clicking again
                 var itemId = $(this).attr('id')
                 var itemWhole = "#using-item" + itemId.split('-')[2]
+                console.log(itemId, itemId.split('-')[2])
                 $.ajax({
                     type: "POST",
                     url: "/game/ajaxe/itemUsed",
@@ -308,7 +309,7 @@ $(document).ready(function ()
                         hpCurrentPlayer = parseInt(response.data.currentHpPlayer) + parseInt(response.hpHealed)
                         console.log(response.data.currentHpPlayer)
                         console.log(response.hpHealed)
-                        if (hpCurrentPlayer > parseInt(response.data.maxHpPlayer)) hpCurrentPlayer = maxHpPlayer
+                        if (hpCurrentPlayer > parseInt(response.data.maxHpPlayer)) hpCurrentPlayer = response.data.maxHpPlayer
                         var itemIdNumberNew = itemId.split('-')[2]
                         var num = $("#using-item-" + itemIdNumberNew).siblings("span[id^='inventory-number-']")
                         console.log(itemIdNumberNew)
@@ -325,5 +326,5 @@ $(document).ready(function ()
                 })
             }
         })
-    })         
+    })        
 }) 
