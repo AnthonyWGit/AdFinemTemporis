@@ -385,6 +385,19 @@ button
     overflow: auto;
 }
 
+@media screen and (max-width:479px) {
+    #modal-inventory
+{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    right: 0;
+    top: 0;
+    width: 99%;
+    height: 50%;
+}
+
+}
 .modal-content-inventory
 {
     background: linear-gradient(45deg, var(--base-color1), var(--base-color2));
@@ -403,4 +416,10 @@ button
     position: absolute;
     top: 0;
     left: 25%;
+}
+
+.interactiveItem:hover
+{
+    cursor: pointer;
+    color: var(--navbarBg);
 }

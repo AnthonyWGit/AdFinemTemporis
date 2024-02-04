@@ -62,7 +62,7 @@
                 <ul id="items-list">
                 {% for item in itemsPlayer %}
                         <li id="all-item-{{item.id}}">
-                            <span id='using-item-{{item.id}}'>
+                            <span id='using-item-{{item.id}}' class="interactiveItem">
                             {{item.item.name}}</span>
                             <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span>
                         </li>
