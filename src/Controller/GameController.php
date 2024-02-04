@@ -404,8 +404,8 @@ class GameController extends AbstractController
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
-        if ($inBattle && $this->getUser()->getStage() == 3) return $this->redirectToRoute('combat2');
-        if ($inBattle && $this->getUser()->getStage() == 10000) return $this->redirectToRoute('combat2');
+        //If stage is one of those numbers just redirect
+        if ($inBattle && in_array($this->getUser()->getStage(),[3,4,5,6,10000])) return $this->redirectToRoute('combat2');
         $session = $request->getSession();
         if ($session->get('placeholder') == 'a' && !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
