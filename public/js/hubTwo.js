@@ -163,7 +163,7 @@ $(document).ready(function()
                     console.log(response)
                     if (response.newItem == null)
                     {
-                        $('#inventory-number-'+ response.target).text(response.quantity)
+                        $('#inventory-number-'+ response.target).text('('+ response.quantity + ')')
                         $('#gold-number').text(response.gold);
                     } 
                     else
