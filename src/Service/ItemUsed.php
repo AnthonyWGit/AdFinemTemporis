@@ -38,11 +38,20 @@ class ItemUsed extends AbstractController
             "player" => $this->getUser()->getId()
         ]);
         $selectedItem = $selectedHaveItem->getItem();
+        //don't remove item if on full hp
+        if($data['currentHpPlayer'] == $data['maxHpPlayer'])
+        {
+            return new JsonResponse(
+                [
+                    'doNothing' => true,
+                    ]
+                );
+        }
         if ($selectedHaveItem->getQuantity() == 1) //using healing item
         {
-            if ($selectedItem->getCategory()->getId() == 1)
-            {
-                switch ($selectedItem->getId())
+            if ($selectedItem->getCategory()->getId() == 1) //selecting what cat the item is 
+            {//Were are IN the healing category and now we parameter the effect of each item 
+                switch ($selectedItem->getId()) 
                 {
                     case 1://potion
                         $hpHealed = 50;
@@ -54,24 +63,8 @@ class ItemUsed extends AbstractController
                         $hpHealed = 150;
                         break;
                 }
-                //don't remove item if on full hp
-                if($data['currentHpPlayer'] == $data['maxHpPlayer'])
-                {
-
-                }
-                else
-                {
-                    $this->em->remove($selectedHaveItem);
-                    $this->em->flush();                    
-                }
-                return new JsonResponse(
-                    [
-                        'status' => 'success',
-                        'errors' => $errors,
-                        'data' => $data,
-                        'hpHealed' => $hpHealed,
-                        ]
-                    );
+                $this->em->remove($selectedHaveItem);
+                $this->em->flush();                    
             }
             else
             {
@@ -103,8 +96,10 @@ class ItemUsed extends AbstractController
                         'errors' => $errors,
                         'data' => $data,
                         'hpHealed' => $hpHealed,
-                        'remains' => $remainingItem
-                        ]
+                        'remains' => $remainingItem,
+                        'curr' => $data['currentHpPlayer'],
+                        'max' => $data['maxHpPlayer']
+                    ]
                     );
             }
         }
