@@ -144,8 +144,8 @@ $(document).ready(function()
         let height = textBox.offsetHeight;
         let fontSize = parseFloat(computedStyle.fontSize);
 
-        let charactersHorizontally = Math.floor(width / (fontSize)); // Adjust the factor as needed
-        let charactersVertically = Math.floor(height / (fontSize));
+        let charactersHorizontally = Math.floor(width / (fontSize * 0.8)); // Adjust the factor as needed
+        let charactersVertically = Math.floor(height / (fontSize * 0.8));
         let totalChars = charactersHorizontally * charactersVertically
         console.log(charactersHorizontally)
         console.log(charactersVertically)
@@ -195,17 +195,17 @@ $(document).ready(function()
         companionText = "Usefull. Keep it in your bag."
         companionText2 = "Hey. Let's sit for a while. Take a break, and choose if you want to strenghten our" 
         + " forces."
-        + "And just a friendly advice... Spare your gold. We WILL need it"
+        + " And just a friendly advice... Spare your gold. We WILL need it"
     } else if ($(".TextDiv").attr('data-var') == "Horus") {
         companionText = "A shiny thing ! A SHINY, TRANSPARENT red thing ! Looks like a potion to me."
         companionText2 = "Let's set up a camp here. I want to have a break. I'm up for cleaning this place of"
         + " shadows, or continue if you want to. Choice is yours."
-        + "And just a friendly advice... Spare your gold. We WILL need it"
+        + " And just a friendly advice... Spare your gold. We WILL need it"
     } else if ($(".TextDiv").attr('data-var') == "Xiuhcoatl") {
         companionText = "This little recipient contains some red liquid in it. Might be a healing item."
         companionText2 = "Stop there. We don't have to be hasty. I forsee good things. A merchant is coming."
-        + "Wait him, buy stuff. We can fight roaming shadows. Proceed further when you're ready." 
-        + "And just a friendly advice... Spare your gold. We WILL need it"
+        + " Wait him, buy stuff. We can fight roaming shadows. Proceed further when you're ready." 
+        + " And just a friendly advice... Spare your gold. We WILL need it"
     }
 
     let maxCharacters
