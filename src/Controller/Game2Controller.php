@@ -91,12 +91,13 @@ class Game2Controller extends AbstractController
                 }
             }
 
-            if ($status == 0 && $line !== null)
+            if ($status == 0 && $line !== null) //When buying existing item
             {
                 $qt = $line->setQuantity($initialQt + $number);
                 $qt = $line->getQuantity();
                 $ifNewItem = null;
                 $target = $line->getItem()->getId();
+                $gold = $this->getUser()->getGold();
             }
             else
             {
