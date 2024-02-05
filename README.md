@@ -106,7 +106,7 @@ It **must** be running if you want to test registration.
 
 </details>
 
-<details open><summary>Loggin</summary>
+<details open><summary>Game</summary>
 
 # **Game**
 - Turn-by-turn combat
@@ -116,7 +116,7 @@ It **must** be running if you want to test registration.
 - Music !
 </details>
 
-<details open><summary>Loggin</summary>
+<details open><summary>What's next ?</summary>
 
 # **To do**
 - Capture system : new field needed in db for demon_player : order
@@ -126,13 +126,13 @@ It **must** be running if you want to test registration.
 - Buttons for responsive, logo for site
 </details>
 
-<details open><summary>Loggin</summary>
+<details open><summary>Licence</summary>
 
 # **Licence**
 - This project is under MIT licence
 </details>
 
-<details open><summary>Loggin</summary>
+<details open><summary>Credits</summary>
 
 # **Credits**
 - All the musicians who did the sound : 
