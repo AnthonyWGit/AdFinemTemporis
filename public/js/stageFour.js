@@ -114,7 +114,6 @@ $(document).ready(function()
     function typeTextChunk() {
         speakerBox.append($(".TextDiv").attr('data-var'))
         maxCharacters = calculateMaxCharacters(textBox)
-        console.log(maxCharacters)
         textChunks = breakTextIntoChunks(companionText, maxCharacters);
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
@@ -123,16 +122,18 @@ $(document).ready(function()
     }
 
     function typeTextChunk2() {
-        console.log("next")
-        currentCharIndex = 0;
-        currentChunkIndex = 0;
-        currentIndex = 0
-        maxCharacters = calculateMaxCharacters(textBox);
-        textChunks = breakTextIntoChunks(companionText2, maxCharacters)
+        if (once)
+        {
+            currentCharIndex = 0;
+            currentChunkIndex = 0;
+            currentIndex = 0          
+            once = false;
+            maxCharacters = calculateMaxCharacters(textBox);
+            textChunks = breakTextIntoChunks(companionText2, maxCharacters)
+        }
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
             textContent.innerHTML = currentChunk; // Set the whole chunk at once
-            console.log(currentChunkIndex, 'replace next')
             isTypingInProgress = false
         }
     }
@@ -144,11 +145,9 @@ $(document).ready(function()
         let height = textBox.offsetHeight;
         let fontSize = parseFloat(computedStyle.fontSize);
 
-        let charactersHorizontally = Math.floor(width / (fontSize * 0.8)); // Adjust the factor as needed
-        let charactersVertically = Math.floor(height / (fontSize * 0.8));
-        let totalChars = charactersHorizontally * charactersVertically
-        console.log(charactersHorizontally)
-        console.log(charactersVertically)
+        let charactersHorizontally = Math.floor(width / fontSize); // Adjust the factor as needed
+        let charactersVertically = Math.floor(height / fontSize);
+        let totalChars = (charactersHorizontally * charactersVertically) * 0.75
         return totalChars;
     }
 
@@ -178,8 +177,8 @@ $(document).ready(function()
     let isTypingInProgress = true;
     let currentChunkIndex = 0;
     let currentCharIndex = 0;
-    let currentIndex = 0;
-
+    let currentIndex = 0
+    let once = true
     var textBox = document.querySelector('.textBox');
     var textContent = document.querySelector('.textContent')
     var speakerBox = $(".speakerBox")
@@ -219,7 +218,8 @@ $(document).ready(function()
                 if (event.key === 'ArrowRight') {
                     if (currentChunkIndex < textChunks.length - 1) {
                         currentChunkIndex++;
-                        typeTextChunk();
+                        if (dialogPassed == 0) typeTextChunk();
+                        if (dialogPassed == 1) typeTextChunk2()
                     } else if (currentChunkIndex == textChunks.length - 1) {
                         if (dialogPassed == 0) {
                             isTypingInProgress = true;
@@ -236,7 +236,8 @@ $(document).ready(function()
                 } else if (event.key === 'ArrowLeft') {
                     if (currentChunkIndex > 0) {
                         currentChunkIndex--;
-                        typeTextChunk();
+                        if (dialogPassed == 0) typeTextChunk();
+                        if (dialogPassed == 1) typeTextChunk2()
                     }
                 }
             }
