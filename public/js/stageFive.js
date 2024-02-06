@@ -36,7 +36,7 @@ $(document).ready(function()
 //________________________________________ENDAUDIO____________________________________
 
     $('.centerTextBox').hide()
-    function moveToHub()
+    function moveToFinale()
     {
         window.location.replace("/game/finalBattle")
     }
@@ -79,6 +79,10 @@ $(document).ready(function()
                     isTypingInProgress = false;
                     $(".texting").text("")
                     $(".centerTextBox").show()
+                    speakerBox.append($(".TextDiv").attr('data-var'))
+                    maxCharacters = calculateMaxCharacters(textBox)
+                    console.log(maxCharacters)
+                    textChunks = breakTextIntoChunks(companionText, maxCharacters);
                     typeTextChunk()
                 }, 2000) // Do nothing and wait 3 seconds 
         }
@@ -95,17 +99,13 @@ $(document).ready(function()
                     $(".texting").text("")
                     $(".textContent").text("")
                     isTypingInProgress = false
-                    moveToHub()
+                    moveToFinale()
                 }, 2000) // Do nothing and wait 3 seconds 
         }
     }
 
     // Function to type a specific chunk of text
     function typeTextChunk() {
-        speakerBox.append($(".TextDiv").attr('data-var'))
-        maxCharacters = calculateMaxCharacters(textBox)
-        console.log(maxCharacters)
-        textChunks = breakTextIntoChunks(companionText, maxCharacters);
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
             textContent.innerHTML = currentChunk; // Set the whole chunk at once
@@ -121,7 +121,7 @@ $(document).ready(function()
 
         let charactersHorizontally = Math.floor(width / (fontSize)); // Adjust the factor as needed
         let charactersVertically = Math.floor(height / (fontSize));
-        let totalChars = charactersHorizontally * charactersVertically
+        let totalChars = (charactersHorizontally * charactersVertically) * 0.8
         console.log(charactersHorizontally)
         console.log(charactersVertically)
         return totalChars;
