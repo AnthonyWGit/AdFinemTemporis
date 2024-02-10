@@ -221,8 +221,6 @@ class GameController extends AbstractController
             {
                 return $skill->getName(); // adjust this based on your Skill entity structure
             }, $generatedCpu->getSkills()->toArray())
-            
-            // add other fields as needed
         ],
         'playerDemons' => array_map(function($demon) use ($skillTableRepository){
             $level = $demon->getLevel();
@@ -377,7 +375,7 @@ class GameController extends AbstractController
                 return $this->redirectToRoute("stageTwo");
             }  
         }
-        return $this->redirectToRoute("app_home");
+        return $this->redirectToRoute("cheating");
     }
           
     #[Route('/game/stageTwo', name: 'stageTwo')]
@@ -388,7 +386,7 @@ class GameController extends AbstractController
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
         if ($this->getUser()->getStage() != 2) 
         {
-            return $this->redirectToRoute("app_home");
+            return $this->redirectToRoute("cheating");
         }
         return $this->render('game/stageTwo.html.twig', [
             'demon' => $starter[0],
@@ -503,6 +501,10 @@ class GameController extends AbstractController
         {
             return $this->redirectToRoute("stageFour");
         }
+        else if ($this->getUser()->getStage() == 5)
+        {
+            return $this->redirectToRoute("stageFive");
+        }
         return $this->redirectToRoute("app_home");
     }
 
@@ -513,37 +515,50 @@ class GameController extends AbstractController
     {
         if ($this->getUser()->getStage() == 0)
         {
+            $arrOfSkillsObjects = [];
             switch($name)
             {
                 case "Horus":
                     $demonBase = $this->pickDemonBase($demonBaseRepository, 'horus');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
-                    $skill = $skills[0]; //level on will only have on skill
-                    $skill = $skill->getSkill();
+                    foreach ($skills as $skill) //Foreaching on all skills and adding
+                    {
+                        $skill = $skill->getSkill();
+                        $arrOfSkillsObjects[] = $skill;
+                    }
                     break;
 
                 case "Xiuhcoatl":
                     $demonBase = $this->pickDemonBase($demonBaseRepository, 'Xiuhcoatl');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
-                    $skill = $skills[0]; //level on will only have on skill
-                    $skill = $skill->getSkill();
+                    foreach ($skills as $skill) //Foreaching on all skills and adding
+                    {
+                        $skill = $skill->getSkill();
+                        $arrOfSkillsObjects[] = $skill;
+                    }
                     break;
                 
                 case "Chernobog":
                     $demonBase = $this->pickDemonBase($demonBaseRepository, 'Chernobog');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
-                    $skill = $skills[0]; //level on will only have on skill
-                    $skill = $skill->getSkill();
+                    foreach ($skills as $skill) //Foreaching on all skills and adding
+                    {
+                        $skill = $skill->getSkill();
+                        $arrOfSkillsObjects[] = $skill;
+                    }
                     break;
             }
 
             $demonPlayer = new DemonPlayer; //create a demon
             $demonPlayer->setDemonBase($demonBase); //set base template
             $demonPlayer->setTrait($playerDemonTrait); //generate a trait
-            $demonPlayer->addSkill($skill);
+            foreach($arrOfSkillsObjects as $skillBis)
+            {
+                $demonPlayer->addSkill($skillBis); //add the skills 
+            }
             $this->getUser()->addDemonPlayer($demonPlayer);
             $this->getUser()->setStage(1);
             $entityManager->persist($demonPlayer);
@@ -552,7 +567,7 @@ class GameController extends AbstractController
         }   
         else
         {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('cheating');
         }
     }
 
