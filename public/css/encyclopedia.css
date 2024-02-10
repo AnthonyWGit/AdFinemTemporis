@@ -296,3 +296,9 @@ td:first-child, th:first-child
     color: orange;
 }
 
+.encAdmin
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
