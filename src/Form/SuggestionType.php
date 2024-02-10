@@ -22,6 +22,7 @@ class SuggestionType extends AbstractType
             ->add('title', TextType::class, ['row_attr' => ['class' => 'formRow']])
             ->add('postContent', TextareaType::class, ['row_attr' => ['class' => 'formRow']])
             ->add('img', FileType::class, [
+                'data_class' => null,
                 'row_attr' => ['class' => 'formRow'],
                 'required' => false,
                 'label' => 'Img (JPEG/JPG/PNG)',
