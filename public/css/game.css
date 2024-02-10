@@ -48,6 +48,7 @@
     flex-direction: column;
     align-items: center;
     font-size: 1.3rem;
+    cursor: pointer;
 }
 .demonsBarContent
 {
@@ -335,7 +336,7 @@
     margin: 0;
 }
 
-#actions, #Items, #Flee, .skill, .j
+#actions, #Items, #Flee, .skill, .j, #open-shop
 {
     cursor: pointer;
 }
