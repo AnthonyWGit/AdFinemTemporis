@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\DemonBase;
 use App\Form\DemonBaseFormType;
 use App\Repository\DemonBaseRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,17 +33,24 @@ class DemonBaseController extends AbstractController
 
     #[Route('admin/demon/base/new', name: 'newDemonBase')]
     #[Route('admin/demon/base/{name}/edit', name: 'editDemonBase')]
-    public function new(DemonBase $demonBase = null, Request $request, EntityManagerInterface $entityManager): Response
+    public function new(DemonBase $demonBase = null, Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader = null): Response
     {
         // creates a task object and initializes some data for this example
         if ($demonBase === null) {
             $demonBase = new DemonBase();
         }
+        
         $form = $this->createForm(DemonBaseFormType::class, $demonBase);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
                 $demonBase = $form->getData();
+                $imgFile = $form->get('img')->getData();
+                if ($imgFile) 
+                {
+                    $imgFileName = $fileUploader->upload($imgFile);
+                    $demonBase->setImg($imgFileName);
+                }
                 $entityManager->persist($demonBase); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
 
