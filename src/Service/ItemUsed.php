@@ -47,9 +47,9 @@ class ItemUsed extends AbstractController
                     ]
                 );
         }
-        if ($selectedHaveItem->getQuantity() == 1) //using healing item
+        if ($selectedHaveItem->getQuantity() == 1) //Check if there is one or + in inv
         {
-            if ($selectedItem->getCategory()->getId() == 1) //selecting what cat the item is 
+            if ($selectedItem->getCategory()->getId() == 1) //using healing item
             {//Were are IN the healing category and now we parameter the effect of each item 
                 switch ($selectedItem->getId()) 
                 {
@@ -65,6 +65,16 @@ class ItemUsed extends AbstractController
                 }
                 $this->em->remove($selectedHaveItem);
                 $this->em->flush();                    
+                return new JsonResponse(
+                    [
+                        'status' => 'success',
+                        'errors' => $errors,
+                        'data' => $data,
+                        'hpHealed' => $hpHealed,
+                        'curr' => $data['currentHpPlayer'],
+                        'max' => $data['maxHpPlayer'],
+                        'remains' => null,
+                    ]);
             }
             else
             {
