@@ -79,8 +79,8 @@
             <p id="current-gold-p">Current Gold : <span id="gold-number">{{app.user.gold}}</span> </p>  
         <div class="modal-inventory">
             <ul id="items-list" class="interactiveItem">
-            {% for item in itemsPlayer%}
-                    <li><span>{{item.item.name}}<span> <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span></li>
+            {% for item in itemsPlayer %}
+                    <li><span>{{item.item.name}}</span> <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span></li>
             {% endfor %}
             </ul>
         </div>
