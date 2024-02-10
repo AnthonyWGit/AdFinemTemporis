@@ -67,3 +67,8 @@
 {
     width: 15rem;
 }
+
+#registration_form_agreeTerms_help a:visited, #registration_form_agreeTerms_help a
+{
+    color: var(--navbarBg);
+}
