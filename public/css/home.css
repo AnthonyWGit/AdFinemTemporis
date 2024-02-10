@@ -4,7 +4,7 @@
     flex-wrap: wrap;
     align-items: center;
     font-size: 2.5rem;
-    padding: 1rem 0 5rem 0;
+    padding: 1rem 0 2rem 0;
     margin: 0 1rem;
     overflow: auto;
 }
@@ -32,17 +32,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-    padding: 0 0 3rem 0;
-    position: absolute;
 }
 
 
 /* under Galaxy S8+ dimensions */
 
 @media screen and (max-width: 359px) {
-    .titleWithSmall {
-        position: inherit;
-    }
 }
 
 .titleWithSmall>h1 {
@@ -68,7 +63,7 @@
 }
 
 .heroBanner>p {
-    padding: 15rem 0 0 0;
+
     text-align: center;
 }
 
@@ -166,13 +161,7 @@
     width: 100px;
 }
 
-@media screen and (max-width: 1340px) and (min-width :1070px) {
-    .ouverture {
-        width: 25%;
-    }
-}
-
-@media screen and (max-width: 1069px) {
+@media screen and (max-width: 1170px) {
     .ouverture {
         width: 100%;
     }
@@ -190,7 +179,7 @@
     }
     .titleWithSmall>h1 {
         align-items: center;
-        padding: 1rem 0 5rem 0;
+        padding: 1rem 0 6rem 0;
     }
     .titleWithSmall>small {
         top: -6.5rem;
@@ -206,7 +195,7 @@
 
 @media screen and (min-width: 400px) and (max-width: 700px) {
     .heroBanner>p {
-        padding: 20rem 0 0 0;
+
     }
 }
 
@@ -215,7 +204,7 @@
 
 {
     .heroBanner>p {
-        padding: 30rem 0 0 0;
+
     }
 }
 
