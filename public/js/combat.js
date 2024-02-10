@@ -313,18 +313,19 @@ $(document).ready(function ()
                         var itemIdNumberNew = itemId.split('-')[2]
                         var num = $("#using-item-" + itemIdNumberNew).siblings("span[id^='inventory-number-']")
                         console.log(itemIdNumberNew)
+                        if (response.remains === null) $('#all-item-' + response.data.itemId).remove()
                         if (hpCurrentPlayer == maxHpPlayer) {
                             document.querySelector("#hpFillPlayer").style.width = '100%'
                             $('#currentHpPlayer').text(hpMaxPlayer + ' HP')
                             num.text('('+ response.remains +')')
                         } else {
                             document.querySelector("#hpFillPlayer").style.width = ((hpCurrentPlayer / hpMaxPlayer)*100) + '%'
-                            num.text('('+ response.remains +')')
                             $('#currentHpPlayer').text(hpCurrentPlayer + ' HP')
+                            num.text('('+ response.remains +')')
                         }
                     }
                 })
             }
         })
-    })        
-}) 
+    })
+})
