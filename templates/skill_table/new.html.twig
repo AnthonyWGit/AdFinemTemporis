@@ -11,16 +11,15 @@
 {% endblock %}
 
 {% block body %}
-{% if edit %}
-<h1 class="centerTitle">Create a new leveling skill</h1>
-{% else %}
-<h1 class="centerTitle">Edit a leveling skill</h1>
+    {% if edit %}
+        <h1 class="centerTitle">Edit a leveling skill</h1>
+    {% else %}
+        <h1 class="centerTitle">Create a new leveling skill</h1>
 {% endif %}
 
 <div class="formGlobal">
     <div class="formInside">
         {{ form_errors(formNewSkillTable) }}
-
         {{ form_start(formNewSkillTable) }}
             {{ form_row(formNewSkillTable.level) }}
             {{ form_row(formNewSkillTable.skill) }}
