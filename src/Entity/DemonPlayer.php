@@ -326,7 +326,8 @@ class DemonPlayer
     public function getMaxHp() : int
     {
         $baseEnd = $this->getDemonBase()->getEndDemonBase();
-        $bonusLvlUpPoints = $this->getLvlUpPoints() * 10;
+        $bonusLvlUpPoints = ($this->getStrPoints() + $this->getEndPoints() + $this->getIntPoints()
+        + $this->getAgiPoints() + $this->getLckPoints()) * 10;
         $bonusEndPoints = $this->getEndPoints();
         $level = $this->getLevel();
         $total = $baseEnd + ($bonusEndPoints * 20) + $bonusLvlUpPoints;
@@ -338,7 +339,8 @@ class DemonPlayer
     public function getMaxHpFictif(int $levelFictif, int $totalEnd, DemonBase $demonBase) : int
     {
         $LvlUpPointsNumber = $levelFictif - 1;
-        $bonusLvlUpPointsValue = $LvlUpPointsNumber * 10;
+        $bonusLvlUpPointsValue = ($this->getStrPoints() + $this->getEndPoints() + $this->getIntPoints()
+        + $this->getAgiPoints() + $this->getLckPoints()) * 10;
         $baseEndPts = $totalEnd - $demonBase->getEndDemonBase();
         $total = $demonBase->getEndDemonBase() + ($baseEndPts * 20) + $bonusLvlUpPointsValue;
         $baseHp = $demonBase->getBaseHp();
