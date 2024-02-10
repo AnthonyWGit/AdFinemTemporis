@@ -15,10 +15,10 @@
         </div>
         <div class="divTable">
             {% if is_granted('ROLE_ADMIN') %}
-                {% for message in app.flashes('noticeChange') %}
-                    <p>{{ message }}</p>
-                {% endfor %}
                 <div class="pex">
+                    {% for message in app.flashes('noticeChange') %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
                     <a class="looksLikeAButtonBlack" href="{{path('newItem')}}">Add a new one</a>
                 </div>
             {% endif %}
@@ -43,7 +43,11 @@
                     <td>{{item.category.name}}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <i><a class="deleteBtn adminAction" href='#'>X--</a><a class="adminAction" href=" {{path('editItem', {'name' : item.name})}}">Edit</a></i>
+                        <i>
+                            <a class="deleteBtn adminAction" href='#'>X</a>
+                            <span>—<span>
+                            <a class="adminAction" href=" {{path('editItem', {'name' : item.name})}}">Edit</a>
+                        </i>
                     </td>
                     {% endif %}
                 </tr>

@@ -50,7 +50,11 @@
                     <td>{{skill.dmgtype}}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <i><a class="deleteBtn adminAction" href='#'>X</a><a class="adminAction" href=" {{path('editSkill', {'name' : skill.name})}}">Edit</a></i>
+                        <i>
+                            <a class="deleteBtn adminAction" href='#'>X</a>
+                            <span>—<span>
+                            <a class="adminAction" href=" {{path('editSkill', {'name' : skill.name})}}">Edit</a>
+                        </i>
                     </td>
                     {% endif %}
                 </tr>
