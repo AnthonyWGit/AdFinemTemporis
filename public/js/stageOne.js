@@ -24,6 +24,7 @@ function typeWriter() {
         speakerBox.innerHTML = jsVar
         isTypingInProgress = false
         document.addEventListener("keydown", keyDown)
+        textBox.addEventListener('click', keyDown)
         typeTextChunk()
     }, 2000) // Do nothing and wait 2 seconds 
 
@@ -43,6 +44,7 @@ function typeWriter2() {
         $('.centerTextBox').show();
         document.querySelector(".textContent").innerHTML = ""
         document.addEventListener("keydown", keyDown)
+        textBox.addEventListener('click', keyDown)
         typeTextChunk2()
     }, 2000) // Do nothing and wait 2 seconds 
 
@@ -239,7 +241,7 @@ function keyDown(event)
     debounceTimeout = setTimeout(function() { //anti spam filter
     if (!isTypingInProgress)
     {
-        if (event.key === 'ArrowRight') 
+        if ((event.type === 'keydown' && event.key === 'ArrowRight') || event.type === 'click') 
         {
             if (currentChunkIndex < textChunks.length - 1) 
             {

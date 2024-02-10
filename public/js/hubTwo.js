@@ -32,31 +32,31 @@ $(document).ready(function()
         rangeValue = document.querySelector("#volume").value
         audio.volume = (rangeValue / 100)
         localStorage.setItem('volume', audio.volume)
-        console.log(rangeValue);
+        console.log(rangeValue)
     });
 //________________________________________ENDAUDIO____________________________________
 
     // Hide the centerTextBox when the document is ready because we want to display X has joined your team ! 
     if ($('.flashes').html().trim() != "" )  // Jquery quivalent to .innerHTML 
     {
-        $('.toHide').hide();
+        $('.toHide').hide()
         console.log('WWWW')
     }
     else
     {
-        $('.flashes').remove();
+        $('.flashes').remove()
         console.log("HAAA")
     }
     setTimeout(function() {
-        $(' .flashes').remove();
-        $('.toHide').show();
+        $(' .flashes').remove()
+        $('.toHide').show()
     }, 5000); // moved the closing parenthesis here
 
     $('.demonCol').on('click', function() 
     {
 
         $('#close').on('click', function() {
-            $('#modal').hide();
+            $('#modal').hide()
         });
 
         var demonId = $(this).data('demon-id');
@@ -70,14 +70,14 @@ $(document).ready(function()
                 {name: "Luck", value: data.Luck}
             ];
             // Remove all paragraph elements within .modal-content and .modal-points
-            $('.modal-stats p').remove();
-            $('.modal-points p').remove();
+            $('.modal-stats p').remove()
+            $('.modal-points p').remove()
             stats.forEach(function(stat) {
                 console.log(stat);
                 if (pts > 0) {
-                    $('.modal-stats').append('<p>' + stat.name + ': ' + stat.value + ' <button class="lvlUpBtn" data-stat="' + stat.name + '">' + '+' + '</button></p>');
+                    $('.modal-stats').append('<p>' + stat.name + ': ' + stat.value + ' <button class="lvlUpBtn" data-stat="' + stat.name + '">' + '+' + '</button></p>')
                 } else {
-                    $('.modal-stats').append('<p>' + stat.name + ': ' + stat.value + '</p>');
+                    $('.modal-stats').append('<p>' + stat.name + ': ' + stat.value + '</p>')
                 }
             });
             $('#modal').css({
@@ -85,8 +85,8 @@ $(document).ready(function()
                 'justify-content': 'center',
                 'align-items': 'center'
             });
-            $('.modal-points').append('<p> Level up Pts left : ' + pts + '</p>');
-            $('#modal').show();
+            $('.modal-points').append('<p> Level up Pts left : ' + pts + '</p>')
+            $('#modal').show()
 
             $('.modal-stats').off('click', '.lvlUpBtn').on('click', '.lvlUpBtn', function() { //Unbid privous event listener if there is one 
                 // Get the current stat and points
@@ -134,20 +134,20 @@ $(document).ready(function()
 
 
         $('#close-inventory').on('click', function() {
-            $('#modal-inventory').hide();
+            $('#modal-inventory').hide()
         });
 
         $('#close-merchant').on('click', function() {
-            $('#modal-merchant').hide();
+            $('#modal-merchant').hide()
         });
 
         $("[id^=button-merchant-]").click(function(event) 
         {
             event.preventDefault();
-            var itemId = $(this).attr('id');
+            var itemId = $(this).attr('id')
             //break the string into two parts and pick the number
             var inputFieldId = "#input-number-merchant-" + itemId.split('-')[2];
-            var formData = $(inputFieldId).val();
+            var formData = $(inputFieldId).val()
             console.log(formData)
             $.ajax(
                 {
@@ -164,13 +164,15 @@ $(document).ready(function()
                     if (response.newItem == null)
                     {
                         $('#inventory-number-'+ response.target).text('('+ response.quantity + ')')
-                        $('#gold-number').text(response.gold);
+                        $('#gold-number').text(response.gold)
                     } 
                     else
                     {
-                        var newItem = $('<li>').text(response.newItem + '('+ response.quantity + ')');
-                        $('#items-list').append(newItem);
-                        $('#gold-number').text(response.gold);
+                        var newItem = $('<li>')
+                        $('#items-list').append(newItem)
+                        var newItem2 = newItem.append($('<span>').text(response.newItem))// Append ItemName
+                        newItem2.append($('<span id="inventory-number-' + response.target + '">').text('(' + response.quantity + ')')) // Append quantity
+                        $('#gold-number').text(response.gold)
                     }
                 })
         });
