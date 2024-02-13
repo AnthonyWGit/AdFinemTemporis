@@ -31,9 +31,8 @@
             {% for suggestion in suggestions %}
                 {% if not suggestion.isverified %}
                 {% else %}
-                    {% for player in suggestion.playersSuggestions %}
                         <div class="cardSuggestion">
-                            {% if app.user in suggestion.playersSuggestions or is_granted('ROLE_ADMIN') %}
+                            {% if app.user in suggestion %}
                                 <div class="deleteOwn">
                                     <a class="zPos" href="{{ path('deleteSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
                                         X
@@ -45,7 +44,7 @@
                             {% endif %}
                             <div class="row">
                                 <p>Title : {{suggestion.title}}</p>
-                                <p>Author : {{player.displayUsername}}</p>
+                                <p>Author : {{suggestion.playerSuggestion.displayUsername}}</p>
                             </div>
                             <div class="row status">
                                 {% if is_granted('ROLE_ADMIN') %}
@@ -81,11 +80,10 @@
                                         </a>
                                 {% endif %}
                                     {{suggestion.playersLikesCount}}
-                                    <a class="block" href=" {{ path("detailSuggestion", {'title' : suggestion.title, 'player' : player.id}) }}"></a>
+                                    <a class="block" href=" {{ path("detailSuggestion", {'suggestion' : suggestion.id, 'player' : suggestion.playerSuggestion.id}) }}"></a>
                             </p>
-
                         </div>
-                    {% endfor %}
+
                 {% endif %}
             {% endfor %}
         {% endif %}
