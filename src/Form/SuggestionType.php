@@ -26,8 +26,6 @@ class SuggestionType extends AbstractType
                 'row_attr' => ['class' => 'formRow'],
                 'required' => false,
                 'label' => 'Img (JPEG/JPG/PNG)',
-                                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
@@ -35,8 +33,9 @@ class SuggestionType extends AbstractType
                             'image/jpeg',
                             'image/jpg',
                             'image/png',
+                            'image/webp',
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid document',
+                        'mimeTypesMessage' => 'Please upload a valid image',
                     ]),
                     new Image([
                         'maxWidth' => 600,
