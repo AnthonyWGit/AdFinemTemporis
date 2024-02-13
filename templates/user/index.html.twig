@@ -28,7 +28,7 @@
                             {% if 'ROLE_BANNED' in user.roles %}
                                 <td><a href=" {{path('unbanAction', {'id' : user.id})}}">Unban</a></td>
                             {% else %}
-                                <td><a href=" {{path('banAction', {'id' : user.id})}}">Ban</a></td>
+                                <td><a class="adminAction" href=" {{path('banAction', {'id' : user.id})}}">Ban</a></td>
                             {% endif %}
                            <td><a class="adminAction" href=" {{path('userDetail', {'id' : user.id})}}">Demons</a></td> 
                            <td><a class="adminAction" href=" {{path('userDetailItem', {'id' : user.id})}}">Items</a></td> 
