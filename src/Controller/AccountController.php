@@ -54,7 +54,11 @@ class AccountController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             //put the email
-            $user->setEmail($form->get('password')->getData());
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                ));
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('app_home');
