@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class CommunityController extends AbstractController
 {
     #[Route('/community', name: 'community')]
-    public function index(SuggestionRepository $suggestionRepository, PlayerRepository $playerRepository): Response
+    public function index(SuggestionRepository $suggestionRepository): Response
     {
         $verifiedSuggestions = 0;
         $suggestions = $suggestionRepository->findSuggestionsOrderedByLikes();
@@ -49,7 +49,7 @@ class CommunityController extends AbstractController
         //On editing route we check if user is trying to edit other user posts
         {
             // dd(in_array($this->getUser(), $suggestion->getPlayersSuggestions()->toArray()));
-            if ($request->attributes->get('_route') == "editSuggestion" && !in_array($this->getUser(), $suggestion->getPlayersSuggestions()->toArray()))
+            if ($request->attributes->get('_route') == "editSuggestion" && ($this->getUser() != $suggestion->getPlayerSuggestion()))
             {
                 die('What are you trying to do ?');
             }
@@ -108,7 +108,7 @@ class CommunityController extends AbstractController
                     $suggestion->setImg($imgFileName);
                 }
 
-                $suggestion->addPlayersSuggestion($this->getUser());
+                $suggestion->setPlayerSuggestion($this->getUser());
                 $entityManager->persist($suggestion); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
                 $entityManager->flush();
 
@@ -136,7 +136,7 @@ class CommunityController extends AbstractController
         return $this->render("community/new.html.twig", ['formNewSuggestion' => $form, 'edit' => $suggestion->getId()]);
     }
 
-    #[Route('community/suggestion/detail/{title}/{player}', name: 'detailSuggestion')]
+    #[Route('community/suggestion/detail/{suggestion}/{player}', name: 'detailSuggestion')]
     public function detail(Suggestion $suggestion, Player $player): Response
     {
         return $this->render('community/detail.html.twig', [
@@ -202,7 +202,6 @@ class CommunityController extends AbstractController
 
         if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author
         {
-            $suggestion->removePlayersSuggestion($player);
             $entityManager->remove($suggestion);
             $entityManager->flush();
             return $this->redirectToRoute('community');            
