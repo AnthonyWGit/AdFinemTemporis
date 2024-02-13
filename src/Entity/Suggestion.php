@@ -28,9 +28,6 @@ class Suggestion
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $postDate = null;
 
-    #[ORM\ManyToMany(targetEntity: Player::class, mappedBy: 'suggestions')]
-    private Collection $playersSuggestions;
-
     #[ORM\ManyToMany(targetEntity: Player::class, mappedBy: 'likes')]
     private Collection $playersLikes;
 
@@ -40,11 +37,12 @@ class Suggestion
     #[ORM\Column(nullable: false)]
     private ?int $is_verified = 2;
 
+    #[ORM\ManyToOne(inversedBy: 'suggestions')]
+    private ?Player $playerSuggestion = null;
+
     public function __construct()
     {
         $this->PlayersLikes = new ArrayCollection();
-        $this->playersSuggestions = new ArrayCollection();
-        $this->playersLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,33 +99,6 @@ class Suggestion
     public function setPostDate(\DateTimeInterface $postDate): static
     {
         $this->postDate = $postDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Player>
-     */
-    public function getPlayersSuggestions(): Collection
-    {
-        return $this->playersSuggestions;
-    }
-
-    public function addPlayersSuggestion(Player $playersSuggestion): static
-    {
-        if (!$this->playersSuggestions->contains($playersSuggestion)) {
-            $this->playersSuggestions->add($playersSuggestion);
-            $playersSuggestion->addSuggestion($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlayersSuggestion(Player $playersSuggestion): static
-    {
-        if ($this->playersSuggestions->removeElement($playersSuggestion)) {
-            $playersSuggestion->removeSuggestion($this);
-        }
 
         return $this;
     }
@@ -210,5 +181,23 @@ class Suggestion
         {
             return false;
         }
+    }
+
+    public function getPlayerSuggestion(): ?Player
+    {
+        return $this->playerSuggestion;
+    }
+
+    public function setPlayerSuggestion(?Player $playerSuggestion): static
+    {
+        $this->playerSuggestion = $playerSuggestion;
+
+        return $this;
+    }
+
+    public function displayUsername(): string
+    {
+        $playerName = $this->playerSuggestion->getUsername();
+        return $playerName;
     }
 }

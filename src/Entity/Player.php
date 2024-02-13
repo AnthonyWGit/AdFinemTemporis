@@ -62,13 +62,12 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'playersSuggestions')]
-    #[ORM\JoinTable(name: "player_suggestions")]
-    private Collection $suggestions;
-
     #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'playersLikes')]
     #[ORM\JoinTable(name: "player_likes")]
     private Collection $likes;
+
+    #[ORM\OneToMany(mappedBy: 'playerSuggestion', targetEntity: Suggestion::class)]
+    private Collection $suggestions;
 
 
     public function __construct()
@@ -76,9 +75,8 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         $this->have_item = new ArrayCollection();
         $this->Demon_Player = new ArrayCollection();
         $this->registerDate = new DateTime();
-        $this->suggestions = new ArrayCollection();
         $this->likes = new ArrayCollection();
-
+        $this->suggestions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -311,30 +309,6 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Suggestion>
      */
-    public function getSuggestions(): Collection
-    {
-        return $this->suggestions;
-    }
-
-    public function addSuggestion(Suggestion $suggestion): static
-    {
-        if (!$this->suggestions->contains($suggestion)) {
-            $this->suggestions->add($suggestion);
-        }
-
-        return $this;
-    }
-
-    public function removeSuggestion(Suggestion $suggestion): static
-    {
-        $this->suggestions->removeElement($suggestion);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Suggestion>
-     */
     public function getLikes(): Collection
     {
         return $this->likes;
@@ -352,6 +326,36 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeLike(Suggestion $like): static
     {
         $this->likes->removeElement($like);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Suggestion>
+     */
+    public function getSuggestions(): Collection
+    {
+        return $this->suggestions;
+    }
+
+    public function addSuggestion(Suggestion $suggestion): static
+    {
+        if (!$this->suggestions->contains($suggestion)) {
+            $this->suggestions->add($suggestion);
+            $suggestion->setPlayerSuggestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSuggestion(Suggestion $suggestion): static
+    {
+        if ($this->suggestions->removeElement($suggestion)) {
+            // set the owning side to null (unless already changed)
+            if ($suggestion->getPlayerSuggestion() === $this) {
+                $suggestion->setPlayerSuggestion(null);
+            }
+        }
 
         return $this;
     }
