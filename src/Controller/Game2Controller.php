@@ -174,7 +174,7 @@ class Game2Controller extends AbstractController
         if ($this->getUser()->getStage() == 5 )
         {
             $combatResolution->combatResolve(6);
-            return $this->redirectToRoute('credits');                     
+            return $this->redirectToRoute('stageSix');                     
         }
         return $this->redirectToRoute('app_home');
     }
