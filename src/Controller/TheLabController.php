@@ -63,6 +63,7 @@ class TheLabController extends AbstractController
             'demonCPU' => $demonsArray["demonCPU"],
             'maxHpSimulatedCPU' => $demonsArray['maxHpCPU'],
             'levelCPU' => $demonsArray['levelCPU'],
+            'level' => $demonsArray['level'],
             'trueDmg' => $demonsArray["trueDmg"],
         ]);            
     }
