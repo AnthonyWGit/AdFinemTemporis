@@ -35,3 +35,34 @@ table input, #the_lab_self_demon_level, #the_lab_self_demon_levelCPU
     color: var(--navbarBg);
 }
 
+.lineSpace
+{
+    line-height: 2;
+}
+.flex
+{
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+}
+.bar
+{
+    height: 2rem;
+    background-color: var(--navbarBg);
+}
+
+.contentLab
+{
+    width: fit-content;
+}
+
+.listStyle
+{
+    list-style: square;
+    padding: 0 1rem;
+}
+
+.emphase
+{
+    color: var(--base-noalpha-color1);
+}
