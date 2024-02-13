@@ -51,7 +51,7 @@ class Simulation
         && $calculated["the_lab_self_demon"]["agiCPU"]  && $calculated["the_lab_self_demon"]["lckCPU"] )
         {
             $demonCPUSimulated = new DemonPlayer();
-            $levelCPUSimulated = $calculated["the_lab_self_demon"]['level']; 
+            $levelCPUSimulated = $calculated["the_lab_self_demon"]['levelCPU']; 
             $demonCPUBaseObject = $demonBaseRepository->findOneBy(['id' => $calculated["the_lab_self_demon"]["demonBaseCPU"]]);
             // $skillDmg = $skillObject->
             $totalEndCPU = $calculated["the_lab_self_demon"]["endCPU"];
@@ -92,6 +92,7 @@ class Simulation
             'maxHpCPU' => $maxHpSimulatedCPU,
             'levelCPU' => $levelCPUSimulated,
             'trueDmg' => $dmgDone,
+            'level' => $levelSimulated,
         ];
     }
     
