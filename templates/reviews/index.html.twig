@@ -37,8 +37,12 @@
                 {% for suggestion in suggestions %}
                 <tr>
                     <td>{{suggestion.id}}</td>
-                    <td>{{suggestion.title}}</td>
-                    <td>{{suggestion.playersSuggestions[0].displayUsername}}</td>
+                    <td>
+                        <a class="linkNoBase" href=" {{ path("detailSuggestion", {'suggestion' : suggestion.id, 'player' : suggestion.playerSuggestion.id}) }}">
+                            {{suggestion.title}}
+                        </a>
+                    </td>
+                    <td>{{suggestion.playerSuggestion.displayUsername}}</td>
                     <td>{{suggestion.postDateFormat}}</td>
                     {% if suggestion.hiddenStatus == 0 %}
                         <td>Safe</td>
@@ -59,11 +63,6 @@
                 {% endfor %}
             </tbody>
         </table>
-            {% for suggestion in suggestions %}
-                {% for player in suggestion.playersSuggestions %}
-
-                {% endfor %}
-            {% endfor %}
         {% endif %}
     </div>
 {% endblock %}
