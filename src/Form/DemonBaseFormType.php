@@ -82,6 +82,7 @@ class DemonBaseFormType extends AbstractType
         new NotBlank()]
             ])
         ->add('img', FileType::class, [
+            'data_class' => null,
             'required' => false,
             'label' => 'Img (JPEG/JPG/PNG)',
             'row_attr' => ['class' => 'formRow'],

@@ -41,7 +41,11 @@
                     <td><a class="linkNoBase" href="{{ path('traitDetail', {'name' : trait.name}) }}">{{trait.name}}</a></td>
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('editTrait', {'name' : trait.name})}}">Edit</a></i>
+                        <i>
+                            <a class="deleteBtn adminAction" href='#'>X</a>
+                            <span>—<span>
+                            <a class="adminAction" href=" {{path('editTrait', {'name' : trait.name})}}">Edit</a>
+                        </i>
                     </td>
                     {% endif %}
                 </tr>
@@ -75,8 +79,8 @@
                     modal.style.justifyContent = "center"
 
                     // Get the name of the demon from the parent row
-                    var traitName = this.parentElement.parentElement.parentElement.children[1].innerHTML;
-                    
+                    var traitName = this.parentElement.parentElement.parentElement.children[1].children[0].innerHTML;
+                    console.log(traitName)
                     yesBtn.onclick = function() {
                         // handle the deletion here
                         window.location.href = "/admin/trait/" + encodeURIComponent(traitName) + "/delete";

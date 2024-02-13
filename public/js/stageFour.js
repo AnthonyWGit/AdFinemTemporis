@@ -52,7 +52,7 @@ $(document).ready(function()
         if (index < walkingText.length) {
             $(".texting").append(walkingText.charAt(index))
             index++
-            setTimeout(typeWriter, 25); // Delay between each character
+            setTimeout(typeWriter, 12); // Delay between each character
         } else {
             setTimeout(function() {
                     index = 0
@@ -68,7 +68,7 @@ $(document).ready(function()
         if (index < walkingText2.length) {
             $(".texting").append(walkingText2.charAt(index))
             index++
-            setTimeout(typeWriter2, 25); // Delay between each character
+            setTimeout(typeWriter2, 12); // Delay between each character
         } else {
             setTimeout(function() {
                     index = 0
@@ -83,7 +83,7 @@ $(document).ready(function()
         if (index < walkingText3.length) {
             $(".texting").append(walkingText3.charAt(index))
             index++
-            setTimeout(typeWriter3, 25) // Delay between each character
+            setTimeout(typeWriter3, 12) // Delay between each character
         } else {
             setTimeout(function() {
                     index = 0
@@ -98,7 +98,7 @@ $(document).ready(function()
         if (index < walkingText4.length) {
             $(".texting").append(walkingText4.charAt(index))
             index++
-            setTimeout(typeWriter4, 25) // Delay between each character
+            setTimeout(typeWriter4, 12) // Delay between each character
         } else {
             setTimeout(function() {
                     index = 0
@@ -114,7 +114,6 @@ $(document).ready(function()
     function typeTextChunk() {
         speakerBox.append($(".TextDiv").attr('data-var'))
         maxCharacters = calculateMaxCharacters(textBox)
-        console.log(maxCharacters)
         textChunks = breakTextIntoChunks(companionText, maxCharacters);
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
@@ -123,16 +122,18 @@ $(document).ready(function()
     }
 
     function typeTextChunk2() {
-        console.log("next")
-        currentCharIndex = 0;
-        currentChunkIndex = 0;
-        currentIndex = 0
-        maxCharacters = calculateMaxCharacters(textBox);
-        textChunks = breakTextIntoChunks(companionText2, maxCharacters)
+        if (once)
+        {
+            currentCharIndex = 0;
+            currentChunkIndex = 0;
+            currentIndex = 0          
+            once = false;
+            maxCharacters = calculateMaxCharacters(textBox);
+            textChunks = breakTextIntoChunks(companionText2, maxCharacters)
+        }
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
             textContent.innerHTML = currentChunk; // Set the whole chunk at once
-            console.log(currentChunkIndex, 'replace next')
             isTypingInProgress = false
         }
     }
@@ -144,11 +145,9 @@ $(document).ready(function()
         let height = textBox.offsetHeight;
         let fontSize = parseFloat(computedStyle.fontSize);
 
-        let charactersHorizontally = Math.floor(width / (fontSize)); // Adjust the factor as needed
-        let charactersVertically = Math.floor(height / (fontSize));
-        let totalChars = charactersHorizontally * charactersVertically
-        console.log(charactersHorizontally)
-        console.log(charactersVertically)
+        let charactersHorizontally = Math.floor(width / fontSize); // Adjust the factor as needed
+        let charactersVertically = Math.floor(height / fontSize);
+        let totalChars = (charactersHorizontally * charactersVertically) * 0.75
         return totalChars;
     }
 
@@ -178,8 +177,8 @@ $(document).ready(function()
     let isTypingInProgress = true;
     let currentChunkIndex = 0;
     let currentCharIndex = 0;
-    let currentIndex = 0;
-
+    let currentIndex = 0
+    let once = true
     var textBox = document.querySelector('.textBox');
     var textContent = document.querySelector('.textContent')
     var speakerBox = $(".speakerBox")
@@ -195,31 +194,33 @@ $(document).ready(function()
         companionText = "Usefull. Keep it in your bag."
         companionText2 = "Hey. Let's sit for a while. Take a break, and choose if you want to strenghten our" 
         + " forces."
-        + "And just a friendly advice... Spare your gold. We WILL need it"
+        + " And just a friendly advice... Spare your gold. We WILL need it"
     } else if ($(".TextDiv").attr('data-var') == "Horus") {
         companionText = "A shiny thing ! A SHINY, TRANSPARENT red thing ! Looks like a potion to me."
         companionText2 = "Let's set up a camp here. I want to have a break. I'm up for cleaning this place of"
         + " shadows, or continue if you want to. Choice is yours."
-        + "And just a friendly advice... Spare your gold. We WILL need it"
+        + " And just a friendly advice... Spare your gold. We WILL need it"
     } else if ($(".TextDiv").attr('data-var') == "Xiuhcoatl") {
         companionText = "This little recipient contains some red liquid in it. Might be a healing item."
         companionText2 = "Stop there. We don't have to be hasty. I forsee good things. A merchant is coming."
-        + "Wait him, buy stuff. We can fight roaming shadows. Proceed further when you're ready." 
-        + "And just a friendly advice... Spare your gold. We WILL need it"
+        + " Wait him, buy stuff. We can fight roaming shadows. Proceed further when you're ready." 
+        + " And just a friendly advice... Spare your gold. We WILL need it"
     }
 
     let maxCharacters
     let textChunks
     document.addEventListener("keydown", keyDown)
+    textBox.addEventListener('click', keyDown)
     let debounceTimeout;
     function keyDown(event) {
         event.stopPropagation(); // Prevent the event from bubbling up
         debounceTimeout = setTimeout(function() { //anti spam filter
             if (!isTypingInProgress) {
-                if (event.key === 'ArrowRight') {
+                if (event.key === 'ArrowRight' || event.type === 'click') {
                     if (currentChunkIndex < textChunks.length - 1) {
                         currentChunkIndex++;
-                        typeTextChunk();
+                        if (dialogPassed == 0) typeTextChunk();
+                        if (dialogPassed == 1) typeTextChunk2()
                     } else if (currentChunkIndex == textChunks.length - 1) {
                         if (dialogPassed == 0) {
                             isTypingInProgress = true;
@@ -236,7 +237,8 @@ $(document).ready(function()
                 } else if (event.key === 'ArrowLeft') {
                     if (currentChunkIndex > 0) {
                         currentChunkIndex--;
-                        typeTextChunk();
+                        if (dialogPassed == 0) typeTextChunk();
+                        if (dialogPassed == 1) typeTextChunk2()
                     }
                 }
             }

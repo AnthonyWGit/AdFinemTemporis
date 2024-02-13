@@ -49,19 +49,21 @@ class SkillController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
-                $skill = $form->getData();
-                $entityManager->persist($skill); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
-                $entityManager->flush();
-
-                $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
-                (
-                    'noticeChange',
-                    'Your changes were saved!'
-                );
-
+                if ($request->getSession()->get('submit') == 'ok')
+                {
+                    $skill = $form->getData();
+                    $entityManager->persist($skill); //traditional prepare / execute in SQL MANDATORY for sql equivalents to INSERT 
+                    $entityManager->flush();
+                    $request->getSession()->remove('submit');
+                    $this->addFlash // need to be logged as user to see the flash messages build-in Symfony
+                    (
+                        'noticeChange',
+                        'Your changes were saved!'
+                    );                    
+                }
                 return $this->redirectToRoute('skillsList'); //redirect to list stagiaires if everything is ok
             }
-        
+        $request->getSession()->set('submit','ok');
         return $this->render("skill/new.html.twig", ['formNewSkill' => $form, 'edit' => $skill->getId()]);
     }
 

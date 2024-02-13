@@ -255,7 +255,7 @@ td:first-child, th:first-child
 {
     display: flex;
     height: 1rem;
-    background-color: rgb(4, 4, 41);
+    background-color: var(--navbarBg);
     border-radius: 10px;
     margin: 2rem 0 2rem 0;
 }
@@ -296,3 +296,9 @@ td:first-child, th:first-child
     color: orange;
 }
 
+.encAdmin
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

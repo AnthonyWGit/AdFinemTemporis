@@ -18,40 +18,46 @@
     box-shadow: 7px 7px 0px 3px #FFDB00;
 }
 
+.looksLikeAButtonAzure {
+    display: flex;
+    background-color: var(--base-noalpha-color1);
+    padding: 1.5rem;
+    width: 7rem;
+    height: 1rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: solid 0.5px var(--navbarText);
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    color: var(--colorForLightBg);
+    box-shadow: 0px 0px 0px 0px var(--formInside);
+}
+
+.looksLikeAButtonAzure:hover {
+    box-shadow: 7px 7px 0px 3px var(--formInside);
+}
+
 .looksLikeAButtonBlue
 {
-    border: 0.25px solid black;
     display: flex;
-    background-color: var(--blueButton);
-    border-radius: 15px;
-    padding: 0.5rem;
-    width: 10rem;
-    height: 3rem;
+    background-color: var(--navbarBg);
+    box-shadow: 1px 4px 1px 1px hsla(236, 26%, 89%, 0.5), 0px 6px 1px 2px rgba(10, 10, 10, 0.5);
+    padding: 0.75rem 0.65rem;
     justify-content: center;
     align-items: center;
     text-decoration: none;
     text-align: center;
-    color: gold;
+    color: var(--base-color1);
     /* lens flare effect */
-    position: relative;
+    transition: box-shadow ease .1s
 }
 
-.looksLikeAButtonBlue::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, azure 0%, rgba(255, 255, 255, 0) 70%);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.looksLikeAButtonBlue:hover::before {
-    opacity: 0.5;
+.looksLikeAButtonBlue:active
+{
+    opacity: 0.8;
+    transform: translateY(4px);
+    box-shadow: 0px 0px 0px 0px rgba(10, 10, 10, 0.5);
 }
 
 .looksLikeAButtonBlack {

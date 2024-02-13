@@ -37,6 +37,9 @@ class RegistrationFormType extends AbstractType
                         'message' => 'You should agree to our terms.',
                     ]),
                 ],
+                'label' => 'You agree to our Terms of Service',
+                'help' => '<a href="/tos">Terms of Service</a>',
+                'help_html' => true
             ])
             ->add('email', RepeatedType::class,
             [

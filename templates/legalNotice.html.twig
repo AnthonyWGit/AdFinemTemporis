@@ -3,32 +3,20 @@
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
         {% block meta %}{% endblock %}
-        <title>{% block title %}Ad Temporis Finem{% endblock %}</title>
+        <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Charm:wght@400;700&display=swap');
-        </style>            
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">          
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('css/base.css') }}">
             <link rel="stylesheet" href="{{ asset('css/looksLikeAButton.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/encyclopedia.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/community.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/account.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/form.css') }}">
             <link rel="stylesheet" href="{{ asset('css/stars.css') }}">
-        {% endblock %}
-        {% block javascripts %}
-            <script src="{{ asset("js/jquery.js")}}"></script>
         {% endblock %}
     </head>
     <body>
-
-        <input type="checkbox" id="menuShowHide">
-        <label for="menuShowHide" id="menuLabel"></label>
+        <label for="menuShowHide" id="incognito"></label><input type="checkbox" id="menuShowHide">
+        <label for="menuLabel" id="menuLabel"></label>
         <nav class="navbar" id="mainMenu">
             <ul>
                 <li><a class="iconText" href=" {{path("app_home")}}" ><img class="navSvg" src="{{ asset('img/home-violet.svg') }}"> Home</a></li>

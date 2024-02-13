@@ -5,7 +5,7 @@
 {% block title %}The Beginning{% endblock %}
 
 {% block body %}
-    <div class="TextDiv gameGlobalDiv toHide">
+    <div class="TextDiv gameGlobalDiv toHide align-center">
         {% for message in app.flashes('notice') %}
             <p>{{ message }}</p>
         {% endfor %}

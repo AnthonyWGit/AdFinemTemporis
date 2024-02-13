@@ -87,7 +87,7 @@ class Math
 
     public static function calcMaxHP($totalEnd, $baseHp, $level)
     {
-        $maxHP = ($totalEnd * 3) + $baseHp + 1 * $level;
+        $maxHP = ($totalEnd * 2) + $baseHp + $level * 2;
         return $maxHP;
     }
 }

@@ -10,7 +10,7 @@
 {% block body %}
 <div class="sun">
 </div>
-<div class="flashes gameGlobalDiv">
+<div class="flashes gameGlobalDiv align-center">
     {% for message in app.flashes('notice') %}
         <p>{{ message }}</p>
     {% endfor %}
@@ -18,7 +18,7 @@
         <p>{{ message }}</p>
     {% endfor %}
 </div>
-<div class="gameGlobalDivGap toHide">
+<div class="gameGlobalDivGap toHide align-center">
     {# <p class="toHide">This is the hub menu</p> #}
     <a class="linkNoBase" href="{{path('combat2')}}">Wander around</a>
     <a class="linkNoBase" href="{{path('stageFive')}}">Continue story</a>
@@ -62,9 +62,9 @@
         <p id='error-msg'></p>
         <form method="POST" action="/game/merchant" id="form-merchant">
         {% for item in items%}
-        <p id="item-name">{{item.name}} : {{item.cost}} G</p>
-        <input type="number" name ="input-number-merchant-{{item.id}}" id="input-number-merchant-{{item.id}}" class="input-number-merchant" name="input-number-merchant" min="1" max="99" />
-        <button id="button-merchant-{{item.id}}">+</button>
+            <p id="item-name" class="interactiveItem">{{item.name}} : {{item.cost}} G</p>
+            <input type="number" name ="input-number-merchant-{{item.id}}" id="input-number-merchant-{{item.id}}" class="input-number-merchant" name="input-number-merchant" min="1" max="99" />
+            <button id="button-merchant-{{item.id}}">+</button>
         {% endfor %}
         <input type="hidden" name="token" value="{{ csrf_token('modal-merchant') }}">
         </form>
@@ -78,9 +78,9 @@
             <span class="close" id="close-inventory">&times;</span>
             <p id="current-gold-p">Current Gold : <span id="gold-number">{{app.user.gold}}</span> </p>  
         <div class="modal-inventory">
-            <ul id="items-list">
-            {% for item in itemsPlayer%}
-                    <li><span>{{item.item.name}}<span> <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span></li>
+            <ul id="items-list" class="interactiveItem">
+            {% for item in itemsPlayer %}
+                    <li><span>{{item.item.name}}</span> <span id="inventory-number-{{item.item.id}}">({{item.quantity}})</span></li>
             {% endfor %}
             </ul>
         </div>

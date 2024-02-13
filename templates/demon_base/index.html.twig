@@ -44,7 +44,11 @@
                     <td>{{demon.pantheon}}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <i><a class="deleteBtn" href='#'>&times;</a><a href=" {{path('editDemonBase', {'name' : demon.name})}}">Edit</a></i>
+                        <i>
+                            <a class="deleteBtn adminAction" href='#'>&times;</a>
+                            <span>—<span>
+                            <a class="adminAction" href=" {{path('editDemonBase', {'name' : demon.name})}}">Edit</a>
+                        </i>
                     </td>
                 {% endif %}
                 </tr>

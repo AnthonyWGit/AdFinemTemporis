@@ -90,7 +90,7 @@ function calculateMaxCharacters(textBox) {
 
 function whenArrowPressed(event) 
 {
-    if (event.key === 'ArrowRight') 
+    if (event.key === 'ArrowRight' || event.type === 'click') 
     {
         if (currentChunkIndex < textChunks.length - 1) 
         {
@@ -176,6 +176,7 @@ console.log(`Number of text chunks: ${textChunks.length}`);
 console.log(textChunks)
   // Event listener to start typing when spacebar is pressed
 document.addEventListener('keydown', whenArrowPressed);
+textBox.addEventListener('click', whenArrowPressed)
 // Function to handle Spacebar key press for scrolling
 //eventListeners
 

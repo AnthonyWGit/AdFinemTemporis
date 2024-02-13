@@ -23,7 +23,7 @@ class TraitController extends AbstractController
     }
 
     #[Route('/trait/show/{name}', name: 'traitDetail')]
-    public function detail(DemonTrait $demonTrait, DemonTraitRepository $demonBaseRepository): Response
+    public function detail(DemonTrait $demonTrait): Response
     {
         return $this->render('trait/detail.html.twig', [
             'demonTrait' => $demonTrait,

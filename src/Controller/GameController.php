@@ -16,6 +16,7 @@ use App\Repository\DemonTraitRepository;
 use App\Repository\SkillTableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DemonPlayerRepository;
+use App\Repository\HaveItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -143,7 +144,7 @@ class GameController extends AbstractController
     }
 
     #[Route('/ajaxe/combatAjax', name: 'combatAjax')]
-    public function combatAjax(Request $request, ?Battle $battle, 
+    public function combatAjax(Request $request, ?Battle $battle, SkillTableRepository $skillTableRepository,
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
     ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
@@ -220,17 +221,17 @@ class GameController extends AbstractController
             {
                 return $skill->getName(); // adjust this based on your Skill entity structure
             }, $generatedCpu->getSkills()->toArray())
-            
-            // add other fields as needed
         ],
-        'playerDemons' => array_map(function($demon) {
+        'playerDemons' => array_map(function($demon) use ($skillTableRepository){
+            $level = $demon->getLevel();
+            $idDemon = $demon->getDemonBase()->getId();
             return [
                 'id' => $demon->getId(),
                 'hpMax' =>$demon->getMaxHp(),
                 'name' => $demon->getDemonBase()->getName(),
-                'skills' => array_map(function ($skill) {
-                    return $skill->getName(); // adjust this based on your Skill entity structure
-                }, $demon->getSkills()->toArray())
+                'skills' => array_map(function ($skill) use ($skillTableRepository, $level, $idDemon){
+                    return $skill->getSkill()->getName(); // adjust this based on your Skill entity structure
+                }, $demon->getDemonBase()->getSkillsBelow($skillTableRepository, $level, $idDemon))
                 // add other fields as needed
             ];
         }, $playerDemons->toArray()),
@@ -374,7 +375,7 @@ class GameController extends AbstractController
                 return $this->redirectToRoute("stageTwo");
             }  
         }
-        return $this->redirectToRoute("app_home");
+        return $this->redirectToRoute("cheating");
     }
           
     #[Route('/game/stageTwo', name: 'stageTwo')]
@@ -385,49 +386,43 @@ class GameController extends AbstractController
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) return $this->redirectToRoute('combat');
         if ($this->getUser()->getStage() != 2) 
         {
-            return $this->redirectToRoute("app_home");
+            return $this->redirectToRoute("cheating");
         }
         return $this->render('game/stageTwo.html.twig', [
             'demon' => $starter[0],
             'demons' => $starter,
+
         ]);
     }
 
     #[Route('/game/combat', name: 'combat')]
-    public function combat(Request $request, ?Battle $battle, 
+    public function combat(Request $request, ?Battle $battle, HaveItemRepository $haveItemRepository,
     ?DemonBaseRepository $demonBaseRepository, ?SkillTableRepository $skillRepository ,
     ?DemonTraitRepository $demonTraitRepository, PlayerRepository $playerRepository, 
-    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
+    ?BattleRepository $battleRepository, EntityManagerInterface $entityManager): Response
     {
         if ($this->inBattleCheck($request, $playerRepository, $battleRepository)) $inBattle = true; else $inBattle = false;
-        if ($inBattle && $this->getUser()->getStage() == 3) return $this->redirectToRoute('combat2');
-        if ($inBattle && $this->getUser()->getStage() == 10000) return $this->redirectToRoute('combat2');
+        //If stage is one of those numbers just redirect
+        if ($inBattle && in_array($this->getUser()->getStage(),[3,4,5,6,10000])) return $this->redirectToRoute('combat2');
         $session = $request->getSession();
-        if ($session->get('placeholder') == 'a' && /*!$this->isGranted('ROLE_IN_COMBAT')*/ !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
+        if ($session->get('placeholder') == 'a' && !$inBattle || ($this->getUser()->getStage() == 9999 && !$inBattle))  //Condition to start a new combat
         {
-            $session->remove('placeholder');
-            $cpu = $playerRepository->findOneBy(["username" => "CPU"]);
-            $battle = new Battle;
+            $session->remove('placeholder'); //remove value of placeholder key
+            $battle = new Battle; //Starting Battle
             $battle->setXpEarned(600);
             $battle->setGoldEarned(30);
-            $playerDemons = $this->getUser()->getDemonPlayer();
+            $playerDemons = $this->getUser()->getDemonPlayer(); //Retrieve player team - Below generate computer demon
             $generatedCpu = $this->cpuDemonGen('imp', $demonBaseRepository, $skillRepository , $demonTraitRepository,$playerRepository, $entityManager);
-            // $playerDemons[0]->addFighter($battle);
-            // $generatedCpu->addFighter2($battle);
-            $playerDemon = $playerDemons[0];
-            $playerDemon->addFighter($battle);
+            $playerDemon = $playerDemons[0]; //$playerDemons is collection of array : here pick the object at index 0
+            $playerDemon->addFighter($battle); //setting figthers
             $generatedCpu->addFighter2($battle);
             $entityManager->persist($battle);
-            // $this->getUser()->addRole("ROLE_IN_COMBAT");
-            // $token = new UsernamePasswordToken($this->getUser(), null, 'main', $this->getUser()->getRoles());
-            // $this->get('security.token_storage')->setToken($token);
             $entityManager->persist($this->getUser());
             $entityManager->flush();
-            $levelDemon = $playerDemon->getLevel();
-            $xpDemon = $playerDemon->getExperience();
+            $xpDemon = $playerDemon->getExperience(); //For level calculation
             $percentage = Math::calculateLevelPercentage($xpDemon);
-            
-            if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]); //get items
+            if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi()) //get Agi to calc who goes first
             {
                 $initiative = $this->getUser()->getUsername();
             }
@@ -452,17 +447,18 @@ class GameController extends AbstractController
                 'cpuDemon' => $generatedCpu,
                 'playerDemons' => $playerDemons,
                 'intiative' => $initiative,
-                'percentage' => $percentage
+                'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer
             ]);    
         }
-        else if (/*$this->isGranted('ROLE_IN_COMBAT')*/ $inBattle) //combat is still in progress so the user is put in it 
+        else if ($inBattle) //combat is still in progress so the user is put in it 
         {
             $playerDemons = $this->getUser()->getDemonPlayer();
             $playerDemon = $playerDemons[0];
             $battleContent = $battleRepository->findOneBy(["demonPlayer1" => $playerDemon]);
             $generatedCpu = $battleContent->getDemonPlayer2();
             //current xp values for xp bar 
-            $levelDemon = $playerDemon->getLevel();
+            $itemsPlayer = $haveItemRepository->findBy(["player" => $this->getUser()->getId()], ["id"=>"ASC"]);
             $xpDemon = $playerDemon->getExperience();
             $percentage = Math::calculateLevelPercentage($xpDemon);
             if ($playerDemon->getTotalAgi() > $generatedCpu->getTotalAgi())
@@ -490,6 +486,7 @@ class GameController extends AbstractController
                 'playerDemons' => $playerDemons,
                 'initiative' => $initiative,
                 'percentage' => $percentage,
+                'itemsPlayer' => $itemsPlayer,
             ]);    
         }
         else if ($this->getUser()->getStage() == 2)
@@ -504,6 +501,10 @@ class GameController extends AbstractController
         {
             return $this->redirectToRoute("stageFour");
         }
+        else if ($this->getUser()->getStage() == 5)
+        {
+            return $this->redirectToRoute("stageFive");
+        }
         return $this->redirectToRoute("app_home");
     }
 
@@ -514,37 +515,50 @@ class GameController extends AbstractController
     {
         if ($this->getUser()->getStage() == 0)
         {
+            $arrOfSkillsObjects = [];
             switch($name)
             {
                 case "Horus":
                     $demonBase = $this->pickDemonBase($demonBaseRepository, 'horus');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
-                    $skill = $skills[0]; //level on will only have on skill
-                    $skill = $skill->getSkill();
+                    foreach ($skills as $skill) //Foreaching on all skills and adding
+                    {
+                        $skill = $skill->getSkill();
+                        $arrOfSkillsObjects[] = $skill;
+                    }
                     break;
 
                 case "Xiuhcoatl":
                     $demonBase = $this->pickDemonBase($demonBaseRepository, 'Xiuhcoatl');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
-                    $skill = $skills[0]; //level on will only have on skill
-                    $skill = $skill->getSkill();
+                    foreach ($skills as $skill) //Foreaching on all skills and adding
+                    {
+                        $skill = $skill->getSkill();
+                        $arrOfSkillsObjects[] = $skill;
+                    }
                     break;
                 
                 case "Chernobog":
                     $demonBase = $this->pickDemonBase($demonBaseRepository, 'Chernobog');
                     $playerDemonTrait = $this->traitGen($demonTraitRepository);
                     $skills = $skillTableRepository->findBy(["level" => 1, "demonBase" => $demonBase->getId()],["id" => "ASC"]);
-                    $skill = $skills[0]; //level on will only have on skill
-                    $skill = $skill->getSkill();
+                    foreach ($skills as $skill) //Foreaching on all skills and adding
+                    {
+                        $skill = $skill->getSkill();
+                        $arrOfSkillsObjects[] = $skill;
+                    }
                     break;
             }
 
             $demonPlayer = new DemonPlayer; //create a demon
             $demonPlayer->setDemonBase($demonBase); //set base template
             $demonPlayer->setTrait($playerDemonTrait); //generate a trait
-            $demonPlayer->addSkill($skill);
+            foreach($arrOfSkillsObjects as $skillBis)
+            {
+                $demonPlayer->addSkill($skillBis); //add the skills 
+            }
             $this->getUser()->addDemonPlayer($demonPlayer);
             $this->getUser()->setStage(1);
             $entityManager->persist($demonPlayer);
@@ -553,7 +567,7 @@ class GameController extends AbstractController
         }   
         else
         {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('cheating');
         }
     }
 

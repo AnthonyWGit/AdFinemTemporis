@@ -13,7 +13,7 @@
                     <p>{{ message }}</p>
                 {% endfor %}
                 <form action="/admin/{{ player.id }}/updateDemons" method="post"> 
-            <button type="submit">Validate</button>
+            <button class="looksLikeAButtonBlue" type="submit">Validate</button>
             </div>
             <table>
                 <thead>
@@ -41,7 +41,11 @@
                             <td><input type="number" class="adminInput" name="lck-{{demon.id}}" value="{{demon.lckPoints}}"></td>
                             <td><input type="number" class="adminInput" name="pts-{{demon.id}}" value="{{demon.lvlUpPoints}}"></td>
                             <td>
-                                <i><a class="deleteBtn" href='#'>X</a><a href=" {{path('playerEditDemon', {'dp' : demon.id, 'player' : player.id})}}">Edit</a></i>
+                                <i>
+                                    <a class="deleteBtn adminAction" href='#'>X</a>
+                                    <span>—</span>
+                                    <a class="adminAction" href=" {{path('playerEditDemon', {'dp' : demon.id, 'player' : player.id})}}">Edit</a>
+                                </i>
                             </td>
                         </tr>
                     {% endfor %}
