@@ -334,6 +334,7 @@
 .lvlUpBtn
 {
     margin: 0;
+    padding: 0 0.5rem;
 }
 
 #actions, #Items, #Flee, .skill, .j, #open-shop
