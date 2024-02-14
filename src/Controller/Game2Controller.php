@@ -343,7 +343,7 @@ class Game2Controller extends AbstractController
     #[Route('/game/credits', name: 'credits')]
     public function credits(BattleChecker $battleChecker) : Response
     {
-        if ($battleChecker->inBattleCheck() && $this->getUser()->getStage() != 6) $this->redirectToRoute('cheating');
+        if ($battleChecker->inBattleCheck() || $this->getUser()->getStage() != 6) return $this->redirectToRoute('cheating');
         return $this->render('game/credits.html.twig');
     }
 }
