@@ -11,7 +11,11 @@
 {% endblock %}
 
 {% block body %}
-<h1 class="centerTitle">Create a new Skill</h1>
+{% if edit %}
+    <h1 class="centerTitle">Edit an existing Skill</h1>
+{% else %}
+    <h1 class="centerTitle">Create a new Skill</h1>
+{% endif %}
 <div class="formGlobal">
     <div class="formInside">
         {{ form_errors(formNewSkill) }}
