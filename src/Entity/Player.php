@@ -5,8 +5,8 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use App\Repository\PlayerRepository;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -61,7 +61,7 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
-
+    
     #[ORM\ManyToMany(targetEntity: Suggestion::class, inversedBy: 'playersLikes')]
     #[ORM\JoinTable(name: "player_likes")]
     private Collection $likes;
@@ -69,6 +69,8 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'playerSuggestion', targetEntity: Suggestion::class)]
     private Collection $suggestions;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -360,4 +362,15 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
 }
