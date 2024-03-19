@@ -86,10 +86,14 @@ $(document).ready(function()
 
     // Function to type a specific chunk of text
     function typeTextChunk() {
-        speakerBox.append($(".TextDiv").attr('data-var'))
-        maxCharacters = calculateMaxCharacters(textBox)
-        console.log(maxCharacters)
-        textChunks = breakTextIntoChunks(companionText, maxCharacters);
+        if (once)
+        {
+            speakerBox.append($(".TextDiv").attr('data-var'))
+            maxCharacters = calculateMaxCharacters(textBox)
+            console.log(maxCharacters)
+            textChunks = breakTextIntoChunks(companionText, maxCharacters);
+            once = false
+        }
         if (currentChunkIndex < textChunks.length) {
             var currentChunk = textChunks[currentChunkIndex];
             textContent.innerHTML = currentChunk; // Set the whole chunk at once
@@ -105,7 +109,7 @@ $(document).ready(function()
 
         let charactersHorizontally = Math.floor(width / (fontSize)); // Adjust the factor as needed
         let charactersVertically = Math.floor(height / (fontSize));
-        let totalChars = charactersHorizontally * charactersVertically
+        let totalChars = (charactersHorizontally * charactersVertically) * 0.8
         console.log(charactersHorizontally)
         console.log(charactersVertically)
         return totalChars;
@@ -129,6 +133,7 @@ $(document).ready(function()
             }
             chunks.push(chunk);
         }
+        console.log(chunks)
         return chunks;
     }
 
@@ -138,20 +143,20 @@ $(document).ready(function()
     let currentChunkIndex = 0;
     let currentCharIndex = 0;
     let currentIndex = 0;
-
+    let once = true;
     var textBox = document.querySelector('.textBox');
     var textContent = document.querySelector('.textContent')
     var speakerBox = $(".speakerBox")
     let walkingText = "Dust settles. You take your time to breath. This sea of ink around you... It faints..."
-    let walkingText2 = "You wave at the one who stand with you."
+    let walkingText2 = "You wave at the one who stands with you."
     let walkingText3 = "You look at the horizon. Waves come and crash on the shore with violence. But you see a door"
     + " in the distance. You run on a ray of light."
     $('#data').append('<p class="texting"> </p>')
     let companionText = ""
     let companionText2 = ""
     if ($(".TextDiv").attr('data-var') == "Chernobog") {
-        companionText = "This is it. Pleasure to have met you, but i shall no stray much longer. I'm not supposed"
-        + " to roam in this part of Humans hidden mind. I have a feeling we will again in the future." +
+        companionText = "This is it. Pleasure to have met you, but i shall not stray much longer. I'm not supposed"
+        + " to roam in this part of Humans hidden mind. I have a feeling we will meet again in the future." +
         " Until then, good bye."
     } else if ($(".TextDiv").attr('data-var') == "Horus") {
         companionText = "This area this is bright. Suits me better, you see. I was going to get blind swimming in"
@@ -174,6 +179,7 @@ $(document).ready(function()
             if (!isTypingInProgress) {
                 if (event.key === 'ArrowRight' || event.type === 'click') {
                     if (currentChunkIndex < textChunks.length - 1) {
+                        console.log(currentChunkIndex)
                         currentChunkIndex++;
                         typeTextChunk();
                     } else if (currentChunkIndex == textChunks.length - 1) {
