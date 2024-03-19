@@ -32,14 +32,21 @@
                 {% if not suggestion.isverified %}
                 {% else %}
                         <div class="cardSuggestion">
-                            {% if app.user in suggestion %}
+                            {% if app.user == suggestion.playerSuggestion or is_granted("ROLE_ADMIN") %}
                                 <div class="deleteOwn">
-                                    <a class="zPos" href="{{ path('deleteSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                    <noscript>
+                                    <a class="zPos" href="{{ path('deleteSuggestion' , {'slug_suggestion':suggestion.slugSuggestion , 'slug' : app.user.slug}) }}">
                                         X
                                     </a>
-                                    <a class="zPos" href="{{ path('editSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
-                                        Edit
+                                    </noscript>
+                                    <a class="zPos delModal" href="#">
+                                        X
                                     </a>
+                                    {% if app.user == suggestion.playerSuggestion %}
+                                        <a class="zPos" href="{{ path('editSuggestion' , {'id':suggestion.id , 'player' : app.user.slug }) }}">
+                                            Edit
+                                        </a>
+                                    {% endif %}
                                 </div>
                             {% endif %}
                             <div class="row">
@@ -75,12 +82,12 @@
                                             <img class="navSvg" src=" {{asset("img/heart-full.svg") }}">
                                         </a>
                                     {% else %}
-                                        <a class="zPos" href="{{ path('addLikeSuggestion' , {'id':suggestion.id , 'player' : app.user.id }) }}">
+                                        <a class="zPos" href="{{ path('addLikeSuggestion' , {'id': suggestion.id , 'player' : app.user.id }) }}">
                                             <img class="navSvg" src=" {{asset("img/heart-empty.svg") }}">
                                         </a>
                                 {% endif %}
                                     {{suggestion.playersLikesCount}}
-                                    <a class="block" href=" {{ path("detailSuggestion", {'suggestion' : suggestion.id, 'player' : suggestion.playerSuggestion.id}) }}"></a>
+                                    <a class="block" href=" {{ path("detailSuggestion", {'slug_suggestion' : suggestion.slugSuggestion , 'slug' : suggestion.playerSuggestion.slug }) }}"></a>
                             </p>
                         </div>
 
@@ -88,6 +95,18 @@
             {% endfor %}
         {% endif %}
     </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-center">
+                <span class="close">&times;</span>
+                <p>Do you really want to delete this?</p>
+                <button id="yesBtn">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+
     {% if is_granted('ROLE_ADMIN') %}
         <script>
             $('.status').hover(
@@ -132,4 +151,49 @@
     
         </script>
     {% endif %}
+    <script>
+        let modal = document.getElementById("myModal");
+        let btns = document.querySelectorAll(".delModal");
+        let span = document.getElementsByClassName("close")[0];
+        let yesBtn = document.getElementById("yesBtn");
+        let noBtn = document.getElementById("noBtn");
+        
+        btns.forEach(function(btn) {
+            btn.onclick = function(event) {
+                event.preventDefault();
+                modal.style.display = "flex";
+                modal.style.justifyContent = "center"
+                // Get the name of the demon from the parent row
+                let link = this.parentElement.parentElement.children[4].children[1].href
+                let interesting = link.split('/')
+                let idS = interesting[6]
+                let idP = interesting[7]
+                console.log(interesting)
+                yesBtn.onclick = function() {
+                    // handle the deletion here
+                    window.location.href = "community/suggestion/" + encodeURIComponent(idS) + "/delete/" + encodeURIComponent(idP)
+                    modal.style.display = "none";
+                }
+            }
+        });
+        
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        yesBtn.onclick = function() {
+            // handle the deletion here
+            modal.style.display = "none";
+        }
+        
+        noBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 {% endblock %}
