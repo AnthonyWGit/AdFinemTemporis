@@ -15,14 +15,14 @@
 {% block body %}
 <div class="lineSpace flex">
     <div class="contentLab">
-    <p>Your Demon <b class="emphase">{{demonPlayer.demonBase.name}}</b> will look like this :</p>
-    <ul class="listStyle">
-        <li><i>Level</i> : <span class="orange">{{level}}</span></li>
-        <li><i>HP max</i> : <span class="orange">{{maxHpSimulated}}</span></li>
-        <li><i>Theorical damage without reduction</i> : <span class="orange">{{skillDmgSimulatedPure.damage}}</span> </li>
-    </ul>
-    <p>Your damage range is <span class="orange">{{skillDmgSimulatedPure.percentage}}</span> </p>
-    <p>Note : natural damage range is <span class="orange">10%</span></p>
+        <p>Your Demon <b class="emphase">{{demonPlayer.demonBase.name}}</b> will look like this :</p>
+        <ul class="listStyle">
+            <li><i>Level</i> : <span class="orange">{{level}}</span></li>
+            <li><i>HP max</i> : <span class="orange">{{maxHpSimulated}}</span></li>
+            <li><i>Theorical damage without reduction</i> : <span class="orange">{{skillDmgSimulatedPure.damage}}</span> </li>
+        </ul>
+        <p>Your damage range is <span class="orange">{{skillDmgSimulatedPure.percentage}}</span> </p>
+        <p>Note : natural damage range is <span class="orange">10%</span></p>
     <div class="bar"></div>
     {% if demonCPU %}
         <p>Selected CPU : <b class="emphase">{{demonCPU.demonBase.name}}</b></p>
@@ -31,7 +31,8 @@
             <li><i>After ennemy defenses, you will deal </i><span class="orange">{{trueDmg.fixedIncrease}}</span> <i>damage points</i></li>
             <li><i>Ennemy HP points</i> : <span class="orange">{{maxHpSimulatedCPU}}</span></li>
         </ul>
+    {% endif %}        
     </div>
 </div>
-    {% endif %}
+
 {% endblock %}
