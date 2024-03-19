@@ -13,13 +13,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CommunityController extends AbstractController
 {
     #[Route('/community', name: 'community')]
-    public function index(SuggestionRepository $suggestionRepository): Response
+    public function index(SuggestionRepository $suggestionRepository, PlayerRepository $playerRepository, EntityManagerInterface $em): Response
     {
         $verifiedSuggestions = 0;
         $suggestions = $suggestionRepository->findSuggestionsOrderedByLikes();
@@ -35,7 +36,8 @@ class CommunityController extends AbstractController
 
     #[Route('community/suggestion/new', name: 'newSuggestion')]
     #[Route('community/suggestion/{id}/edit', name: 'editSuggestion')]
-    public function new(Suggestion $suggestion = null, FileUploader $fileUploader = null, Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Suggestion $suggestion = null, FileUploader $fileUploader = null, Request $request, 
+    EntityManagerInterface $entityManager, SuggestionRepository $suggestionRepository): Response
     {
 
         //Banned users should not be able to post a suggestion or edit the one they already made 
@@ -97,6 +99,22 @@ class CommunityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
             {
+                $slugger = new AsciiSlugger;
+                $slug = $suggestionRepository->findOneBy([], ['id' => 'desc']);
+                if ($slug)
+                {
+                    $slug = $slug->getSlugSuggestion();
+                    // Extract the number from the slug
+                    $number = intval(substr($slug, 1));
+                    // Increment the number
+                    $newNumber = $number + 1;
+                    $slug = "S".$newNumber;
+                    $suggestion->setSlugSuggestion($slug);                    
+                }
+                else
+                {
+                    $suggestion->setSlugSuggestion("S1");
+                }
 
                 $date = new \DateTime();
                 $suggestion->setPostDate($date);
@@ -136,7 +154,7 @@ class CommunityController extends AbstractController
         return $this->render("community/new.html.twig", ['formNewSuggestion' => $form, 'edit' => $suggestion->getId()]);
     }
 
-    #[Route('community/suggestion/detail/{suggestion}/{player}', name: 'detailSuggestion')]
+    #[Route('community/suggestion/detail/{slug_suggestion}/{slug}', name: 'detailSuggestion')]
     public function detail(Suggestion $suggestion, Player $player): Response
     {
         return $this->render('community/detail.html.twig', [
@@ -179,7 +197,7 @@ class CommunityController extends AbstractController
         return $this->redirectToRoute('community');
     }
 
-    #[Route('community/suggestion/{id}/delete/{player}', name: 'deleteSuggestion')]
+    #[Route('community/suggestion/{slug_suggestion}/delete/{slug}', name: 'deleteSuggestion')]
     public function delete(Suggestion $suggestion, Player $player, EntityManagerInterface $entityManager): Response
     {
         //Banned users should not be able to delete their post
@@ -200,7 +218,7 @@ class CommunityController extends AbstractController
             return $this->redirectToRoute("community");
         }
 
-        if ($player == $this->getUser()) //Safeguard so suggestions can only be removed by author
+        if ($player == $this->getUser() || $this->isGranted("ROLE_ADMIN")) //Safeguard so suggestions can only be removed by author or admin
         {
             $entityManager->remove($suggestion);
             $entityManager->flush();
