@@ -38,7 +38,7 @@
                 <tr>
                     <td>{{suggestion.id}}</td>
                     <td>
-                        <a class="linkNoBase" href=" {{ path("detailSuggestion", {'suggestion' : suggestion.id, 'player' : suggestion.playerSuggestion.id}) }}">
+                        <a class="linkNoBase" href=" {{ path("detailSuggestion", {'slug_suggestion' : suggestion.slugSuggestion, 'slug' : suggestion.playerSuggestion.slug}) }}">
                             {{suggestion.title}}
                         </a>
                     </td>
