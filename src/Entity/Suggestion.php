@@ -40,6 +40,9 @@ class Suggestion
     #[ORM\ManyToOne(inversedBy: 'suggestions')]
     private ?Player $playerSuggestion = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug_suggestion = null;
+
     public function __construct()
     {
         $this->PlayersLikes = new ArrayCollection();
@@ -199,5 +202,17 @@ class Suggestion
     {
         $playerName = $this->playerSuggestion->getUsername();
         return $playerName;
+    }
+
+    public function getSlugSuggestion(): ?string
+    {
+        return $this->slug_suggestion;
+    }
+
+    public function setSlugSuggestion(string $slug_suggestion): static
+    {
+        $this->slug_suggestion = $slug_suggestion;
+
+        return $this;
     }
 }
